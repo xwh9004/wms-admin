@@ -1,6 +1,6 @@
 package com.wms.admin.controller;
 
-import com.wms.admin.entity.UserInfo;
+import com.wms.admin.entity.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,14 +13,14 @@ import java.util.List;
 public class UserController {
 
     @GetMapping("/queryUser")
-    public List<UserInfo> queryUser(){
+    public List<User> queryUser(){
 
-        List<UserInfo> userInfoList = new ArrayList<>();
+        List<User> userInfoList = new ArrayList<>();
 
-        UserInfo user1 = new UserInfo();
+        User user1 = new User();
         user1.setUsername("TEST1");
         userInfoList.add(user1);
-        UserInfo user2 = new UserInfo();
+        User user2 = new User();
         user2.setUsername("TEST2");
         userInfoList.add(user2);
 

@@ -3,13 +3,29 @@ server:
     context-path: /wms-admin
   port: 8081
 
-##jwtÅäÖÃ
+##jwté…ç½®
 audience:
-  # ´ú±íÕâ¸öJWTµÄ½ÓÊÕ¶ÔÏó,´æÈëaudience
+  # ä»£è¡¨è¿™ä¸ªJWTçš„æ¥æ”¶å¯¹è±¡,å­˜å…¥audience
   clientId: 098f6bcd4621d373cade4e832627b4f6
-  # ÃÜÔ¿, ¾­¹ıBase64¼ÓÃÜ, ¿É×ÔĞĞÌæ»»
+  # å¯†é’¥, ç»è¿‡Base64åŠ å¯†, å¯è‡ªè¡Œæ›¿æ¢
   base64Secret: MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=
-  # JWTµÄÇ©·¢Ö÷Ìå£¬´æÈëissuer
+  # JWTçš„ç­¾å‘ä¸»ä½“ï¼Œå­˜å…¥issuer
   name: restapiuser
-  # ¹ıÆÚÊ±¼ä£¬Ê±¼ä´Á,2Ìì
+  # è¿‡æœŸæ—¶é—´ï¼Œæ—¶é—´æˆ³,2å¤©
   expiresSecond: 172800
+
+
+
+# DataSource Config
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/wms_db?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=GMT%2B8
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 20000
+      minimum-idle: 10
+      maximum-pool-size: 50
+      pool-name: hikari_jdbc_conn_pool
+      auto-commit: true
