@@ -11,10 +11,10 @@ import org.springframework.stereotype.Controller;
  * </p>
  *
  * @author Jesse
- * @since 2022-01-19
+ * @since 2022-01-19 16:02:56
  */
 @Controller
-@RequestMapping("/menu")
+@RequestMapping("/admin/menu-entity")
 public class MenuController {
 
 }

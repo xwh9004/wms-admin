@@ -1,6 +1,6 @@
 package com.wms.admin.service;
 
-import com.wms.admin.entity.Menu;
+import com.wms.admin.entity.MenuEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author Jesse
- * @since 2022-01-19
+ * @since 2022-01-19 16:02:56
  */
-public interface IMenuService extends IService<Menu> {
+public interface IMenuService extends IService<MenuEntity> {
 
 }

@@ -1,6 +1,6 @@
 package com.wms.admin.mapper;
 
-import com.wms.admin.entity.Menu;
+import com.wms.admin.entity.MenuEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Jesse
- * @since 2022-01-19
+ * @since 2022-01-19 16:02:56
  */
-public interface MenuMapper extends BaseMapper<Menu> {
+public interface MenuMapper extends BaseMapper<MenuEntity> {
 
 }
