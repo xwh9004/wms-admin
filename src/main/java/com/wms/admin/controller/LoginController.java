@@ -6,7 +6,6 @@ import com.wms.admin.auth.JwtTokenUtil;
 import com.wms.admin.commom.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +20,7 @@ public class LoginController {
 
 
     @PostMapping("/login")
-    public String login(HttpServletResponse response, String username, String password) {
+    public Result login(HttpServletResponse response, String username, String password) {
         // 这里模拟测试, 默认登录成功，返回用户ID和角色信息
         String userId = UUID.randomUUID().toString();
         String role = "admin";
@@ -33,6 +32,6 @@ public class LoginController {
         // 将token响应给客户端
         JSONObject result = new JSONObject();
         result.put("token", token);
-        return Result.SUCCESS(result);
+        return  Result.success();
     }
 }

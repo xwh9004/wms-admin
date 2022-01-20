@@ -1,7 +1,10 @@
 package com.wms.admin.service;
 
-import com.wms.admin.entity.MenuEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.entity.MenuEntity;
+import com.wms.admin.vo.MenuVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMenuService extends IService<MenuEntity> {
 
+     List<MenuVO> queryList();
+
+     boolean addMenu(MenuVO menuVO);
+
+     boolean updateMenu(MenuVO menuVO);
+
+     boolean deleteMenu(String  id);
+
+    boolean addTopMenu(MenuVO menuVO);
 }
