@@ -17,9 +17,10 @@ public class MyBatisPlusGenerator {
         String username = "root";
         String password = "";
         String path = "D:/gitRepo/wms-admin/src/main/java/";
+        String xmlPath="D:/gitRepo/wms-admin/src/main/resources/mapper";
 
 
-        String tableName = "T_WMS_MENU";
+        String[] tableNames = {"T_WMS_ROLE","T_WMS_ROLE_MENU","T_WMS_USER"};
 
         FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> {
@@ -31,13 +32,13 @@ public class MyBatisPlusGenerator {
 
                 })
                 .packageConfig(builder -> {
-                    builder.parent("com.wms") // 设置父包名
-                            .moduleName("admin") // 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, path)); // 设置mapperXml生成路径
+                    builder.parent("com.wms.admin") // 设置父包名
+//                            .moduleName("admin") // 设置父包模块名
+                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, xmlPath)); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
                     builder
-                            .addInclude(tableName) // 设置需要生成的表名
+                            .addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_wms") // 设置过滤表前缀
                             .entityBuilder()
                             .superClass("com.wms.admin.entity.BaseEntity")

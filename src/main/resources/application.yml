@@ -3,6 +3,12 @@ server:
     context-path: /wms-admin
   port: 8081
 
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 ##jwt配置
 audience:
   # 代表这个JWT的接收对象,存入audience

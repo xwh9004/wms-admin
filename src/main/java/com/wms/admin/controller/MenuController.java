@@ -7,6 +7,7 @@ import com.wms.admin.commom.Result;
 import com.wms.admin.service.IMenuService;
 import com.wms.admin.vo.MenuVO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ import java.util.List;
  * @since 2022-01-19 16:02:56
  */
 @Api("菜单控制器")
-@Controller
+@RestController
 @RequestMapping("/menu")
 public class MenuController {
 
@@ -33,9 +34,10 @@ public class MenuController {
     private IMenuService menuService;
 
 
-    @ApiOperation("菜单列表")
+    @ApiOperation(value = "菜单列表")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @GetMapping("/list")
-    public Result menuList(@RequestParam PageParam pageParam) {
+    public Result menuList() {
         List<MenuVO> menuVOList = menuService.queryList();
         return Result.success().data(menuVOList);
     }

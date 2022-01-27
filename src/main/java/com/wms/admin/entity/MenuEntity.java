@@ -70,6 +70,12 @@ public class MenuEntity extends BaseEntity {
     @TableField("type")
     private String type;
 
+    /**
+     * 状态  1 启用 0 停用
+     */
+    @TableField("type")
+    private String status;
+
     public String getId() {
         return id;
     }
@@ -134,6 +140,14 @@ public class MenuEntity extends BaseEntity {
         this.type = type;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "MenuEntity{" +
@@ -145,6 +159,7 @@ public class MenuEntity extends BaseEntity {
             ", levelNo=" + levelNo +
             ", url=" + url +
             ", seq=" + seq +
+            ", status=" + status +
             ", type=" + type +
         "}";
     }

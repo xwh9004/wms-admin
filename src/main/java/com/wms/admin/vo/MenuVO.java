@@ -55,6 +55,10 @@ public class MenuVO {
      * 资源类型 1 菜单 2 按钮
      */
     private String type;
+    /**
+     * 状态  1 启用 0 停用
+     */
+    private String status;
 
     /**
      * 创建人

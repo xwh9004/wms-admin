@@ -37,15 +37,15 @@ public class UserInfoInterceptor implements HandlerInterceptor {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }
+        log.info(request.getRequestURI());
         // 获取请求头信息authorization信息
-        final String authHeader = request.getHeader(JwtTokenUtil.AUTH_HEADER_KEY);
-        log.info("## authHeader= {}", authHeader);
-        if (StringUtils.isBlank(authHeader) || !authHeader.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
+        final String token = request.getHeader(JwtTokenUtil.AUTH_HEADER_KEY);
+//        log.info("## authHeader= {}", authHeader);
+        if (StringUtils.isBlank(token)) {
             log.info("### 用户未登录，请先登录 ###");
             throw new BusinessException(ResultCode.USER_NOT_LOGGED_IN);
         }
         // 获取token
-        final String token = authHeader.substring(7);
         if (audience == null) {
             BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
             audience = (Audience) factory.getBean("audience");
