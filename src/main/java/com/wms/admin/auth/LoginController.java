@@ -31,7 +31,6 @@ public class LoginController {
 
     @PostMapping(value = "/login")
     public Result login(HttpServletResponse response, @RequestBody UserInfo req) {
-        // 这里模拟测试, 默认登录成功，返回用户ID和角色信息
         UserInfo userInfo = authenticService.getUserInfo(req.getUsername(),req.getPassword());
         // 创建token
         String token = JwtTokenUtil.createJWT(userInfo.getUserId(), req.getUsername(),
@@ -55,5 +54,10 @@ public class LoginController {
         userInfo.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         return Result.success().data(userInfo);
     }
-
+    @PostMapping(value = "/logout")
+    public Result logout() {
+        //清空登录信息，共享sessionId
+        UserInfoContext.removeUserInfo();
+        return Result.success();
+    }
 }
