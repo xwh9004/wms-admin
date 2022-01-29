@@ -18,7 +18,10 @@ public class Result<T> {
         this.code = resultCode.getCode();
         this.message = resultCode.getMsg();
     }
-
+    private Result(String code,String msg) {
+        this.code = code;
+        this.message = msg;
+    }
 
     public static Result success() {
         return new Result(ResultCode.SUCCESS);
@@ -27,10 +30,12 @@ public class Result<T> {
     public static Result error(ResultCode resultCode) {
         return new Result(resultCode);
     }
+    public static Result error(String code,String msg) {
+        return new Result(code,msg);
+    }
     public Result data(T data) {
         this.data = data;
         return this;
     }
-
 
 }
