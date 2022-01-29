@@ -19,6 +19,8 @@ create table  if not exists T_WMS_MENU(
  ALTER TABLE T_WMS_MENU ADD status VARCHAR(1);
  alter table T_WMS_MENU modify status VARCHAR(1) comment '状态  1 启用 0 停用';
 
+  ALTER TABLE T_WMS_MENU ADD icon VARCHAR(500) comment '图标';
+
 
  create table  if not exists T_WMS_ROLE(
    id VARCHAR(40) comment '主键ID',
