@@ -9,6 +9,8 @@ import com.wms.admin.util.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 public class AuthenticServiceImpl  implements AuthenticService{
 
@@ -27,7 +29,8 @@ public class AuthenticServiceImpl  implements AuthenticService{
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userEntity.getId());
         userInfo.setUsername(username);
-        userInfo.setRoleCode(userEntity.getRoleCode());
+        //目前支持一个角色，后期可以支持多个角色
+        userInfo.setRoleCode(Arrays.asList(userEntity.getRoleCode()));
         return userInfo;
     }
 
