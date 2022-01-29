@@ -11,10 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -25,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2022-01-21 10:08:12
  */
 @Api("用户管理控制器")
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -34,24 +31,24 @@ public class UserController {
 
     @ApiOperation(value = "用户列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/list")
-    public Result list(UserQueryVO userQueryVO, PageParam pageParam) {
+    @PostMapping("/list")
+    public Result list(@RequestBody UserQueryVO userQueryVO, PageParam pageParam) {
         IPage<UserVO> rolePage = userService.userPage(userQueryVO,pageParam);
         return Result.success().data(rolePage);
     }
 
     @ApiOperation(value = "新增用户")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/add")
-    public Result add(UserVO userVO) {
+    @PostMapping("/add")
+    public Result add(@RequestBody UserVO userVO) {
         userService.addUser(userVO);
         return Result.success();
     }
 
     @ApiOperation(value = "修改用户")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/update")
-    public Result update(UserVO userVO) {
+    @PostMapping("/update")
+    public Result update(@RequestBody UserVO userVO) {
         userService.updateUser(userVO);
         return Result.success();
     }
@@ -59,7 +56,7 @@ public class UserController {
 
     @ApiOperation(value = "删除用户")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/delete/{roleId}")
+    @PostMapping("/delete/{roleId}")
     public Result delete(@PathVariable String userId) {
         userService.deleteUser(userId);
         return Result.success();
