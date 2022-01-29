@@ -1,4 +1,4 @@
-package com.wms.admin.controller;
+package com.wms.admin.auth;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wms.admin.auth.Audience;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,8 @@ public class LoginController {
         // 这里模拟测试, 默认登录成功，返回用户ID和角色信息
         UserInfo userInfo = authenticService.getUserInfo(req.getUsername(),req.getPassword());
         // 创建token
-        String token = JwtTokenUtil.createJWT(userInfo.getUserId(), req.getUsername(), userInfo.getRoleCode(), audience);
+        String token = JwtTokenUtil.createJWT(userInfo.getUserId(), req.getUsername(),
+                userInfo.getRoleCode(),userInfo.getResources(), audience);
         log.info("### 登录成功, token={} ###", token);
         // 将token放在响应头
         response.setContentType("application/json");
