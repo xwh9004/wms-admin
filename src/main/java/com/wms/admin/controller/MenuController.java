@@ -32,7 +32,8 @@ public class MenuController {
 
     @Autowired
     private IMenuService menuService;
-    @ApiOperation(value = "菜单列表")
+
+    @ApiOperation(value = "所有路径")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @GetMapping("/routes")
     public Result routes() {

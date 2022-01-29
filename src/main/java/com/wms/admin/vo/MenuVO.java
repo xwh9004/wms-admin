@@ -7,6 +7,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Data
 public class MenuVO implements Comparable<MenuVO> {
@@ -89,11 +91,14 @@ public class MenuVO implements Comparable<MenuVO> {
      */
     private LocalDateTime updateTime;
 
-    private List<MenuVO> children = new ArrayList<>();
+    private Set<MenuVO> children = new TreeSet<>();
 
 
     @Override
     public int compareTo(MenuVO o) {
-        return this.getSeq().compareTo(o.getSeq());
+        if(this.levelNo!=o.levelNo){
+            return this.levelNo-o.levelNo;
+        }
+        return this.seq -o.getSeq();
     }
 }
