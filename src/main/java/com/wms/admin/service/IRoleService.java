@@ -1,10 +1,10 @@
 package com.wms.admin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.wms.admin.commom.PageParam;
-import com.wms.admin.commom.PageQuery;
-import com.wms.admin.entity.RoleEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.commom.PageParam;
+import com.wms.admin.entity.RoleEntity;
+import com.wms.admin.vo.RoleQueryVO;
 import com.wms.admin.vo.RoleVO;
 
 import java.util.List;
@@ -23,10 +23,10 @@ public interface IRoleService extends IService<RoleEntity> {
 
     boolean updateRole(RoleVO roleVO);
 
-    boolean deleteRole(RoleVO roleVO);
+    boolean deleteRole(String roleId);
 
     List<RoleVO>  roleList();
 
-    IPage<RoleVO> rolePage(PageQuery pageQuery);
+    IPage<RoleVO> rolePage(RoleQueryVO roleQueryVO, PageParam pageParam);
 
 }

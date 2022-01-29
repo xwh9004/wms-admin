@@ -1,7 +1,10 @@
 package com.wms.admin.service;
 
-import com.wms.admin.entity.UserEntity;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.commom.PageParam;
+import com.wms.admin.entity.UserEntity;
+import com.wms.admin.vo.UserQueryVO;
 import com.wms.admin.vo.UserVO;
 
 /**
@@ -15,6 +18,8 @@ import com.wms.admin.vo.UserVO;
 public interface IUserService extends IService<UserEntity> {
 
     UserVO selectUser(String userId);
+
+    IPage<UserVO> userPage(UserQueryVO userQueryVO, PageParam pageParam);
 
     boolean addUser(UserVO userVO);
 

@@ -25,4 +25,6 @@ public interface IMenuService extends IService<MenuEntity> {
      boolean deleteMenu(String  id);
 
     boolean addTopMenu(MenuVO menuVO);
+
+
 }
