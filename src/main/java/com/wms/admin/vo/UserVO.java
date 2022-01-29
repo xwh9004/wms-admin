@@ -7,8 +7,9 @@ import java.util.List;
 @Data
 public class UserVO {
 
-    private String userId;
+    private String id;
     private String username;
-    private String userPwd;
+    private String password;
+    private String roleDesc;
     private List<String> roleIds;
 }

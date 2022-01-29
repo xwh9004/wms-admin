@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class MenuVO {
+public class MenuVO implements Comparable<MenuVO> {
     /**
      * 主键ID
      */
@@ -50,11 +50,17 @@ public class MenuVO {
      * 展示顺序
      */
     private Integer seq;
+    /**
+     * 资源标签
+     */
+    private String label;
 
     /**
      * 资源类型 1 菜单 2 按钮
      */
     private String type;
+
+    private String icon;
     /**
      * 状态  1 启用 0 停用
      */
@@ -86,5 +92,8 @@ public class MenuVO {
     private List<MenuVO> children = new ArrayList<>();
 
 
-
+    @Override
+    public int compareTo(MenuVO o) {
+        return this.getSeq().compareTo(o.getSeq());
+    }
 }
