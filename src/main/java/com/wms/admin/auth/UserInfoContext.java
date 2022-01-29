@@ -17,4 +17,8 @@ public class UserInfoContext {
         return userInfoThreadLocal.get().getUsername();
     }
 
+    public static void removeUserInfo(){
+        userInfoThreadLocal.remove();
+    }
+
 }
