@@ -71,6 +71,11 @@ public class MenuEntity extends BaseEntity {
     private String type;
 
     /**
+     * 图标
+     */
+    @TableField("icon")
+    private String icon;
+    /**
      * 状态  1 启用 0 停用
      */
     @TableField("type")
