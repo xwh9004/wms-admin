@@ -32,6 +32,13 @@ public class MenuController {
 
     @Autowired
     private IMenuService menuService;
+    @ApiOperation(value = "菜单列表")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @GetMapping("/routes")
+    public Result routes() {
+        List<MenuVO> menuVOList = menuService.queryList();
+        return Result.success().data(menuVOList);
+    }
 
 
     @ApiOperation(value = "菜单列表")
@@ -43,9 +50,34 @@ public class MenuController {
     }
 
     @ApiOperation("添加顶层菜单")
-    @PostMapping("/add/topMenu")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/addTop")
     public Result addTopMenu(@RequestBody MenuVO menuVO) {
         menuService.addTopMenu(menuVO);
+        return Result.success();
+    }
+
+    @ApiOperation("添加菜单")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/add")
+    public Result add(@RequestBody MenuVO menuVO) {
+        menuService.addMenu(menuVO);
+        return Result.success();
+    }
+
+    @ApiOperation("添加菜单")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/update")
+    public Result update(@RequestBody MenuVO menuVO) {
+        menuService.updateMenu(menuVO);
+        return Result.success();
+    }
+
+    @ApiOperation("删除菜单")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/delete/{menuId}")
+    public Result deleteMenu(@PathVariable String menuId) {
+        menuService.deleteMenu(menuId);
         return Result.success();
     }
 
