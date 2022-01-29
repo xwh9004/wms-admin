@@ -3,7 +3,6 @@ package com.wms.admin.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.wms.admin.entity.BaseEntity;
 
 /**
  * <p>
@@ -168,4 +167,5 @@ public class MenuEntity extends BaseEntity {
             ", type=" + type +
         "}";
     }
+
 }
