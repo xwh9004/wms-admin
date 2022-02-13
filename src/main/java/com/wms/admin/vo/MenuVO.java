@@ -48,6 +48,13 @@ public class MenuVO implements Comparable<MenuVO> {
      */
     private String url;
 
+    private String path;
+
+    private String component;
+
+    private String redirect;
+
+
     /**
      * 展示顺序
      */
@@ -58,15 +65,22 @@ public class MenuVO implements Comparable<MenuVO> {
     private String label;
 
     /**
-     * 资源类型 1 菜单 2 按钮
+     * 资源类型 0目录 1 菜单 2 资源
      */
     private String type;
 
+    /**
+     * 图标
+     */
     private String icon;
     /**
      * 状态  1 启用 0 停用
      */
     private String status;
+    /**
+     * 是否隐藏 0 否 1 是
+     */
+    private String hidden;
 
     /**
      * 创建人

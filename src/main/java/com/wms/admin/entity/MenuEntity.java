@@ -57,6 +57,15 @@ public class MenuEntity extends BaseEntity {
     @TableField("url")
     private String url;
 
+    @TableField("redirect")
+    private String redirect;
+
+    @TableField("path")
+    private String path;
+
+    @TableField("component")
+    private String component;
+
     /**
      * 展示顺序
      */
@@ -64,10 +73,16 @@ public class MenuEntity extends BaseEntity {
     private Integer seq;
 
     /**
-     * 资源类型 1 菜单 2 按钮
+     * 资源类型 0目录 1 菜单 2 资源
      */
     @TableField("type")
     private String type;
+
+    /**
+     * 是否隐藏 0 不隐藏 1 隐藏
+     */
+    @TableField("hidden")
+    private String hidden;
 
     /**
      * 图标
@@ -77,7 +92,7 @@ public class MenuEntity extends BaseEntity {
     /**
      * 状态  1 启用 0 停用
      */
-    @TableField("type")
+    @TableField("status")
     private String status;
 
     public String getId() {
@@ -144,12 +159,55 @@ public class MenuEntity extends BaseEntity {
         this.type = type;
     }
 
+
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+
+    public String getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(String hidden) {
+        this.hidden = hidden;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
     }
 
     @Override
@@ -162,9 +220,14 @@ public class MenuEntity extends BaseEntity {
             ", levelPath=" + levelPath +
             ", levelNo=" + levelNo +
             ", url=" + url +
+            ", path=" + path +
+            ", component=" + component +
+            ", redirect=" + redirect +
             ", seq=" + seq +
             ", status=" + status +
             ", type=" + type +
+            ", hidden=" + hidden +
+            ", icon=" + icon +
         "}";
     }
 

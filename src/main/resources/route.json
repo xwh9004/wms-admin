@@ -1,0 +1,399 @@
+[
+	{
+		"redirect": "/dashboard/index",
+		"path": "/dashboard",
+		"component": "layout/Layout",
+		"children": [
+			{
+				"path": "index",
+				"component": "views/dashboard/index",
+				"meta": {
+					"icon": "dashboard",
+					"title": "全景视图"
+				},
+				"name": "全景视图"
+			}
+		],
+		"meta": {
+			"icon": "dashboard",
+			"title": "全景视图"
+		}
+	},
+	{
+		"redirect": "noRedirect",
+		"path": "/workspace",
+		"component": "layout/Layout",
+		"children": [
+			{
+				"redirect": "/workspace/storage-in/list",
+				"path": "storage-in",
+				"component": "views/workspace/storage-in/index",
+				"children": [
+					{
+						"path": "list",
+						"component": "views/workspace/storage-in/list",
+						"meta": {
+							"title": "入库管理"
+						},
+						"name": "storage-in"
+					},
+					{
+						"path": "add",
+						"component": "views/workspace/storage-in/add",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/storage-in/storage-in",
+							"title": "新增入库"
+						},
+						"name": "新增入库"
+					},
+					{
+						"path": "detail/:receiptNo",
+						"component": "views/workspace/storage-in/detail",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/storage-in/storage-in",
+							"title": "入库详情"
+						},
+						"name": "入库详情"
+					}
+				],
+				"meta": {
+					"title": "入库管理"
+				},
+				"name": "入库管理"
+			},
+			{
+				"redirect": "/workspace/storage-out/list",
+				"path": "storage-out",
+				"component": "views/workspace/storage-out/index",
+				"children": [
+					{
+						"path": "list",
+						"component": "views/workspace/storage-out/list",
+						"meta": {
+							"title": "出库管理"
+						},
+						"name": "出库管理"
+					},
+					{
+						"path": "add",
+						"component": "views/workspace/storage-out/add",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/storage-out/list",
+							"title": "新增出库"
+						},
+						"name": "新增出库"
+					},
+					{
+						"path": "detail/:receiptNo",
+						"component": "views/workspace/storage-out/detail",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/storage-out/list",
+							"title": "出库详情"
+						},
+						"name": "出库详情"
+					}
+				],
+				"meta": {
+					"title": "出库管理"
+				},
+				"name": "出库管理"
+			},
+			{
+				"redirect": "/workspace/storage-shift/list",
+				"path": "storage-shift",
+				"component": "views/workspace/storage-shift/index",
+				"children": [
+					{
+						"path": "list",
+						"component": "views/workspace/storage-shift/list",
+						"meta": {
+							"title": "调拨管理"
+						},
+						"name": "调拨列表"
+					},
+					{
+						"path": "add",
+						"component": "views/workspace/storage-shift/add",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/storage-shift/list",
+							"title": "新增调拨"
+						},
+						"name": "新增调拨"
+					},
+					{
+						"path": "detail/:receiptNo",
+						"component": "views/workspace/storage-shift/detail",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/storage-shift/list",
+							"title": "调拨详情"
+						},
+						"name": "调拨详情"
+					}
+				],
+				"meta": {
+					"title": "调拨管理"
+				},
+				"name": "调拨管理"
+			},
+			{
+				"redirect": "/workspace/discard/list",
+				"path": "discard",
+				"component": "views/workspace/discard/index",
+				"children": [
+					{
+						"path": "list",
+						"component": "views/workspace/discard/list",
+						"meta": {
+							"noCache": true,
+							"title": "报废管理"
+						},
+						"name": "报废列表"
+					},
+					{
+						"path": "add",
+						"component": "views/workspace/discard/add",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/discard/list",
+							"title": "新增报废"
+						},
+						"name": "新增报废"
+					},
+					{
+						"path": "detail/:receiptNo",
+						"component": "views/workspace/discard/detail",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/discard/list",
+							"title": "新增报废"
+						},
+						"name": "新增详情"
+					}
+				],
+				"meta": {
+					"title": "报废管理"
+				},
+				"name": "报废管理"
+			},
+			{
+				"redirect": "/workspace/stock/maintainList",
+				"path": "stock",
+				"component": "views/workspace/stock/index",
+				"children": [
+					{
+						"path": "maintainList",
+						"component": "views/workspace/stock/maintainList",
+						"meta": {
+							"title": "库存维护"
+						},
+						"name": "maintainList"
+					},
+					{
+						"path": "inventoryList",
+						"component": "views/workspace/stock/inventoryList",
+						"meta": {
+							"title": "库存盘点"
+						},
+						"name": "inventoryList"
+					},
+					{
+						"path": "addInventory",
+						"component": "views/workspace/stock/addInventory",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/stock/inventoryList",
+							"title": "新增库存盘点"
+						},
+						"name": "TakeStocks"
+					},
+					{
+						"path": "inventoryDetail/:receiptNo",
+						"component": "views/workspace/stock/inventoryDetail",
+						"hidden": true,
+						"meta": {
+							"noCache": true,
+							"activeMenu": "/workspace/stock/inventoryList",
+							"title": "库存盘点详情"
+						},
+						"name": "detail"
+					}
+				],
+				"meta": {
+					"title": "库存管理"
+				},
+				"name": "库存管理"
+			}
+		],
+		"meta": {
+			"icon": "workspace",
+			"title": "仓库作业"
+		},
+		"name": "仓库作业",
+		"alwaysShow": false
+	},
+	{
+		"redirect": "noRedirect",
+		"path": "/report",
+		"component": "layout/Layout",
+		"children": [
+			{
+				"path": "storage-in",
+				"component": "views/report/storage-in/storage-in",
+				"meta": {
+					"title": "入库报表"
+				},
+				"name": "入库报表"
+			},
+			{
+				"path": "storage-out",
+				"component": "views/report/storage-out/storage-out",
+				"meta": {
+					"title": "出库报表"
+				},
+				"name": "出库报表"
+			},
+			{
+				"path": "storage-shift",
+				"component": "views/report/storage-shift/storage-shift",
+				"meta": {
+					"title": "调拨报表"
+				},
+				"name": "调拨报表"
+			},
+			{
+				"path": "product",
+				"component": "views/report/product/product",
+				"meta": {
+					"title": "货物报表"
+				},
+				"name": "货物报表"
+			},
+			{
+				"path": "stock",
+				"component": "views/report/stock/stock",
+				"meta": {
+					"title": "库存报表"
+				},
+				"name": "库存报表"
+			}
+		],
+		"meta": {
+			"icon": "excel",
+			"title": "报表管理"
+		},
+		"name": "报表管理",
+		"alwaysShow": false
+	},
+	{
+		"redirect": "noRedirect",
+		"path": "/system",
+		"component": "layout/Layout",
+		"children": [
+			{
+				"path": "menu",
+				"component": "views/system/menu/menu",
+				"meta": {
+					"title": "菜单管理"
+				},
+				"name": "菜单管理"
+			},
+			{
+				"path": "role",
+				"component": "views/system/role/role",
+				"meta": {
+					"title": "角色管理"
+				},
+				"name": "角色管理"
+			},
+			{
+				"path": "user",
+				"component": "views/system/user/user",
+				"meta": {
+					"title": "用户管理"
+				},
+				"name": "用户管理"
+			},
+			{
+				"redirect": "noRedirect",
+				"path": "warehouse",
+				"component": "views/system/warehouse/index",
+				"children": [
+					{
+						"path": "repository",
+						"component": "views/system/warehouse/repository/repository",
+						"meta": {
+							"title": "库区管理"
+						},
+						"name": "repository"
+					},
+					{
+						"path": "storage-rack",
+						"component": "views/system/warehouse/storage-rack/storage-rack",
+						"meta": {
+							"title": "货架管理"
+						},
+						"name": "storage-rack"
+					}
+				],
+				"meta": {
+					"title": "仓库管理"
+				},
+				"name": "仓库管理"
+			},
+			{
+				"redirect": "noRedirect",
+				"path": "product",
+				"component": "views/system/product/index",
+				"children": [
+					{
+						"path": "category",
+						"component": "views/system/product/category/category",
+						"meta": {
+							"title": "类目管理"
+						},
+						"name": "category"
+					},
+					{
+						"path": "product-list",
+						"component": "views/system/product/product-list/product-list",
+						"meta": {
+							"title": "货物列表"
+						},
+						"name": "storeage-rack"
+					}
+				],
+				"meta": {
+					"title": "货物管理"
+				},
+				"name": "货物管理"
+			},
+			{
+				"path": "vendor",
+				"component": "views/system/vendor/vendor-list",
+				"meta": {
+					"title": "供应商管理"
+				},
+				"name": "供应商管理"
+			}
+		],
+		"meta": {
+			"icon": "setting",
+			"title": "系统设置"
+		}
+	}
+]

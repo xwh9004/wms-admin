@@ -12,6 +12,8 @@ import com.wms.admin.mapper.MenuMapper;
 import com.wms.admin.service.IMenuService;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.MenuVO;
+import com.wms.admin.vo.RouteMeta;
+import com.wms.admin.vo.RouteVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -32,14 +34,71 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
 
     private static final Integer TOP_LEVEL = Integer.valueOf(1);
     private static final String TOP_PARENT = "-1";
+    private static final String SLASH = "/";
 
     @Override
     public List<MenuVO> queryList() {
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1);
-        List<MenuEntity> list = list(queryWrapper);
+        List<MenuEntity> list = new ArrayList<>();
+        try {
+            list = list(queryWrapper);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return toMenuTree(list);
     }
+
+    @Override
+    public List<RouteVO> queryRoutes() {
+        QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .in(MenuEntity::getType, WMSConstants.MENU_TYPE_DIR, WMSConstants.MENU_TYPE_MENU);
+        List<MenuEntity> list = list(queryWrapper);
+        List menuList = toMenuTree(list);
+        List<RouteVO> routes = toRoutes(menuList);
+        List<RouteVO> routes1 = new ArrayList<>();
+        routes1.add(routes.get(0));
+        routes1.add(routes.get(1));
+        routes1.add(routes.get(2));
+        routes1.add(routes.get(3));
+        return routes1;
+
+    }
+
+    private List<RouteVO> toRoutes(List<MenuVO> menuList) {
+        if (menuList.isEmpty()) {
+            return null;
+        }
+        List<RouteVO> routes = new ArrayList<>();
+        for (MenuVO menu : menuList) {
+            RouteVO routeVO = new RouteVO();
+            routeVO.setPath(menu.getPath());
+            if (WMSConstants.MENU_TYPE_DIR.equals(menu.getType())) {
+                routeVO.setComponent("layout/Layout");
+            } else {
+                routeVO.setComponent(menu.getComponent());
+                routeVO.setName(menu.getMenuName());
+            }
+            routeVO.setMeta(RouteMeta.build(menu));
+
+            if ("0".equals(menu.getHidden())) {
+                routeVO.setHidden(false);
+            } else {
+                routeVO.setHidden(true);
+            }
+            routeVO.setRedirect(menu.getRedirect());
+            List<MenuVO> menuChildren = new ArrayList(menu.getChildren());
+            if (!menuChildren.isEmpty()) {
+                List<RouteVO> children = toRoutes(menuChildren);
+                routeVO.setChildren(children);
+            }
+            routes.add(routeVO);
+        }
+        return routes;
+    }
+
 
     @Override
     public boolean addMenu(MenuVO menuVO) {
@@ -58,18 +117,23 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         menu.setUpdateBy(UserInfoContext.getUsername());
         menu.setSeq(menuVO.getSeq());
         menu.setDelFlag(WMSConstants.DEL_FLG_1);
-        menu.setType(WMSConstants.RESOURCE_TYPE_MENU); //菜单
+        menu.setType(menuVO.getType());
         menu.setParentId(parentMenu.getId());
         menu.setUrl(menuVO.getUrl()); //
+        menu.setHidden(menuVO.getHidden());
+        menu.setPath(menuVO.getPath());
+        menu.setRedirect(menuVO.getRedirect());
+        menu.setIcon(menuVO.getIcon());
+        menu.setStatus(menuVO.getStatus());
         return save(menu);
     }
 
     private void checkMenuForAdd(MenuEntity parentMenu, MenuVO menuVO) {
         Integer parentLevel = parentMenu.getLevelNo();
-        checkMenuSeq(parentMenu.getId(),null, Integer.sum(parentLevel, 1), menuVO.getSeq());
+        checkMenuSeq(parentMenu.getId(), null, Integer.sum(parentLevel, 1), menuVO.getSeq());
     }
 
-    private void checkMenuSeq(String parentId,String menuId, int level, int seq) {
+    private void checkMenuSeq(String parentId, String menuId, int level, int seq) {
         LambdaQueryWrapper<MenuEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
                 .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1)
@@ -96,7 +160,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         if (!WMSConstants.STATUS_1.equals(parentMenu.getStatus())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_AVAILABLE, parentMenu.getMenuCode());
         }
-        if (WMSConstants.RESOURCE_TYPE_BTN.equals(parentMenu.getType())) {
+        if (WMSConstants.MENU_TYPE_RESOURCE.equals(parentMenu.getType())) {
             throw new BusinessException(ResultCode.COMMON_ERROR, "按钮不能添加子菜单");
         }
     }
@@ -107,6 +171,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         checkMenuForUpdate(menuVO);
         MenuEntity menuEntity = new MenuEntity();
         BeanUtils.copyProperties(menuVO, menuEntity);
+        menuEntity.setUpdateBy(UserInfoContext.getUsername());
         return updateById(menuEntity);
     }
 
@@ -123,7 +188,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
             throw new BusinessException(ResultCode.DATA_NO_MODIFY, "父级菜单");
         }
         checkMenuCode(menuVO.getId(), menuVO.getMenuCode());
-        checkMenuSeq(menuVO.getParentId(),menuVO.getId(), menuVO.getLevelNo(), menuVO.getSeq());
+        checkMenuSeq(menuVO.getParentId(), menuVO.getId(), menuVO.getLevelNo(), menuVO.getSeq());
 
         oldMenu.setSeq(menuVO.getSeq());
         oldMenu.setMenuName(menuVO.getMenuName());
@@ -138,7 +203,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     @Override
     public boolean addTopMenu(MenuVO menuVO) {
         checkMenuCode(menuVO.getId(), menuVO.getMenuCode());
-        checkMenuSeq("-1",null,1,menuVO.getSeq());
+        checkMenuSeq("-1", null, 1, menuVO.getSeq());
         MenuEntity menu = new MenuEntity();
         menu.setId(UUIDUtil.uuid());
         menu.setMenuName(menuVO.getMenuName());
@@ -148,9 +213,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         menu.setCreateBy(UserInfoContext.getUsername());
         menu.setUpdateBy(UserInfoContext.getUsername());
         menu.setSeq(menuVO.getSeq());
-        menu.setType(WMSConstants.RESOURCE_TYPE_MENU); //菜单
+        menu.setType(menuVO.getType());
+        menu.setStatus(menuVO.getStatus());
+        menu.setHidden(menuVO.getHidden());
         menu.setParentId("-1"); //-1表示顶级菜单
         menu.setUrl(menuVO.getUrl()); //
+        menu.setRedirect(menuVO.getRedirect());
+        menu.setPath(menuVO.getPath());
+        menu.setIcon(menuVO.getIcon());
         return save(menu);
     }
 
@@ -195,7 +265,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         return menuVO;
     }
 
-    private void checkMenuUrl(MenuVO menuVO){
+    private void checkMenuUrl(MenuVO menuVO) {
 
     }
 }

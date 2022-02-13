@@ -2,17 +2,10 @@ package com.wms.admin.vo;
 
 import lombok.Data;
 
-import java.util.List;
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+
  * meta : {
  roles: ['admin','editor']    control the page roles (you can set multiple roles)
  title: 'title'               the name show in sidebar and breadcrumb (recommend set)
@@ -24,13 +17,26 @@ import java.util.List;
  }
  */
 @Data
-public class RouteVO {
-    private String path;
-    private String name;
-    private String component;
-    private String redirect;
-    private List<RouteVO> children;
-    private RouteMeta meta;
-    private Boolean hidden;
+public class RouteMeta {
+    private String title;
+    private String icon;
+//    private String affix;
+//    private String breadcrumb ="false";
+//    private String noCache ="true";
+    private String activeMenu;
 
+    private RouteMeta(){
+
+    }
+
+    public static RouteMeta build(MenuVO menu){
+        RouteMeta metaVO = new RouteMeta();
+//        metaVO.setAffix("true");
+        metaVO.setIcon(menu.getIcon());
+        metaVO.setTitle(menu.getMenuName());
+//        metaVO.setNoCache("true");
+//        metaVO.setBreadcrumb("false");
+//            metaVO.setActiveMenu("false");
+        return metaVO;
+    }
 }

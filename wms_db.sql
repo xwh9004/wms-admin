@@ -7,7 +7,10 @@ create table  if not exists T_WMS_MENU(
   level_no int(2) NOT NULL comment '菜单层级',
   url VARCHAR(1000) comment '菜单路径',
   seq int(10) comment '展示顺序',
-  type VARCHAR(2) comment '资源类型 1 菜单 2 按钮',
+  type VARCHAR(2) comment '资源类型 0 目录 1 菜单 2 按钮',
+  status VARCHAR(1) comment '状态  1 启用 0 停用',
+  hidden VARCHAR(1) comment '是否隐藏 0 否 1 是';
+  icon VARCHAR(500) comment '图标',
   del_flag VARCHAR(1) default '1' comment '是否删除',
   create_by VARCHAR(200) comment '创建人',
   create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
@@ -16,10 +19,10 @@ create table  if not exists T_WMS_MENU(
   PRIMARY KEY ( id )
  )comment='菜单表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
- ALTER TABLE T_WMS_MENU ADD status VARCHAR(1);
- alter table T_WMS_MENU modify status VARCHAR(1) comment '状态  1 启用 0 停用';
 
-  ALTER TABLE T_WMS_MENU ADD icon VARCHAR(500) comment '图标';
+  ALTER TABLE T_WMS_MENU add redirect VARCHAR(1000) comment '重定向' ;
+  ALTER TABLE T_WMS_MENU add path VARCHAR(1000) comment '路径' ;
+  ALTER TABLE T_WMS_MENU add component VARCHAR(1000) comment '页面地址' ;
 
 
  create table  if not exists T_WMS_ROLE(

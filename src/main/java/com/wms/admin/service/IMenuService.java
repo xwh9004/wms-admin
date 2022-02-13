@@ -3,6 +3,7 @@ package com.wms.admin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.admin.entity.MenuEntity;
 import com.wms.admin.vo.MenuVO;
+import com.wms.admin.vo.RouteVO;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ import java.util.List;
 public interface IMenuService extends IService<MenuEntity> {
 
      List<MenuVO> queryList();
+
+    List<RouteVO> queryRoutes();
 
      boolean addMenu(MenuVO menuVO);
 

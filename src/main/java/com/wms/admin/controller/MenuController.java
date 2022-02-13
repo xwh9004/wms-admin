@@ -6,6 +6,7 @@ import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
 import com.wms.admin.service.IMenuService;
 import com.wms.admin.vo.MenuVO;
+import com.wms.admin.vo.RouteVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +38,7 @@ public class MenuController {
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @GetMapping("/routes")
     public Result routes() {
-        List<MenuVO> menuVOList = menuService.queryList();
+        List<RouteVO> menuVOList = menuService.queryRoutes();
         return Result.success().data(menuVOList);
     }
 
@@ -66,7 +67,7 @@ public class MenuController {
         return Result.success();
     }
 
-    @ApiOperation("添加菜单")
+    @ApiOperation("修改菜单")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @PostMapping("/update")
     public Result update(@RequestBody MenuVO menuVO) {
