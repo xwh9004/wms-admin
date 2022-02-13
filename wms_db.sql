@@ -71,3 +71,82 @@ create table  if not exists T_WMS_MENU(
 
  insert into T_WMS_ROLE (id,role_name,role_code,type,create_by,update_by) values('5e9066572ab8463392c3b418edd3b914','超级管理员','superAdmin','1','sys' ,'sys');
  insert into T_WMS_USER (id,user_name,role_code,user_pwd,create_by,update_by) values('574a612414b3464fb8e135bfc18ee777','super','superAdmin','MTIzNDU2','sys' ,'sys');
+
+
+ create table  if not exists T_WMS_STORAGES_REGION(
+   id VARCHAR(40) NOT NULL comment '仓库ID',
+   region_no VARCHAR(20) NOT NULL comment '仓库编号',
+   region_name VARCHAR(40) NOT NULL comment '仓库名称',
+   region_type VARCHAR(40) NOT NULL comment '仓库类型 1 一级库 2 二级库',
+   description VARCHAR(300) comment '描述',
+   del_flag VARCHAR(1) default '1' comment '是否删除',
+   create_by VARCHAR(200) comment '创建人',
+   create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+   update_by VARCHAR(200)   comment '最后更新人',
+   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+   PRIMARY KEY ( id )
+  )comment='仓库库区表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table  if not exists T_WMS_REGION_RACKS(
+   rack_no VARCHAR(40) NOT NULL comment 'ID',
+   region_id VARCHAR(20) NOT NULL comment '库区id',
+   rack_type VARCHAR(300) NOT NULL comment '存放商品类型，逗号分割多种类型',
+   total_racks int(11)  comment '货位架数',
+   used_racks int(11)  comment '已用货位数',
+   description VARCHAR(300) comment '描述',
+   del_flag VARCHAR(1) default '1' comment '是否删除',
+   create_by VARCHAR(200) comment '创建人',
+   create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+   update_by VARCHAR(200)   comment '最后更新人',
+   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+   PRIMARY KEY (rack_no)
+  )comment='库区货架表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  create table  if not exists T_WMS_PROD_CATEGORY(
+     id VARCHAR(40) NOT NULL comment 'ID',
+     name VARCHAR(100) NOT NULL comment '大类名称',
+     description VARCHAR(200) NOT NULL comment '描述',
+     del_flag VARCHAR(1) default '1' comment '是否删除',
+     create_by VARCHAR(200) comment '创建人',
+     create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+     update_by VARCHAR(200)   comment '最后更新人',
+     update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+     PRIMARY KEY ( id )
+    )comment='货物大类表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table  if not exists T_WMS_PRODUCT(
+  prod_no VARCHAR(40) NOT NULL comment '产品标号',
+  product_name VARCHAR(100) NOT NULL comment '产品名称',
+  vendor varChar(200) comment '供应商',
+  type  varChar(100)   comment '产品型号',
+  category_id  varChar(40)  NOT NULL comment '产品类目',
+  description VARCHAR(200) NOT NULL comment '描述',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+  PRIMARY KEY ( prod_no )
+)comment='货物表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table  if not exists T_WMS_VENDOR(
+  id varChar(40) NOT NULL comment '主键id',
+  vendor_no VARCHAR(40) NOT NULL comment '供应商编号',
+  name varChar(200) comment '供应商名称',
+  type  varChar(100)   comment '供应商类型 个人/代理',
+  description VARCHAR(200) NOT NULL comment '描述',
+   address VARCHAR(1000) NOT NULL comment '供应商地址',
+  contact varChar(100) comment '联系人',
+  contact_phone  varChar(40)   comment '联系人电话',
+  status varChar(2) NOT NULL comment '状态  可用 不可用',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+  PRIMARY KEY ( id )
+)comment='供应商表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
