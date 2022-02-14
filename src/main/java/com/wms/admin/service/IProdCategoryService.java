@@ -14,10 +14,9 @@ import com.wms.admin.vo.StoragesRegionVO;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-13 20:34:21
+ * @since 2022-02-14 14:43:16
  */
 public interface IProdCategoryService extends IService<ProdCategoryEntity> {
-
     IPage<ProdCategoryVO> categoryPages(ProdCategoryQueryVO queryVO, PageParam pageParam);
 
     void addCategory(ProdCategoryVO vo);

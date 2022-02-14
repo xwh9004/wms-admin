@@ -5,11 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
 import com.wms.admin.service.IProdCategoryService;
-import com.wms.admin.service.IStoragesRegionService;
 import com.wms.admin.vo.ProdCategoryQueryVO;
 import com.wms.admin.vo.ProdCategoryVO;
-import com.wms.admin.vo.StoragesRegionQueryVO;
-import com.wms.admin.vo.StoragesRegionVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-13 20:34:21
+ * @since 2022-02-14 14:43:16
  */
 @RestController
 @RequestMapping("/category")

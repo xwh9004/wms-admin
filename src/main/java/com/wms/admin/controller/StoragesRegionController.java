@@ -31,7 +31,7 @@ public class StoragesRegionController {
     @Autowired
     private IStoragesRegionService storagesRegionService;
 
-    
+
     @ApiOperation(value = "库区列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/list")

@@ -11,7 +11,7 @@ import com.wms.admin.entity.BaseEntity;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-13 20:34:22
+ * @since 2022-02-14 14:43:16
  */
 @TableName("t_wms_storages_region")
 public class StoragesRegionEntity extends BaseEntity {
@@ -40,13 +40,11 @@ public class StoragesRegionEntity extends BaseEntity {
     @TableField("region_type")
     private String regionType;
 
-
     /**
      * 描述
      */
     @TableField("description")
     private String description;
-
 
     public String getId() {
         return id;
@@ -75,6 +73,13 @@ public class StoragesRegionEntity extends BaseEntity {
 
     public void setRegionType(String regionType) {
         this.regionType = regionType;
+    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.ProductEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wms.admin.vo.ProdCategoryVO;
 import com.wms.admin.vo.ProductQueryVO;
 import com.wms.admin.vo.ProductVO;
-import com.wms.admin.vo.StoragesRegionVO;
 
 /**
  * <p>
@@ -15,10 +13,9 @@ import com.wms.admin.vo.StoragesRegionVO;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-13 20:34:22
+ * @since 2022-02-14 14:43:16
  */
 public interface IProductService extends IService<ProductEntity> {
-
     IPage<ProductVO> productPages(ProductQueryVO queryVO, PageParam pageParam);
 
     void addProduct(ProductVO vo);

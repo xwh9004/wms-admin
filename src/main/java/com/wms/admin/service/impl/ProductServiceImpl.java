@@ -3,7 +3,9 @@ package com.wms.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.ProdCategoryEntity;
 import com.wms.admin.entity.ProductEntity;
 import com.wms.admin.mapper.ProductMapper;
@@ -55,16 +57,39 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
 
     @Override
     public void addProduct(ProductVO vo) {
+        checkForAdd(vo);
+        ProductEntity productEntity = new ProductEntity();
+        BeanUtils.copyProperties(vo,productEntity);
+        productEntity.setCreateBy(UserInfoContext.getUsername());
+        productEntity.setUpdateBy(UserInfoContext.getUsername());
+        save(productEntity);
+    }
 
+    private void checkForAdd(ProductVO vo) {
     }
 
     @Override
-    public void updateProduct(ProductVO categoryVO) {
+    public void updateProduct(ProductVO productVO) {
+        checkForUpdate(productVO);
+        ProductEntity productEntity = new ProductEntity();
+        BeanUtils.copyProperties(productVO,productEntity);
+        productEntity.setUpdateBy(UserInfoContext.getUsername());
+        updateById(productEntity);
+    }
 
+    private void checkForUpdate(ProductVO productVO) {
     }
 
     @Override
-    public void deleteProduct(String regionId) {
+    public void deleteProduct(String prodNo) {
+        checkForDelete(prodNo);
+        ProductEntity productEntity = baseMapper.selectById(prodNo);
+        productEntity.setDelFlag(WMSConstants.DEL_FLG_0);
+        productEntity.setUpdateBy(UserInfoContext.getUsername());
+        updateById(productEntity);
+    }
+
+    private void checkForDelete(String prodNo) {
 
     }
 }

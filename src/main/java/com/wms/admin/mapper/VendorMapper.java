@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-13 20:34:22
+ * @since 2022-02-14 14:43:16
  */
 public interface VendorMapper extends BaseMapper<VendorEntity> {
 

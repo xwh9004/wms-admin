@@ -19,12 +19,12 @@ public class MyBatisPlusGenerator {
         String path = "D:/gitRepo/wms-admin/src/main/java/";
         String xmlPath="D:/gitRepo/wms-admin/src/main/resources/mapper";
 
-
-        String[] tableNames = {"T_WMS_STORAGES_REGION",
-                "T_WMS_REGION_RACKS",
-                "T_WMS_PROD_CATEGORY",
-        "T_WMS_PRODUCT",
-        "T_WMS_VENDOR"};
+        String[] tableNames={};
+//        String[] tableNames = {"T_WMS_STORAGES_REGION",
+//                "T_WMS_REGION_RACKS",
+//                "T_WMS_PROD_CATEGORY",
+//        "T_WMS_PRODUCT",
+//        "T_WMS_VENDOR"};
 
         FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> {
