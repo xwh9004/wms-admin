@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
+
 @Validated
 @Data
 public class ProductVO {
@@ -38,5 +40,9 @@ public class ProductVO {
      * 描述
      */
     private String description;
+    private String createBy;
+    private String updateBy;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
 }

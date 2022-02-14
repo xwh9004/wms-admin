@@ -2,6 +2,8 @@ package com.wms.admin.vo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class StoragesRegionQueryVO {
 
@@ -10,10 +12,13 @@ public class StoragesRegionQueryVO {
      */
     private String regionName;
 
+    private String regionNo;
     /**
      * 仓库类型 1 一级库 2 二级库
      */
     private String regionType;
+
+
 
 
 }

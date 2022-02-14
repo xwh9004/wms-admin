@@ -75,6 +75,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         checkForUpdate(categoryVO);
         ProdCategoryEntity entity = prodCategoryMapper.selectById(categoryVO.getId());
         entity.setName(categoryVO.getName());
+        entity.setCode(categoryVO.getCode());
         entity.setDescription(categoryVO.getDescription());
         entity.setUpdateBy(UserInfoContext.getUsername());
         updateById(entity);

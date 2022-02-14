@@ -78,6 +78,7 @@ create table  if not exists T_WMS_MENU(
    region_no VARCHAR(20) NOT NULL comment '仓库编号',
    region_name VARCHAR(40) NOT NULL comment '仓库名称',
    region_type VARCHAR(40) NOT NULL comment '仓库类型 1 一级库 2 二级库',
+   address VARCHAR(1000) comment '地址',
    description VARCHAR(300) comment '描述',
    del_flag VARCHAR(1) default '1' comment '是否删除',
    create_by VARCHAR(200) comment '创建人',
@@ -86,6 +87,7 @@ create table  if not exists T_WMS_MENU(
    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
    PRIMARY KEY ( id )
   )comment='仓库库区表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ALTER TABLE T_WMS_STORAGES_REGION add address VARCHAR(1000) comment '地址' ;
 
 
 create table  if not exists T_WMS_REGION_RACKS(
@@ -106,6 +108,7 @@ create table  if not exists T_WMS_REGION_RACKS(
   create table  if not exists T_WMS_PROD_CATEGORY(
      id VARCHAR(40) NOT NULL comment 'ID',
      name VARCHAR(100) NOT NULL comment '大类名称',
+     code VARCHAR(40) NOT NULL comment '大类编码',
      description VARCHAR(200) NOT NULL comment '描述',
      del_flag VARCHAR(1) default '1' comment '是否删除',
      create_by VARCHAR(200) comment '创建人',
@@ -114,6 +117,7 @@ create table  if not exists T_WMS_REGION_RACKS(
      update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
      PRIMARY KEY ( id )
     )comment='货物大类表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ALTER TABLE T_WMS_PROD_CATEGORY add code VARCHAR(40) comment '大类编码' ;
 
 
 create table  if not exists T_WMS_PRODUCT(

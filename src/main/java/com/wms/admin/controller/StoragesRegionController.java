@@ -31,6 +31,13 @@ public class StoragesRegionController {
     @Autowired
     private IStoragesRegionService storagesRegionService;
 
+    @ApiOperation(value = "库区列表")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/all")
+    public Result all(@RequestBody StoragesRegionQueryVO queryVO, PageParam pageParam) {
+        List<StoragesRegionVO> data = storagesRegionService.regionList();
+        return Result.success().data(data);
+    }
 
     @ApiOperation(value = "库区列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")

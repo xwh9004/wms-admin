@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
@@ -44,6 +45,20 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
     StoragesRegionMapper storagesRegionMapper;
 
     @Override
+    public List<StoragesRegionVO> regionList() {
+        LambdaQueryWrapper<StoragesRegionEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(StoragesRegionEntity::getDelFlag, DEL_FLG_1);
+        List<StoragesRegionEntity> list = list(queryWrapper);
+        List<StoragesRegionVO> resultList = new ArrayList<>();
+        list.forEach(item->{
+            StoragesRegionVO vo = new StoragesRegionVO();
+            BeanUtils.copyProperties(item,vo);
+            resultList.add(vo);
+        });
+        return resultList;
+    }
+
+    @Override
     public IPage<StoragesRegionVO> regionPages(StoragesRegionQueryVO storagesRegionQueryVO, PageParam pageParam) {
         IPage<StoragesRegionEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<StoragesRegionEntity> queryWrapper = new LambdaQueryWrapper<>();
@@ -54,7 +69,7 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
         if (StringUtils.isNotBlank(storagesRegionQueryVO.getRegionType())) {
             queryWrapper.like(StoragesRegionEntity::getRegionType, storagesRegionQueryVO.getRegionType());
         }
-        queryWrapper.orderByDesc(StoragesRegionEntity::getCreateTime);
+        queryWrapper.orderByDesc(StoragesRegionEntity::getRegionType,StoragesRegionEntity::getCreateTime);
         IPage<StoragesRegionVO> resultPage = page(page, queryWrapper).convert(entity -> {
             StoragesRegionVO storagesRegionVO = new StoragesRegionVO();
             BeanUtils.copyProperties(entity, storagesRegionVO);
@@ -71,6 +86,7 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
         regionEntity.setId(UUIDUtil.uuid());
         regionEntity.setCreateBy(UserInfoContext.getUsername());
         regionEntity.setUpdateBy(UserInfoContext.getUsername());
+        save(regionEntity);
     }
 
     @Override

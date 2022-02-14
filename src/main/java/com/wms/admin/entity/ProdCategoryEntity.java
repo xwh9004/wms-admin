@@ -27,7 +27,11 @@ public class ProdCategoryEntity extends BaseEntity {
      */
     @TableField("name")
     private String name;
-
+    /**
+     * 大类编号
+     */
+    @TableField("code")
+    private String code;
     /**
      * 描述
      */
@@ -43,6 +47,14 @@ public class ProdCategoryEntity extends BaseEntity {
     }
     public String getName() {
         return name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public void setName(String name) {
@@ -61,6 +73,7 @@ public class ProdCategoryEntity extends BaseEntity {
         return "ProdCategoryEntity{" +
             "id=" + id +
             ", name=" + name +
+            ", code=" + code +
             ", description=" + description +
         "}";
     }

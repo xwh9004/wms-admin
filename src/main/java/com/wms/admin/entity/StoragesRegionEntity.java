@@ -39,7 +39,11 @@ public class StoragesRegionEntity extends BaseEntity {
      */
     @TableField("region_type")
     private String regionType;
-
+    /**
+     * 仓库地址
+     */
+    @TableField("address")
+    private String address;
     /**
      * 描述
      */
@@ -71,6 +75,14 @@ public class StoragesRegionEntity extends BaseEntity {
         return regionType;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public void setRegionType(String regionType) {
         this.regionType = regionType;
     }
@@ -89,6 +101,7 @@ public class StoragesRegionEntity extends BaseEntity {
             ", regionNo=" + regionNo +
             ", regionName=" + regionName +
             ", regionType=" + regionType +
+            ", address=" + address +
             ", description=" + description +
         "}";
     }

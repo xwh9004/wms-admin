@@ -16,16 +16,19 @@ public class MyBatisPlusGenerator {
         String url = "jdbc:mysql://localhost:3306/wms_db";
         String username = "root";
         String password = "";
-        String path = "D:/gitRepo/wms-admin/src/main/java/";
-        String xmlPath="D:/gitRepo/wms-admin/src/main/resources/mapper";
+        String path = "D:/我的项目/wms/";
+        String xmlPath="D:/我的项目/wms/mapper";
 
         String[] tableNames={};
+
 //        String[] tableNames = {"T_WMS_STORAGES_REGION",
 //                "T_WMS_REGION_RACKS",
 //                "T_WMS_PROD_CATEGORY",
 //        "T_WMS_PRODUCT",
 //        "T_WMS_VENDOR"};
-
+        if(tableNames.length==0){
+            return;
+        }
         FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> {
                     builder.author("Jesse") // 设置作者
