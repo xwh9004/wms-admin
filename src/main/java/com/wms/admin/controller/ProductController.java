@@ -34,7 +34,13 @@ public class ProductController {
         IPage<ProductVO> pages = productService.productPages(queryVO, pageParam);
         return Result.success().data(pages);
     }
-
+    @ApiOperation(value = "货物查询")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @GetMapping("/findBy/{prodNo}")
+    public Result findBy(@PathVariable String prodNo) {
+        ProductVO product = productService.findByProdNo(prodNo);
+        return Result.success().data(product);
+    }
     @ApiOperation(value = "新增货物")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
@@ -54,9 +60,9 @@ public class ProductController {
 
     @ApiOperation(value = "删除货物")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/delete/{regionId}")
-    public Result delete(@PathVariable String regionId) {
-        productService.deleteProduct(regionId);
+    @PostMapping("/delete/{id}")
+    public Result delete(@PathVariable String id) {
+        productService.deleteProduct(id);
         return Result.success();
     }
 }

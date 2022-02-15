@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Validated
 @Data
 public class ProductVO {
-
+    private String id;
     /**
      * prod_no
      */
@@ -19,12 +19,13 @@ public class ProductVO {
     /**
      * 产品名称
      */
-    private String productName;
+    private String prodName;
 
     /**
      * 供应商
      */
-    private String vendor;
+    private String vendorId;
+    private String vendorName;
 
     /**
      * 产品型号
@@ -35,6 +36,7 @@ public class ProductVO {
      * 产品类目
      */
     private String categoryId;
+    private String categoryName;
 
     /**
      * 描述

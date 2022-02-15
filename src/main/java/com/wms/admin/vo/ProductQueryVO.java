@@ -15,12 +15,12 @@ public class ProductQueryVO {
     /**
      * 产品名称
      */
-    private String productName;
+    private String prodName;
 
     /**
      * 供应商
      */
-    private String vendor;
+    private String vendorId;
 
 
 }

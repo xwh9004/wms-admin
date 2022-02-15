@@ -15,24 +15,28 @@ import com.wms.admin.entity.BaseEntity;
  */
 @TableName("t_wms_product")
 public class ProductEntity extends BaseEntity {
-
+    /**
+     * id
+     */
+    @TableId("id")
+    private String id;
     /**
      * prod_no
      */
-    @TableId("prod_no")
+    @TableField("prod_no")
     private String prodNo;
 
     /**
      * 产品名称
      */
-    @TableField("product_name")
-    private String productName;
+    @TableField("prod_name")
+    private String prodName;
 
     /**
      * 供应商
      */
-    @TableField("vendor")
-    private String vendor;
+    @TableField("vendor_id")
+    private String vendorId;
 
     /**
      * 产品型号
@@ -52,6 +56,15 @@ public class ProductEntity extends BaseEntity {
     @TableField("description")
     private String description;
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getProdNo() {
         return prodNo;
     }
@@ -59,20 +72,23 @@ public class ProductEntity extends BaseEntity {
     public void setProdNo(String prodNo) {
         this.prodNo = prodNo;
     }
-    public String getProductName() {
-        return productName;
+
+    public String getProdName() {
+        return prodName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-    public String getVendor() {
-        return vendor;
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
     }
 
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
+    public String getVendorId() {
+        return vendorId;
     }
+
+    public void setVendorId(String vendorId) {
+        this.vendorId = vendorId;
+    }
+
     public String getType() {
         return type;
     }
@@ -98,9 +114,10 @@ public class ProductEntity extends BaseEntity {
     @Override
     public String toString() {
         return "ProductEntity{" +
+            "id=" + id +
             "prodNo=" + prodNo +
-            ", productName=" + productName +
-            ", vendor=" + vendor +
+            ", prodName=" + prodName +
+            ", vendorId=" + vendorId +
             ", type=" + type +
             ", categoryId=" + categoryId +
             ", description=" + description +

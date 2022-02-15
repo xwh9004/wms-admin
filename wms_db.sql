@@ -125,18 +125,19 @@ ALTER TABLE T_WMS_REGION_RACKS MODIFY  region_id VARCHAR(40) ;
 
 
 create table  if not exists T_WMS_PRODUCT(
-  prod_no VARCHAR(40) NOT NULL comment '产品标号',
-  product_name VARCHAR(100) NOT NULL comment '产品名称',
-  vendor varChar(200) comment '供应商',
+  id VARCHAR(40) NOT NULL comment '产品ID',
+  prod_no VARCHAR(40) NOT NULL comment '产品编号',
+  prod_name VARCHAR(100) NOT NULL comment '产品名称',
+  vendor_id varChar(40) comment '供应商',
   type  varChar(100)   comment '产品型号',
   category_id  varChar(40)  NOT NULL comment '产品类目',
-  description VARCHAR(200) NOT NULL comment '描述',
+  description VARCHAR(200)  comment '描述',
   del_flag VARCHAR(1) default '1' comment '是否删除',
   create_by VARCHAR(200) comment '创建人',
   create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
-  PRIMARY KEY ( prod_no )
+  PRIMARY KEY ( id )
 )comment='货物表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
