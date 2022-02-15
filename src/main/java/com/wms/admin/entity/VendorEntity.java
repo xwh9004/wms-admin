@@ -41,6 +41,12 @@ public class VendorEntity extends BaseEntity {
     private String type;
 
     /**
+     * 状态 1 可用 0 不可用
+     */
+    @TableField("status")
+    private String status;
+
+    /**
      * 描述
      */
     @TableField("description")
@@ -64,11 +70,6 @@ public class VendorEntity extends BaseEntity {
     @TableField("contact_phone")
     private String contactPhone;
 
-    /**
-     * 状态  可用 不可用
-     */
-    @TableField("status")
-    private String status;
 
     public String getId() {
         return id;

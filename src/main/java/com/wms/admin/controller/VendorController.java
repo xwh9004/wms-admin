@@ -6,14 +6,13 @@ import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
 import com.wms.admin.service.IStoragesRegionService;
 import com.wms.admin.service.IVendorService;
-import com.wms.admin.vo.StoragesRegionQueryVO;
-import com.wms.admin.vo.StoragesRegionVO;
-import com.wms.admin.vo.VendorQueryVO;
-import com.wms.admin.vo.VendorVO;
+import com.wms.admin.vo.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -29,6 +28,13 @@ public class VendorController {
     @Autowired
     private IVendorService vendorService;
 
+    @ApiOperation(value = "供应商下拉框列表")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @GetMapping("/all")
+    public Result all() {
+        List<VendorVO> data = vendorService.vendorList();
+        return Result.success().data(data);
+    }
 
     @ApiOperation(value = "供应商列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")

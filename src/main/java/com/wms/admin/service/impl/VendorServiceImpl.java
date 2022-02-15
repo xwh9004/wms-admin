@@ -15,8 +15,12 @@ import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.StoragesRegionVO;
 import com.wms.admin.vo.VendorQueryVO;
 import com.wms.admin.vo.VendorVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 
@@ -32,11 +36,39 @@ import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 public class VendorServiceImpl extends ServiceImpl<VendorMapper, VendorEntity> implements IVendorService {
 
     @Override
+    public List<VendorVO> vendorList() {
+        LambdaQueryWrapper<VendorEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(VendorEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.orderByDesc(VendorEntity::getCreateTime);
+        queryWrapper.orderByAsc(VendorEntity::getId);
+        List<VendorEntity> list = list(queryWrapper);
+        List<VendorVO> result = new ArrayList<>();
+        if (!list.isEmpty()){
+            list.forEach(item->{
+                VendorVO vo = new VendorVO();
+                BeanUtils.copyProperties(item, vo);
+                result.add(vo);
+            });
+        }
+        return result;
+    }
+
+
+    @Override
     public IPage<VendorVO> vendorPages(VendorQueryVO queryVO, PageParam pageParam) {
         IPage<VendorEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<VendorEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(VendorEntity::getDelFlag, DEL_FLG_1);
 
+        if(StringUtils.isNotBlank(queryVO.getName())){
+            queryWrapper.like(VendorEntity::getName,queryVO.getName());
+        }
+        if(StringUtils.isNotBlank(queryVO.getVendorNo())){
+            queryWrapper.like(VendorEntity::getVendorNo,queryVO.getVendorNo());
+        }
+        if(StringUtils.isNotBlank(queryVO.getType())){
+            queryWrapper.eq(VendorEntity::getType,queryVO.getType());
+        }
         queryWrapper.orderByDesc(VendorEntity::getCreateTime);
         IPage<VendorVO> resultPage = page(page, queryWrapper).convert(entity -> {
             VendorVO vo = new VendorVO();
@@ -51,6 +83,7 @@ public class VendorServiceImpl extends ServiceImpl<VendorMapper, VendorEntity> i
         checkForAdd(vendorVO);
         VendorEntity entity = new VendorEntity();
         entity.setId(UUIDUtil.uuid());
+        BeanUtils.copyProperties(vendorVO,entity);
         entity.setCreateBy(UserInfoContext.getUsername());
         entity.setUpdateBy(UserInfoContext.getUsername());
         save(entity);
@@ -79,6 +112,7 @@ public class VendorServiceImpl extends ServiceImpl<VendorMapper, VendorEntity> i
         entity.setUpdateBy(UserInfoContext.getUsername());
         updateById(entity);
     }
+
 
     private void checkForDelete(String vendorId) {
     }

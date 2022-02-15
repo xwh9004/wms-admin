@@ -146,7 +146,7 @@ create table  if not exists T_WMS_VENDOR(
   name varChar(200) comment '供应商名称',
   type  varChar(100)   comment '供应商类型 个人/代理',
   description VARCHAR(200) NOT NULL comment '描述',
-   address VARCHAR(1000) NOT NULL comment '供应商地址',
+  address VARCHAR(1000) NOT NULL comment '供应商地址',
   contact varChar(100) comment '联系人',
   contact_phone  varChar(40)   comment '联系人电话',
   status varChar(2) NOT NULL comment '状态  可用 不可用',

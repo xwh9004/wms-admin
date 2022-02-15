@@ -2,6 +2,8 @@ package com.wms.admin.vo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class VendorVO {
     /**
@@ -48,4 +50,10 @@ public class VendorVO {
      * 状态  可用 不可用
      */
     private String status;
+
+    private String createBy;
+    private String updateBy;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+
 }

@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.VendorEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.vo.ProdCategoryVO;
 import com.wms.admin.vo.StoragesRegionVO;
 import com.wms.admin.vo.VendorQueryVO;
 import com.wms.admin.vo.VendorVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -26,5 +29,5 @@ public interface IVendorService extends IService<VendorEntity> {
 
     void deleteVendor(String vendorId);
 
-
+    List<VendorVO> vendorList();
 }
