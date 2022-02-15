@@ -48,6 +48,8 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
     public List<StoragesRegionVO> regionList() {
         LambdaQueryWrapper<StoragesRegionEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StoragesRegionEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.orderByAsc(StoragesRegionEntity::getRegionType);
+        queryWrapper.orderByDesc(StoragesRegionEntity::getCreateTime);
         List<StoragesRegionEntity> list = list(queryWrapper);
         List<StoragesRegionVO> resultList = new ArrayList<>();
         list.forEach(item->{
@@ -69,7 +71,8 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
         if (StringUtils.isNotBlank(storagesRegionQueryVO.getRegionType())) {
             queryWrapper.like(StoragesRegionEntity::getRegionType, storagesRegionQueryVO.getRegionType());
         }
-        queryWrapper.orderByDesc(StoragesRegionEntity::getRegionType,StoragesRegionEntity::getCreateTime);
+        queryWrapper.orderByAsc(StoragesRegionEntity::getRegionType);
+        queryWrapper.orderByDesc(StoragesRegionEntity::getCreateTime);
         IPage<StoragesRegionVO> resultPage = page(page, queryWrapper).convert(entity -> {
             StoragesRegionVO storagesRegionVO = new StoragesRegionVO();
             BeanUtils.copyProperties(entity, storagesRegionVO);

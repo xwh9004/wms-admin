@@ -32,7 +32,7 @@ public class RegionRacksController {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/list")
     public Result list(@RequestBody RegionRackQueryVO queryVO, PageParam pageParam) {
-        IPage<StoragesRegionVO> pages = regionRacksService.regionRackPages(queryVO, pageParam);
+        IPage<RegionRackVO> pages = regionRacksService.regionRackPages(queryVO, pageParam);
         return Result.success().data(pages);
     }
 

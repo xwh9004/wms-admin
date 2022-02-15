@@ -22,6 +22,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 
 /**
@@ -37,6 +40,21 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
 
     @Autowired
     private ProdCategoryMapper prodCategoryMapper;
+
+    @Override
+    public List<ProdCategoryVO> categoryAll() {
+        LambdaQueryWrapper<ProdCategoryEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProdCategoryEntity::getDelFlag, DEL_FLG_1);
+
+        queryWrapper.orderByDesc(ProdCategoryEntity::getCreateTime);
+        List<ProdCategoryVO> list = new ArrayList<>();
+        list(queryWrapper).forEach(entity -> {
+            ProdCategoryVO vo = new ProdCategoryVO();
+            BeanUtils.copyProperties(entity, vo);
+            list.add(vo);
+        });
+        return list;
+    }
 
     @Override
     public IPage<ProdCategoryVO> categoryPages(ProdCategoryQueryVO queryVO, PageParam pageParam) {

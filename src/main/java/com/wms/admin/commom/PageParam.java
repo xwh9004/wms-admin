@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 @Data
 public class PageParam {
 
-    private Integer page;
+    private Integer page =1;
 
-    private Integer limit;
+    private Integer limit =10;
 }

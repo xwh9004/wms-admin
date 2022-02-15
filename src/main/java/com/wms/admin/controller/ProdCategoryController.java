@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>
  * 货物大类表 前端控制器
@@ -26,7 +28,13 @@ public class ProdCategoryController {
     @Autowired
     private IProdCategoryService prodCategoryService;
 
-
+    @ApiOperation(value = "大类列表")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @GetMapping("/all")
+    public Result all() {
+        List<ProdCategoryVO> data = prodCategoryService.categoryAll();
+        return Result.success().data(data);
+    }
     @ApiOperation(value = "大类列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/list")

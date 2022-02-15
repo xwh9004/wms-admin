@@ -18,7 +18,7 @@ import com.wms.admin.vo.StoragesRegionVO;
  */
 public interface IRegionRacksService extends IService<RegionRacksEntity> {
 
-    IPage<StoragesRegionVO> regionRackPages(RegionRackQueryVO queryVO, PageParam pageParam);
+    IPage<RegionRackVO> regionRackPages(RegionRackQueryVO queryVO, PageParam pageParam);
 
     void addRegionRack(RegionRackVO vo);
 

@@ -10,9 +10,12 @@ import java.time.LocalDateTime;
 @Validated
 @Data
 public class RegionRackVO {
-
     /**
      * ID
+     */
+    private String id;
+    /**
+     * 货架编号
      */
     private String rackNo;
 
@@ -20,6 +23,14 @@ public class RegionRackVO {
      * 库区id
      */
     private String regionId;
+    /**
+     * 库区编号
+     */
+    private String regionNo;
+    /**
+     * 库区名称
+     */
+    private String regionName;
 
     /**
      * 存放商品类型，逗号分割多种类型

@@ -91,9 +91,10 @@ create table  if not exists T_WMS_MENU(
 
 
 create table  if not exists T_WMS_REGION_RACKS(
-   rack_no VARCHAR(40) NOT NULL comment 'ID',
-   region_id VARCHAR(20) NOT NULL comment '库区id',
-   rack_type VARCHAR(300) NOT NULL comment '存放商品类型，逗号分割多种类型',
+   id VARCHAR(40) NOT NULL comment 'ID',
+   rack_no VARCHAR(40) NOT NULL comment '货架编号',
+   region_id VARCHAR(40) NOT NULL comment '库区id',
+   rack_type VARCHAR(300)  comment '存放商品类型，逗号分割多种类型',
    total_racks int(11)  comment '货位架数',
    used_racks int(11)  comment '已用货位数',
    description VARCHAR(300) comment '描述',
@@ -102,8 +103,11 @@ create table  if not exists T_WMS_REGION_RACKS(
    create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
    update_by VARCHAR(200)   comment '最后更新人',
    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
-   PRIMARY KEY (rack_no)
+   PRIMARY KEY (id)
   )comment='库区货架表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE T_WMS_REGION_RACKS MODIFY  region_id VARCHAR(40) ;
+
 
   create table  if not exists T_WMS_PROD_CATEGORY(
      id VARCHAR(40) NOT NULL comment 'ID',

@@ -15,11 +15,12 @@ import com.wms.admin.entity.BaseEntity;
  */
 @TableName("t_wms_region_racks")
 public class RegionRacksEntity extends BaseEntity {
-
+    @TableId("id")
+    private String id;
     /**
-     * ID
+     * 货架编号
      */
-    @TableId("rack_no")
+    @TableField("rack_no")
     private String rackNo;
 
     /**
@@ -51,6 +52,14 @@ public class RegionRacksEntity extends BaseEntity {
      */
     @TableField("description")
     private String description;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getRackNo() {
         return rackNo;
@@ -98,6 +107,7 @@ public class RegionRacksEntity extends BaseEntity {
     @Override
     public String toString() {
         return "RegionRacksEntity{" +
+            "id=" + id +
             "rackNo=" + rackNo +
             ", regionId=" + regionId +
             ", rackType=" + rackType +

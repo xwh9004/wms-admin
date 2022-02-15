@@ -8,6 +8,8 @@ import com.wms.admin.vo.ProdCategoryQueryVO;
 import com.wms.admin.vo.ProdCategoryVO;
 import com.wms.admin.vo.StoragesRegionVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 货物大类表 服务类
@@ -17,6 +19,9 @@ import com.wms.admin.vo.StoragesRegionVO;
  * @since 2022-02-14 14:43:16
  */
 public interface IProdCategoryService extends IService<ProdCategoryEntity> {
+
+    List<ProdCategoryVO> categoryAll();
+
     IPage<ProdCategoryVO> categoryPages(ProdCategoryQueryVO queryVO, PageParam pageParam);
 
     void addCategory(ProdCategoryVO vo);
@@ -24,4 +29,5 @@ public interface IProdCategoryService extends IService<ProdCategoryEntity> {
     void updateCategory(ProdCategoryVO categoryVO);
 
     void deleteCategory(String regionId);
+
 }

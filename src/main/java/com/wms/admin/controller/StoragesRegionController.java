@@ -33,8 +33,8 @@ public class StoragesRegionController {
 
     @ApiOperation(value = "库区列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/all")
-    public Result all(@RequestBody StoragesRegionQueryVO queryVO, PageParam pageParam) {
+    @GetMapping("/all")
+    public Result all() {
         List<StoragesRegionVO> data = storagesRegionService.regionList();
         return Result.success().data(data);
     }
@@ -66,8 +66,8 @@ public class StoragesRegionController {
 
     @ApiOperation(value = "删除库区")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/delete/{regionId}")
-    public Result delete(@PathVariable String regionId) {
+    @PostMapping("/delete/{id}")
+    public Result delete(@PathVariable(value = "id") String regionId) {
         storagesRegionService.deleteRegion(regionId);
         return Result.success();
     }
