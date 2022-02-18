@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.admin.mapper.StorageShiftDetailRecordMapper">
+    <select id="storageShiftDetailList" resultType="com.wms.admin.vo.StorageShiftDetailRecordVO">
+        SELECT
+        rd.id,rd.receipt_id,
+        rd.prod_id,p.prod_no,p.prod_name,rd.prod_amount,ven.name vendor_name,
+        rd.status,rd.create_by,rd.create_time,rd.update_by,rd.update_time
+        FROM t_wms_storage_out_detail_record rd
+        LEFT JOIN t_wms_receipt_record rp on rp.id = rd.receipt_id and rp.del_flag ='1'
+        LEFT JOIN t_wms_product p on p.id = rd.prod_id and p.del_flag ='1'
+        LEFT JOIN t_wms_vendor ven on ven.id = p.vendor_id and ven.del_flag ='1'
+        WHERE rd.del_flag='1'
+        and rp.receipt_no =#{receiptNo}
+    </select>
+
+    <select id="receiptPage" parameterType="com.wms.admin.vo.ReceiptRecordQueryVO"
+            resultType="com.wms.admin.vo.ReceiptRecordVO">
+        select
+        r.id , r.receipt_no , r.receipt_type , r.sub_type ,
+        r.from_id , SR1.region_name from_name,  r.to_id , SR2.region_name to_name,
+        r.apply_id ,r.operator_id ,r.prod_type_nums,r.total_amount ,
+        r.description , r.apply_date ,
+        r.del_flag ,r.create_by , r.create_time , r.update_by ,r.update_time
+        from T_WMS_RECEIPT_RECORD r
+        left join T_WMS_STORAGES_REGION SR1 on r.from_id = SR1.id and SR1.del_flag='1'
+        left join T_WMS_STORAGES_REGION SR2 on r.to_id = SR2.id and SR2.del_flag='1'
+        where r.del_flag ='1'
+        <if test="param.applyStartDate!=null and param.applyStartDate!=''">
+            and r.apply_date &gt; #{param.applyStartDate}
+        </if>
+        <if test="param.applyEndDate!=null and param.applyEndDate!=''">
+            and r.apply_date &lt; #{param.applyEndDate}
+        </if>
+        <if test="param.receiptNo!=null and param.receiptNo!=''">
+            and r.receipt_no = #{param.receiptNo}
+        </if>
+        <if test="param.fromId!=null and param.fromId!=''">
+            and r.from_id = #{param.fromId}
+        </if>
+        <if test="param.toId!=null and param.toId!=''">
+            and r.to_id = #{param.toId}
+        </if>
+        <if test="param.applyId!=null and param.applyId!=''">
+            and r.apply_id = #{param.applyId}
+        </if>
+        <if test="param.operatorId!=null and param.operatorId!=''">
+            and r.operator_id = #{param.operatorId}
+        </if>
+        order by r.update_time desc, r.receipt_no asc
+    </select>
+</mapper>

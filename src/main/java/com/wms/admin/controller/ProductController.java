@@ -7,6 +7,7 @@ import com.wms.admin.commom.Result;
 import com.wms.admin.service.IProdCategoryService;
 import com.wms.admin.service.IProductService;
 import com.wms.admin.vo.*;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Jesse
  * @since 2022-02-13 20:34:22
  */
+@Api("货物控制器")
 @RestController
 @RequestMapping("/product")
 public class ProductController {

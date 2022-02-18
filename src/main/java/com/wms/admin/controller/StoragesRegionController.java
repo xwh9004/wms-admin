@@ -9,6 +9,7 @@ import com.wms.admin.vo.RoleQueryVO;
 import com.wms.admin.vo.RoleVO;
 import com.wms.admin.vo.StoragesRegionQueryVO;
 import com.wms.admin.vo.StoragesRegionVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.List;
  * @author Jesse
  * @since 2022-02-13 20:34:22
  */
+@Api("仓库控制器")
 @RestController
 @RequestMapping("/region")
 public class StoragesRegionController {

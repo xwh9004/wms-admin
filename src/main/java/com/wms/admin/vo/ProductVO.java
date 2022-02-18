@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Data
 public class ProductVO {
     private String id;
+
+    private String prodId;
     /**
      * prod_no
      */

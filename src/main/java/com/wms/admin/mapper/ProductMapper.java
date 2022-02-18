@@ -20,4 +20,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ProductMapper extends BaseMapper<ProductEntity> {
     IPage<ProductVO> productPage(@Param(value = "param") ProductQueryVO queryVO, Page page);
+
+    ProductVO findByProdNo(@Param(value = "prodNo") String prodNo);
 }

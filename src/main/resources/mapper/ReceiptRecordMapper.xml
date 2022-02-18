@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.admin.mapper.ReceiptRecordMapper">
+    <select id="receiptPage" parameterType="com.wms.admin.vo.ReceiptRecordQueryVO"
+            resultType="com.wms.admin.vo.ReceiptRecordVO">
+        select
+        r.id , r.receipt_no , r.receipt_type , r.sub_type ,
+        r.region_id , SR.region_name,
+        r.apply_id ,r.operator_id ,r.prod_type_nums,r.total_amount ,
+        r.description , r.apply_date ,
+        r.del_flag ,r.create_by , r.create_time , r.update_by ,r.update_time
+        from T_WMS_RECEIPT_RECORD r
+        left join T_WMS_STORAGES_REGION SR on r.region_id = SR.id and SR.del_flag='1'
+        where r.del_flag ='1'
+        <if test="param.applyStartDate!=null and param.applyStartDate!=''">
+            and r.apply_date &gt; #{param.applyStartDate}
+        </if>
+        <if test="param.applyEndDate!=null and param.applyEndDate!=''">
+            and r.apply_date &lt; #{param.applyEndDate}
+        </if>
+        <if test="param.receiptNo!=null and param.receiptNo!=''">
+            and r.receipt_no = #{param.receiptNo}
+        </if>
+        <if test="param.regionId!=null and param.regionId!=''">
+            and r.region_id = #{param.regionId}
+        </if>
+        <if test="param.applyId!=null and param.applyId!=''">
+            and r.apply_id = #{param.applyId}
+        </if>
+        <if test="param.operatorId!=null and param.operatorId!=''">
+            and r.operator_id = #{param.operatorId}
+        </if>
+        <if test="param.receiptType!=null and param.receiptType!=''">
+            and r.receipt_type = #{param.receiptType}
+        </if>
+        order by r.update_time desc, r.receipt_no asc
+    </select>
+
+    <select id="selectByReceiptNo" resultType="com.wms.admin.vo.ReceiptRecordVO">
+        SELECT r.id , r.receipt_no ,r.receipt_type ,r.sub_type ,
+        r.region_id ,SR.region_name,
+        r.apply_id , r.operator_id , r.prod_type_nums, r.total_amount , r.description ,
+        r.apply_date , r.del_flag ,r.create_by , r.create_time , r.update_by , r.update_time
+        FROM t_wms_receipt_record r
+        left join T_WMS_STORAGES_REGION SR on r.region_id = SR.id and SR.del_flag='1'
+        WHERE
+        r.del_flag = '1'
+        AND r.receipt_no = #{receiptNo}
+    </select>
+</mapper>

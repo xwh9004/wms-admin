@@ -7,6 +7,7 @@ import com.wms.admin.commom.Result;
 import com.wms.admin.service.IRegionRacksService;
 import com.wms.admin.vo.RegionRackQueryVO;
 import com.wms.admin.vo.RegionRackVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,12 @@ import org.springframework.web.bind.annotation.*;
  * @author Jesse
  * @since 2022-02-13 20:34:22
  */
+@Api("货架控制器")
 @RestController
 @RequestMapping("/racks")
 public class RegionRacksController {
     @Autowired
     private IRegionRacksService regionRacksService;
-
 
     @ApiOperation(value = "货架列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")

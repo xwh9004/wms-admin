@@ -48,13 +48,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
 
     @Override
     public ProductVO findByProdNo(String prodNo) {
-        LambdaQueryWrapper<ProductEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.
-                eq(ProductEntity::getDelFlag, DEL_FLG_1)
-                .eq(ProductEntity::getProdNo,prodNo);
-        ProductEntity productEntity = baseMapper.selectOne(queryWrapper);
-        ProductVO productVO = new ProductVO();
-        BeanUtils.copyProperties(productEntity,productVO);
+        ProductVO productVO = productMapper.findByProdNo(prodNo);
         return productVO;
     }
 

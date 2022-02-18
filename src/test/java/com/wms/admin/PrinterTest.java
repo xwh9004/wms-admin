@@ -10,11 +10,11 @@ import java.io.File;
 public class PrinterTest {
 
     @Test
-    public void test() {
-
-        String filePath = "D://workshop/WMS/数据库设计.xls";
-        String destPath = "D://workshop/WMS/数据库设计1.pdf";
-        System.out.println(PDFUtil.convertToPdf(filePath,destPath));
+    public void test() throws Exception {
+        PrinterUtil.getPrintServiceByName("Brother PT-9700PC");
+//        String filePath = "D://workshop/WMS/数据库设计.xls";
+//        String destPath = "D://workshop/WMS/数据库设计1.pdf";
+//        System.out.println(PDFUtil.convertToPdf(filePath,destPath));
 //        String filePath = "D://workshop/WMS/数据库设计.xls";
 //        try {
 //            PrinterUtil.printPDF(destPath, "Microsoft Print to PDF");

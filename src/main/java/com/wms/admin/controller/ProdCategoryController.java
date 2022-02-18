@@ -7,6 +7,7 @@ import com.wms.admin.commom.Result;
 import com.wms.admin.service.IProdCategoryService;
 import com.wms.admin.vo.ProdCategoryQueryVO;
 import com.wms.admin.vo.ProdCategoryVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.util.List;
  * @author Jesse
  * @since 2022-02-14 14:43:16
  */
+@Api("货物大类控制器")
 @RestController
 @RequestMapping("/category")
 public class ProdCategoryController {
