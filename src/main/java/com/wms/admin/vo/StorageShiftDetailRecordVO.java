@@ -21,11 +21,6 @@ public class StorageShiftDetailRecordVO {
     private String prodId;
 
     private String prodNo;
-
-    private String fromId;
-    private String fromName;
-    private String toId;
-    private String toName;
     /**
      * 供应商
      */

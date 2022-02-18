@@ -16,6 +16,7 @@ import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,6 +47,7 @@ public class StorageShiftRecordServiceImpl extends ServiceImpl<StorageShiftDetai
 
   
 
+    @Transactional
     @Override
     public void addStorageShift(ReceiptRecordVO<StorageShiftDetailRecordVO> recordVO) {
         checkForAdd(recordVO);
@@ -78,21 +80,22 @@ public class StorageShiftRecordServiceImpl extends ServiceImpl<StorageShiftDetai
     }
 
     private void checkForAdd(ReceiptRecordVO<StorageShiftDetailRecordVO> recordVO) {
+        recordVO.setReceiptType("DB");
     }
 
     @Override
     public ReceiptRecordVO detail(String receiptNo) {
-        ReceiptRecordVO recordVO = receiptRecordService.selectByReceiptNo(receiptNo);
+        ReceiptRecordVO recordVO = storageShiftDetailRecordMapper.selectByReceiptNo(receiptNo);
 
         List<StorageShiftDetailRecordVO> list = storageShiftDetailRecordMapper.storageShiftDetailList(receiptNo);
         if (!list.isEmpty()) {
-            List<StorageShiftDetailRecordVO> storageInList = new ArrayList<>();
+            List<StorageShiftDetailRecordVO> detailList = new ArrayList<>();
             list.forEach(item -> {
                 StorageShiftDetailRecordVO vo = new StorageShiftDetailRecordVO();
                 BeanUtils.copyProperties(item, vo);
-                storageInList.add(vo);
+                detailList.add(vo);
             });
-            recordVO.setList(storageInList);
+            recordVO.setList(detailList);
         }
         return recordVO;
     }

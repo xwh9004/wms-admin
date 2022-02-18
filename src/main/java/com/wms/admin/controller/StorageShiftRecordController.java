@@ -50,7 +50,7 @@ public class StorageShiftRecordController {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
     public Result add(@RequestBody ReceiptRecordVO<StorageShiftDetailRecordVO> recordVO) {
-        recordVO.setReceiptType("RK");
+
         storageShiftRecordService.addStorageShift(recordVO);
         return Result.success();
     }

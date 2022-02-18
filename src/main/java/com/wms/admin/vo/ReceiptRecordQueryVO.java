@@ -27,6 +27,9 @@ public class ReceiptRecordQueryVO {
      */
     private String regionId;
 
+    private String fromId;
+    private String toId;
+
     /**
      * 申请人工号
      */

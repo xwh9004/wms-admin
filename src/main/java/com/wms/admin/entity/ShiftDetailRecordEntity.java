@@ -38,17 +38,7 @@ public class ShiftDetailRecordEntity extends BaseEntity {
     @TableField("prod_amount")
     private Integer prodAmount;
 
-    /**
-     * 调拨库区
-     */
-    @TableField("shift_from")
-    private String shiftFrom;
 
-    /**
-     * 转入库区
-     */
-    @TableField("shift_to")
-    private String shiftTo;
 
     /**
      * 状态
@@ -84,20 +74,7 @@ public class ShiftDetailRecordEntity extends BaseEntity {
     public void setProdAmount(Integer prodAmount) {
         this.prodAmount = prodAmount;
     }
-    public String getShiftFrom() {
-        return shiftFrom;
-    }
 
-    public void setShiftFrom(String shiftFrom) {
-        this.shiftFrom = shiftFrom;
-    }
-    public String getShiftTo() {
-        return shiftTo;
-    }
-
-    public void setShiftTo(String shiftTo) {
-        this.shiftTo = shiftTo;
-    }
     public String getStatus() {
         return status;
     }
@@ -113,8 +90,6 @@ public class ShiftDetailRecordEntity extends BaseEntity {
             ", receiptId=" + receiptId +
             ", prodId=" + prodId +
             ", prodAmount=" + prodAmount +
-            ", shiftFrom=" + shiftFrom +
-            ", shiftTo=" + shiftTo +
             ", status=" + status +
         "}";
     }
