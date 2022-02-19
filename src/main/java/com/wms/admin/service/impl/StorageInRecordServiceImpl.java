@@ -91,19 +91,9 @@ public class StorageInRecordServiceImpl extends ServiceImpl<StorageInDetailRecor
 
     @Override
     public ReceiptRecordVO detail(String receiptNo) {
-
         ReceiptRecordVO recordVO = receiptRecordService.selectByReceiptNo(receiptNo);
-
-        List<StorageInDetailRecordVO> list = storageInDetailRecordMapper.storageInDetailList(receiptNo);
-        if (!list.isEmpty()) {
-            List<StorageInDetailRecordVO> storageInList = new ArrayList<>();
-            list.forEach(item -> {
-                StorageInDetailRecordVO vo = new StorageInDetailRecordVO();
-                BeanUtils.copyProperties(item, vo);
-                storageInList.add(vo);
-            });
-            recordVO.setList(storageInList);
-        }
+        List<StorageInDetailRecordVO> list = storageInDetailRecordMapper.storageInDetailListBy(receiptNo);
+        recordVO.setList(list);
         return recordVO;
     }
 

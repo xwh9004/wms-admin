@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.StorageOutDetailRecordMapper">
-    <select id="storageOutDetailList" resultType="com.wms.admin.vo.StorageOutDetailRecordVO">
+    <select id="storageOutDetailListBy" resultType="com.wms.admin.vo.StorageOutDetailRecordVO">
         SELECT
         rd.id,rd.receipt_id,
         rd.prod_id,p.prod_no,p.prod_name,rd.prod_amount,ven.name vendor_name,
@@ -13,4 +13,23 @@
         WHERE rd.del_flag='1'
         and rp.receipt_no =#{receiptNo}
     </select>
+
+    <select id="storageOutReportList" resultType="com.wms.admin.vo.ReportRecordVO">
+        SELECT
+        rd.id,rd.receipt_id,rp.receipt_no,rp.apply_id,rp.operator_id,rp.apply_id,rp.apply_date,
+        rd.prod_id,p.prod_no,p.prod_name,p.type prod_type,
+        rd.prod_amount,ven.name vendor_name, rg.region_name,
+        rd.status,rd.create_by,rd.create_time,rd.update_by,rd.update_time
+        FROM t_wms_storage_out_detail_record rd
+        LEFT JOIN t_wms_receipt_record rp on rp.id = rd.receipt_id and rp.del_flag ='1'
+        LEFT JOIN t_wms_product p on p.id = rd.prod_id and p.del_flag ='1'
+        LEFT JOIN t_wms_vendor ven on ven.id = p.vendor_id and ven.del_flag ='1'
+        LEFT JOIN t_wms_storages_region rg on rg.id = rp.region_id and rg.del_flag ='1'
+        WHERE rd.del_flag='1'
+        <if test="query.regionId!=null and query.regionId!=''">
+          and  rp.regionId =#{query.regionId}
+        </if>
+    </select>
+
+
 </mapper>

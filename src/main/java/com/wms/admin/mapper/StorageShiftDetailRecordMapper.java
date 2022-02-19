@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.entity.ShiftDetailRecordEntity;
-import com.wms.admin.vo.ReceiptRecordQueryVO;
-import com.wms.admin.vo.ReceiptRecordVO;
-import com.wms.admin.vo.StorageShiftDetailRecordVO;
+import com.wms.admin.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,5 +22,8 @@ public interface StorageShiftDetailRecordMapper extends BaseMapper<ShiftDetailRe
 
     IPage<ReceiptRecordVO<StorageShiftDetailRecordVO>> receiptPage(@Param(value = "param") ReceiptRecordQueryVO queryVO, Page page);
 
-    List<StorageShiftDetailRecordVO> storageShiftDetailList(@Param("receiptNo") String receiptNo);
+    List<StorageShiftDetailRecordVO> storageShiftDetailListBy(@Param("receiptNo") String receiptNo);
+
+    IPage<ReportRecordVO> storageShiftReportList(@Param("query")ReportQueryVO queryVO, Page page);
+
 }

@@ -86,17 +86,8 @@ public class StorageShiftRecordServiceImpl extends ServiceImpl<StorageShiftDetai
     @Override
     public ReceiptRecordVO detail(String receiptNo) {
         ReceiptRecordVO recordVO = storageShiftDetailRecordMapper.selectByReceiptNo(receiptNo);
-
-        List<StorageShiftDetailRecordVO> list = storageShiftDetailRecordMapper.storageShiftDetailList(receiptNo);
-        if (!list.isEmpty()) {
-            List<StorageShiftDetailRecordVO> detailList = new ArrayList<>();
-            list.forEach(item -> {
-                StorageShiftDetailRecordVO vo = new StorageShiftDetailRecordVO();
-                BeanUtils.copyProperties(item, vo);
-                detailList.add(vo);
-            });
-            recordVO.setList(detailList);
-        }
+        List<StorageShiftDetailRecordVO> list = storageShiftDetailRecordMapper.storageShiftDetailListBy(receiptNo);
+        recordVO.setList(list);
         return recordVO;
     }
 }

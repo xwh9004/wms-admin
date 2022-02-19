@@ -85,7 +85,7 @@ public class StorageOutRecordServiceImpl extends ServiceImpl<StorageOutDetailRec
     public ReceiptRecordVO detail(String receiptNo) {
         ReceiptRecordVO recordVO = receiptRecordService.selectByReceiptNo(receiptNo);
 
-        List<StorageOutDetailRecordVO> list = storageOutDetailRecordMapper.storageOutDetailList(receiptNo);
+        List<StorageOutDetailRecordVO> list = storageOutDetailRecordMapper.storageOutDetailListBy(receiptNo);
         if (!list.isEmpty()) {
             List<StorageOutDetailRecordVO> storageInList = new ArrayList<>();
             list.forEach(item -> {
