@@ -3,14 +3,17 @@ package com.wms.admin.auth;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.util.Base64Util;
+import com.wms.admin.vo.UserRoleVO;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class JwtTokenUtil {
@@ -39,7 +42,7 @@ public class JwtTokenUtil {
         }
     }
 
-    public static String createJWT(String userId, String username, List<String> roleIds, List<String> resources, Audience audience) {
+    public static String createJWT(String userId, String username, List<UserRoleVO> roles, List<String> resources, Audience audience) {
         try {
             //添加构成JWT的参数
             long nowMillis = System.currentTimeMillis();
@@ -50,7 +53,7 @@ public class JwtTokenUtil {
             Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
             JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JWT")
                     // 可以将基本不重要的对象信息放到claims
-                    .claim("role", roleIds)
+                    .claim("roles", roles)
                     .claim("userId", userId)
                     .claim("resources", resources)
                     .setSubject(username)           // 代表这个JWT的主体，即它的所有人
@@ -62,7 +65,7 @@ public class JwtTokenUtil {
             //添加Token过期时间
             int TTLMillis = audience.getExpiresSecond();
             if (TTLMillis >= 0) {
-                long expMillis = nowMillis + TTLMillis*1000;
+                long expMillis = nowMillis + TTLMillis * 1000;
                 Date exp = new Date(expMillis);
                 builder.setExpiration(exp)  // 是一个时间戳，代表这个JWT的过期时间；
                         .setNotBefore(now); // 是一个时间戳，代表这个JWT生效的开始时间，意味着在这个时间之前验证JWT是会失败的
@@ -86,20 +89,28 @@ public class JwtTokenUtil {
         return parseJWT(token, base64Security).getSubject();
     }
 
-    public static UserInfo parseUserInfo(Claims claims){
+    public static UserInfo parseUserInfo(Claims claims) {
         UserInfo userInfo = new UserInfo();
-        userInfo.setUserId((String)claims.get("userId"));
+        userInfo.setUserId((String) claims.get("userId"));
         userInfo.setUsername(claims.getSubject());
-        List<String> resources =(List)claims.get("resources");
-        if(resources!=null){
+        List<String> resources = (List) claims.get("resources");
+        if (resources != null) {
             userInfo.setResources(resources);
         }
-        List<String> roles =(List)claims.get("role");
+        List<Map<String, String>> rolesMapping = (List) claims.get("roles");
+        List<UserRoleVO> roles = new ArrayList<>();
+        rolesMapping.forEach(mapping->{
+            UserRoleVO role=new UserRoleVO();
+            role.setRoleId(mapping.get("roleId"));
+            role.setRoleName(mapping.get("roleName"));
+            roles.add(role);
+        });
         if(roles!=null){
-            userInfo.setRoleIds(roles);
+            userInfo.setRoles(roles);
         }
         return userInfo;
     }
+
     /**
      * 从token中获取用户ID
      *
@@ -111,6 +122,7 @@ public class JwtTokenUtil {
         String userId = parseJWT(token, base64Security).get("userId", String.class);
         return Base64Util.decode(userId);
     }
+
     public static List getResources(String token, String base64Security) {
         List resources = parseJWT(token, base64Security).get("resources", List.class);
         return resources;
@@ -120,6 +132,7 @@ public class JwtTokenUtil {
         Claims claims = parseJWT(token, base64Security);
         return parseUserInfo(claims);
     }
+
     /**
      * 是否已过期
      *

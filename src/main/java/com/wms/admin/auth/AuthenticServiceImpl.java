@@ -11,6 +11,7 @@ import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.UserMapper;
 import com.wms.admin.mapper.UserRoleMapper;
 import com.wms.admin.util.Base64Util;
+import com.wms.admin.vo.UserRoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,14 +42,8 @@ public class AuthenticServiceImpl implements AuthenticService {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userEntity.getId());
         userInfo.setUsername(username);
-        //目前支持一个角色，后期可以支持多个角色
-        LambdaQueryWrapper<UserRoleEntity> roleQueryWrapper = new LambdaQueryWrapper<>();
-        roleQueryWrapper
-                .eq(UserRoleEntity::getDelFlag, WMSConstants.DEL_FLG_1)
-                .eq(UserRoleEntity::getUserId, userEntity.getId());
-        List<UserRoleEntity> roleList = userRoleMapper.selectList(roleQueryWrapper);
-        final List<String> roleIds = roleList.stream().map(UserRoleEntity::getRoleId).collect(Collectors.toList());
-        userInfo.setRoleIds(roleIds);
+        List<UserRoleVO> roles = userRoleMapper.selectUserRoles(userEntity.getId());
+        userInfo.setRoles(roles);
         return userInfo;
     }
 

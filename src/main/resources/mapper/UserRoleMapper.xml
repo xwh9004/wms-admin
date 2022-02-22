@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.UserRoleMapper">
+    <select id="selectUserRoles" resultType="com.wms.admin.vo.UserRoleVO">
+        select ur.role_id,r.role_name,ur.user_id
+        from t_wms_user_role ur
+        left join t_wms_role r on r.id = ur.role_id and r.del_flag='1'
+        where ur.del_flag ='1'
+        and ur.user_id =#{userId}
+    </select>
 
 </mapper>

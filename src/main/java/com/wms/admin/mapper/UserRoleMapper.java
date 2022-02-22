@@ -2,6 +2,10 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.UserRoleEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.admin.vo.UserRoleVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserRoleMapper extends BaseMapper<UserRoleEntity> {
 
+    List<UserRoleVO> selectUserRoles(@Param("userId") String id);
 }
