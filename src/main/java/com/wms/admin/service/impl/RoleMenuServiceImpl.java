@@ -37,6 +37,8 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenuEnt
 
     @Autowired
     private IMenuService menuService;
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
 
     @Transactional
     @Override
@@ -101,14 +103,9 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenuEnt
         return update(updateWrapper);
     }
 
-    //角色菜单
     @Override
-    public List<MenuEntity> roleMenus(List<String> roleIds) {
-        QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1)
-                .in(MenuEntity::getType, WMSConstants.MENU_TYPE_DIR, WMSConstants.MENU_TYPE_MENU);
-        List<MenuEntity> list = menuService.list(queryWrapper);
-        return list;
+    public List<String> roleResources(String roleId) {
+        return roleMenuMapper.roleResources(roleId);
     }
+
 }

@@ -2,6 +2,9 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.RoleMenuEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface RoleMenuMapper extends BaseMapper<RoleMenuEntity> {
 
+    List<String> roleResources(@Param("roleId") String roleId);
 }

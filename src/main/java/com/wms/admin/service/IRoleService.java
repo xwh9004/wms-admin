@@ -33,4 +33,6 @@ public interface IRoleService extends IService<RoleEntity> {
     List<String> rolePermission(String roleId);
 
     List<MenuVO> allPermission();
+
+    List<String> roleResources(String roleId);
 }

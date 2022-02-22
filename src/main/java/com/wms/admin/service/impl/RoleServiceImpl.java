@@ -51,7 +51,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     @Autowired
     private IRoleMenuService roleMenuService;
 
-
     @Autowired
     private IMenuService menuService;
 
@@ -142,5 +141,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     @Override
     public List<MenuVO> allPermission() {
         return menuService.queryList();
+    }
+
+    @Override
+    public List<String> roleResources(String roleId) {
+        return roleMenuService.roleResources(roleId);
     }
 }

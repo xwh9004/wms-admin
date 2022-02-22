@@ -1,9 +1,7 @@
 package com.wms.admin.service;
 
-import com.wms.admin.entity.MenuEntity;
-import com.wms.admin.entity.RoleMenuEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wms.admin.vo.MenuVO;
+import com.wms.admin.entity.RoleMenuEntity;
 
 import java.util.List;
 
@@ -23,5 +21,7 @@ public interface IRoleMenuService extends IService<RoleMenuEntity> {
 
     boolean deleteRoleMenu(String roleId);
 
-    List<MenuEntity>roleMenus(List<String> roleIds);
+    List<String> roleResources(String roleId);
+
+
 }

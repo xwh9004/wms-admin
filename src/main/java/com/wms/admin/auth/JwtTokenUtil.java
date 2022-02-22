@@ -102,6 +102,7 @@ public class JwtTokenUtil {
         rolesMapping.forEach(mapping->{
             UserRoleVO role=new UserRoleVO();
             role.setRoleId(mapping.get("roleId"));
+            role.setRoleCode(mapping.get("roleCode"));
             role.setRoleName(mapping.get("roleName"));
             roles.add(role);
         });

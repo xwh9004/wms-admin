@@ -58,7 +58,9 @@ public class LoginController {
             roleNames.add(item.getRoleName());
         });
         userInfo.put("roles", roleNames);
-        userInfo.put("resources", new String[]{"BTN0001", "BTN0002"});
+//        userInfo.put("resources", new String[]{"BTN0001", "BTN0002"});
+        userInfo.put("resources", UserInfoContext.getUserInfo().getResources());
+
         userInfo.put("introduction", "I am a super administrator");
         userInfo.put("name", UserInfoContext.getUsername());
         userInfo.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");

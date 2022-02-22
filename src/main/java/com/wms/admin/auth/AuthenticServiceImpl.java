@@ -10,6 +10,8 @@ import com.wms.admin.entity.UserRoleEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.UserMapper;
 import com.wms.admin.mapper.UserRoleMapper;
+import com.wms.admin.service.IRoleMenuService;
+import com.wms.admin.service.IRoleService;
 import com.wms.admin.util.Base64Util;
 import com.wms.admin.vo.UserRoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,12 @@ public class AuthenticServiceImpl implements AuthenticService {
     @Autowired
     private UserRoleMapper userRoleMapper;
 
+    @Autowired
+    private IRoleMenuService roleMenuService;
+
+    @Autowired
+    private IRoleService roleService;
+
     @Override
     public UserInfo getUserInfo(String username, String password) {
         QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
@@ -44,6 +52,8 @@ public class AuthenticServiceImpl implements AuthenticService {
         userInfo.setUsername(username);
         List<UserRoleVO> roles = userRoleMapper.selectUserRoles(userEntity.getId());
         userInfo.setRoles(roles);
+        List<String> resources = roleService.roleResources(roles.get(0).getRoleId());
+        userInfo.setResources(resources);
         return userInfo;
     }
 
