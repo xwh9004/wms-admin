@@ -14,6 +14,7 @@ public enum ResultCode {
     PERMISSION_SIGNATURE_ERROR("PERMISSION_SIGNATURE_ERROR", "签名异常"),
     PERMISSION_TOKEN_INVALID("PERMISSION_TOKEN_INVALID", "TOKEN验证失败"),
     USER_NOT_LOGGED_IN("USER_NOT_LOGGED_IN", "用户未登入"),
+    USER_PWD_ERROR("500001", "T用户名或密码错误"),
     ;
 
     private String code;

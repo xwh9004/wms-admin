@@ -10,12 +10,14 @@ import com.wms.admin.entity.MenuEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.MenuMapper;
 import com.wms.admin.service.IMenuService;
+import com.wms.admin.service.IRoleMenuService;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.MenuVO;
 import com.wms.admin.vo.RouteMeta;
 import com.wms.admin.vo.RouteVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,16 +38,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     private static final String TOP_PARENT = "-1";
     private static final String SLASH = "/";
 
+    @Autowired
+    private IRoleMenuService roleMenuService;
+    @Autowired
+    private MenuMapper menuMapper;
+
     @Override
     public List<MenuVO> queryList() {
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1);
-        List<MenuEntity> list = new ArrayList<>();
-        try {
-            list = list(queryWrapper);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<MenuEntity> list =list(queryWrapper);
         return toMenuTree(list);
     }
 
@@ -58,13 +60,21 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         List<MenuEntity> list = list(queryWrapper);
         List menuList = toMenuTree(list);
         List<RouteVO> routes = toRoutes(menuList);
-        List<RouteVO> routes1 = new ArrayList<>();
-        routes1.add(routes.get(0));
-        routes1.add(routes.get(1));
-        routes1.add(routes.get(2));
-        routes1.add(routes.get(3));
-        return routes1;
+        return routes;
 
+    }
+
+    /**
+     * 用户路由
+     * @param roleIds
+     * @return
+     */
+    @Override
+    public List<RouteVO> queryRoleRoutes(List<String> roleIds) {
+        List<MenuEntity> list = baseMapper.roleMenus(roleIds.get(0));
+        List menuList = toMenuTree(list);
+        List<RouteVO> routes = toRoutes(menuList);
+        return routes;
     }
 
     private List<RouteVO> toRoutes(List<MenuVO> menuList) {
@@ -74,6 +84,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         List<RouteVO> routes = new ArrayList<>();
         for (MenuVO menu : menuList) {
             RouteVO routeVO = new RouteVO();
+            routeVO.setId(menu.getId());
             routeVO.setPath(menu.getPath());
             if (WMSConstants.MENU_TYPE_DIR.equals(menu.getType())) {
                 routeVO.setComponent("layout/Layout");

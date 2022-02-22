@@ -39,7 +39,7 @@ public class JwtTokenUtil {
         }
     }
 
-    public static String createJWT(String userId, String username, List<String> role, List<String> resources, Audience audience) {
+    public static String createJWT(String userId, String username, List<String> roleIds, List<String> resources, Audience audience) {
         try {
             //添加构成JWT的参数
             long nowMillis = System.currentTimeMillis();
@@ -50,7 +50,7 @@ public class JwtTokenUtil {
             Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
             JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JWT")
                     // 可以将基本不重要的对象信息放到claims
-                    .claim("role", role)
+                    .claim("role", roleIds)
                     .claim("userId", userId)
                     .claim("resources", resources)
                     .setSubject(username)           // 代表这个JWT的主体，即它的所有人
@@ -96,7 +96,7 @@ public class JwtTokenUtil {
         }
         List<String> roles =(List)claims.get("role");
         if(roles!=null){
-            userInfo.setRoleCode(roles);
+            userInfo.setRoleIds(roles);
         }
         return userInfo;
     }

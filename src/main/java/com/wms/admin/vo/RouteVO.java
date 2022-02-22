@@ -25,6 +25,7 @@ import java.util.List;
  */
 @Data
 public class RouteVO {
+    private String id;
     private String path;
     private String name;
     private String component;

@@ -29,12 +29,6 @@ public class UserEntity extends BaseEntity {
     private String userName;
 
     /**
-     * 角色代码
-     */
-    @TableField("role_code")
-    private String roleCode;
-
-    /**
      * 用户密码
      */
     @TableField("user_pwd")
@@ -78,13 +72,7 @@ public class UserEntity extends BaseEntity {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public String getRoleCode() {
-        return roleCode;
-    }
 
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
     public String getUserPwd() {
         return userPwd;
     }
@@ -126,7 +114,6 @@ public class UserEntity extends BaseEntity {
         return "UserEntity{" +
             "id=" + id +
             ", userName=" + userName +
-            ", roleCode=" + roleCode +
             ", userPwd=" + userPwd +
             ", deptName=" + deptName +
             ", cardNo=" + cardNo +

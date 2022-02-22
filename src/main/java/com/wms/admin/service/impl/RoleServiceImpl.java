@@ -1,27 +1,40 @@
 package com.wms.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.RoleEntity;
+import com.wms.admin.entity.RoleMenuEntity;
 import com.wms.admin.mapper.RoleMapper;
+import com.wms.admin.mapper.RoleMenuMapper;
+import com.wms.admin.service.IMenuService;
+import com.wms.admin.service.IRoleMenuService;
 import com.wms.admin.service.IRoleService;
 import com.wms.admin.util.UUIDUtil;
+import com.wms.admin.vo.MenuVO;
 import com.wms.admin.vo.RoleQueryVO;
 import com.wms.admin.vo.RoleVO;
+import com.wms.admin.vo.RouteVO;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.wms.admin.commom.WMSConstants.DEL_FLG_0;
 import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 
 /**
@@ -35,6 +48,13 @@ import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> implements IRoleService {
 
+    @Autowired
+    private IRoleMenuService roleMenuService;
+
+
+    @Autowired
+    private IMenuService menuService;
+
     @Transactional
     @Override
     public boolean addRole(RoleVO roleVO) {
@@ -44,19 +64,26 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
         roleEntity.setId(UUIDUtil.uuid());
         roleEntity.setCreateBy(UserInfoContext.getUsername());
         roleEntity.setUpdateBy(UserInfoContext.getUsername());
+        saveRoleMenu(roleVO);
         return save(roleEntity);
     }
 
     private void checkRole(RoleVO roleVO) {
     }
 
+    @Transactional
     @Override
     public boolean updateRole(RoleVO roleVO) {
         checkRoleForUpdate(roleVO);
         RoleEntity roleEntity = new RoleEntity();
         BeanUtils.copyProperties(roleVO, roleEntity);
         roleEntity.setUpdateBy(UserInfoContext.getUsername());
-        return updateById(roleEntity);
+        updateById(roleEntity);
+        return saveRoleMenu(roleVO);
+    }
+
+    private boolean saveRoleMenu(RoleVO roleVO) {
+        return roleMenuService.updateRoleMenu(roleVO.getId(), roleVO.getMenuIds());
     }
 
     private void checkRoleForUpdate(RoleVO roleVO) {
@@ -64,7 +91,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
 
     @Override
     public boolean deleteRole(String roleId) {
-        return false;
+        LambdaUpdateWrapper<RoleEntity> updateWrapper = new LambdaUpdateWrapper();
+        updateWrapper.eq(RoleEntity::getId, roleId).set(RoleEntity::getDelFlag, DEL_FLG_0);
+        update(updateWrapper);
+        return roleMenuService.deleteRoleMenu(roleId);
     }
 
     @Override
@@ -102,5 +132,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
             return roleVO;
         });
         return resultPage;
+    }
+
+    @Override
+    public List<String> rolePermission(String roleId) {
+        return  roleMenuService.roleMenuIds(roleId);
+    }
+
+    @Override
+    public List<MenuVO> allPermission() {
+        return menuService.queryList();
     }
 }

@@ -11,7 +11,7 @@ public class PrinterTest {
 
     @Test
     public void test() throws Exception {
-        PrinterUtil.getPrintServiceByName("Brother PT-9700PC");
+//        PrinterUtil.getPrintServiceByName("Brother PT-9700PC");
 //        String filePath = "D://workshop/WMS/数据库设计.xls";
 //        String destPath = "D://workshop/WMS/数据库设计1.pdf";
 //        System.out.println(PDFUtil.convertToPdf(filePath,destPath));

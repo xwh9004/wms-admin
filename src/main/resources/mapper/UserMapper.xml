@@ -2,4 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.UserMapper">
 
+    <select id="userPage" parameterType="com.wms.admin.vo.UserQueryVO" resultType="com.wms.admin.vo.UserVO">
+        select u.id,u.user_name,u.role_code,u.dept_name,u.card_no,
+        u.phone,ur.role_id,r.role_name,
+        u.create_by,u.create_time,u.update_time,u.update_by
+        from t_wms_user u
+        left join t_wms_user_role ur on ur.user_id = u.id and ur.del_flag='1'
+        left join t_wms_role r on r.id = ur.role_id and r.del_flag ='1'
+        where u.del_flag ='1'
+        <if test="param.username!=null and param.username!=''">
+            and u.user_name like concat('%',#{param.username},'%')
+        </if>
+        <if test="param.department!=null and param.department!=''">
+            and u.dept_name like concat('%',#{param.department},'%')
+        </if>
+        <if test="param.cardNo!=null and param.cardNo!=''">
+            and u.card_no like concat('%',#{param.cardNo},'%')
+        </if>
+
+    </select>
+
 </mapper>

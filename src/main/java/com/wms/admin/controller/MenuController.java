@@ -42,7 +42,6 @@ public class MenuController {
         return Result.success().data(menuVOList);
     }
 
-
     @ApiOperation(value = "菜单列表")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @GetMapping("/list")

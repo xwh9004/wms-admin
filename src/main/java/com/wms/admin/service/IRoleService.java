@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.RoleEntity;
+import com.wms.admin.vo.MenuVO;
 import com.wms.admin.vo.RoleQueryVO;
 import com.wms.admin.vo.RoleVO;
 
@@ -29,4 +30,7 @@ public interface IRoleService extends IService<RoleEntity> {
 
     IPage<RoleVO> rolePage(RoleQueryVO roleQueryVO, PageParam pageParam);
 
+    List<String> rolePermission(String roleId);
+
+    List<MenuVO> allPermission();
 }

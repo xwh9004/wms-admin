@@ -8,7 +8,7 @@ import java.util.List;
 public class UserInfo {
     private String userId;
     private String username;
-    private List<String> roleCode;
+    private List<String> roleIds;
     private String password;
     private List<String> resources;
 }

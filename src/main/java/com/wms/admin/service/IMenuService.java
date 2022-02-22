@@ -17,9 +17,11 @@ import java.util.List;
  */
 public interface IMenuService extends IService<MenuEntity> {
 
-     List<MenuVO> queryList();
+    List<MenuVO> queryList();
 
     List<RouteVO> queryRoutes();
+
+    List<RouteVO> queryRoleRoutes(List<String> roleIds);
 
      boolean addMenu(MenuVO menuVO);
 

@@ -2,13 +2,10 @@ package com.wms.admin.service;
 
 import com.wms.admin.entity.MenuEntity;
 import com.wms.admin.util.UUIDUtil;
-import com.wms.admin.vo.MenuVO;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.util.List;
 
 @RunWith(PowerMockRunner.class)
 public class MenuServiceTest {
@@ -16,7 +13,7 @@ public class MenuServiceTest {
     @InjectMocks
     IMenuService menuService;
 
-    @Test
+//    @Test
     public void insertMenu(){
         String name ="仓库作业";
         String code ="operate";
@@ -47,11 +44,5 @@ public class MenuServiceTest {
         menu.setParentId("-1"); //-1表示顶级菜单
         menu.setUrl(url); //
         return menu;
-    }
-
-    @Test
-    public void list(){
-        List<MenuVO> list = menuService.queryList();
-        System.out.println(list.size());
     }
 }
