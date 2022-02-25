@@ -45,6 +45,12 @@ public class ProductEntity extends BaseEntity {
     private String type;
 
     /**
+     * 产品型号
+     */
+    @TableField("unit_price")
+    private Integer unitPrice;
+
+    /**
      * 产品类目
      */
     @TableField("category_id")
@@ -96,6 +102,15 @@ public class ProductEntity extends BaseEntity {
     public void setType(String type) {
         this.type = type;
     }
+
+    public Integer getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Integer unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
     public String getCategoryId() {
         return categoryId;
     }
@@ -119,6 +134,7 @@ public class ProductEntity extends BaseEntity {
             ", prodName=" + prodName +
             ", vendorId=" + vendorId +
             ", type=" + type +
+            ", unitPrice=" + unitPrice +
             ", categoryId=" + categoryId +
             ", description=" + description +
         "}";

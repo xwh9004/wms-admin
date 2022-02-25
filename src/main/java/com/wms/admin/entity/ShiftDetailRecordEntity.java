@@ -38,7 +38,8 @@ public class ShiftDetailRecordEntity extends BaseEntity {
     @TableField("prod_amount")
     private Integer prodAmount;
 
-
+    @TableField("prod_unit_price")
+    private Integer prodUnitPrice;
 
     /**
      * 状态
@@ -83,6 +84,14 @@ public class ShiftDetailRecordEntity extends BaseEntity {
         this.status = status;
     }
 
+    public Integer getProdUnitPrice() {
+        return prodUnitPrice;
+    }
+
+    public void setProdUnitPrice(Integer prodUnitPrice) {
+        this.prodUnitPrice = prodUnitPrice;
+    }
+
     @Override
     public String toString() {
         return "ShiftDetailRecordEntity{" +
@@ -91,6 +100,8 @@ public class ShiftDetailRecordEntity extends BaseEntity {
             ", prodId=" + prodId +
             ", prodAmount=" + prodAmount +
             ", status=" + status +
+            ", prodUnitPrice=" + prodUnitPrice +
+
         "}";
     }
 }

@@ -37,6 +37,9 @@ public class StorageOutDetailRecordEntity extends BaseEntity {
     @TableField("prod_amount")
     private Integer prodAmount;
 
+    @TableField("prod_unit_price")
+    private Integer prodUnitPrice;
+
     /**
      * 状态
      */
@@ -77,6 +80,14 @@ public class StorageOutDetailRecordEntity extends BaseEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getProdUnitPrice() {
+        return prodUnitPrice;
+    }
+
+    public void setProdUnitPrice(Integer prodUnitPrice) {
+        this.prodUnitPrice = prodUnitPrice;
     }
 
     @Override

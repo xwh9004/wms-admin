@@ -39,6 +39,9 @@ public class StorageInDetailRecordEntity extends BaseEntity {
     @TableField("prod_amount")
     private Integer prodAmount;
 
+    @TableField("prod_unit_price")
+    private Integer prodUnitPrice;
+
     /**
      * 货架号
      */
@@ -107,6 +110,13 @@ public class StorageInDetailRecordEntity extends BaseEntity {
         this.status = status;
     }
 
+    public Integer getProdUnitPrice() {
+        return prodUnitPrice;
+    }
+
+    public void setProdUnitPrice(Integer prodUnitPrice) {
+        this.prodUnitPrice = prodUnitPrice;
+    }
 
     @Override
     public String toString() {
@@ -118,6 +128,7 @@ public class StorageInDetailRecordEntity extends BaseEntity {
                 ", rackId=" + rackId +
                 ", rackTakes=" + rackTakes +
                 ", status=" + status +
+                ", prodUnitPrice=" + prodUnitPrice +
                 "}";
     }
 }
