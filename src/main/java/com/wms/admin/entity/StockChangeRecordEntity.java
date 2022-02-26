@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-16 21:10:29
+ * @since 2022-02-26 14:22:49
  */
 @TableName("t_wms_stock_change_record")
 public class StockChangeRecordEntity extends BaseEntity {

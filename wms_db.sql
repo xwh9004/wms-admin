@@ -1,5 +1,5 @@
 create table  if not exists T_WMS_MENU(
- id VARCHAR(40) comment '主键ID',
+  id VARCHAR(40) comment '主键ID',
   menu_name VARCHAR(200) NOT NULL comment '菜单名称',
   menu_code VARCHAR(200) NOT NULL comment '菜单代码',
   parent_id VARCHAR(40)  NOT NULL comment '父ID',
@@ -24,6 +24,24 @@ create table  if not exists T_WMS_MENU(
 
 
   ALTER TABLE T_WMS_MENU add redirect VARCHAR(1000) comment '重定向' ;
+
+
+create table  if not exists T_WMS_ORG(
+  id VARCHAR(40) comment '主键ID',
+  org_name VARCHAR(200) comment '机构名称',
+  org_code VARCHAR(200) comment '机构代码',
+  parent_id VARCHAR(40) comment '父ID',
+  level_path varChar(500) comment '路径层级',
+  seq int(11) comment '顺序',
+  level_no int(11) comment '层级',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+  PRIMARY KEY ( id )
+)comment='组织表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
  create table  if not exists T_WMS_ROLE(
    id VARCHAR(40) comment '主键ID',
@@ -239,4 +257,45 @@ create table  if not exists T_WMS_STORAGE_OUT_DETAIL_RECORD(
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='出库详情记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table  if not exists T_WMS_DISCARD_DETAIL_RECORD(
+  id int(20) primary key not null auto_increment,
+  receipt_id VARCHAR(40) NOT NULL comment '单据ID',
+  prod_id VARCHAR(40) comment '产品ID',
+  prod_amount int(11) comment '产品数量',
+  status varChar(2) comment '状态',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='报废详情录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table  if not exists T_WMS_STOCK(
+  id int(20) primary key not null auto_increment,
+  region_id VARCHAR(40) comment '库区ID',
+  prod_id VARCHAR(40) comment '产品ID',
+  current_stock int(11) comment '当前库存',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='库存记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table  if not exists T_WMS_BULLETIN_INFO(
+  id int(20) primary key not null auto_increment,
+  BULLETIN_INFO VARCHAR(2000) comment '公告内容',
+  is_publish VARCHAR(1) comment '是否发布',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='布告信息表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
 

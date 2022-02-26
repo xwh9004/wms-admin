@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Iterator;
 import java.util.List;
 
-//@Configuration
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
     /**
      * 注册用户登入拦截器

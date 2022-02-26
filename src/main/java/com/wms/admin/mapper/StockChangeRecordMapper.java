@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-16 21:10:29
+ * @since 2022-02-26 14:22:49
  */
 public interface StockChangeRecordMapper extends BaseMapper<StockChangeRecordEntity> {
 
