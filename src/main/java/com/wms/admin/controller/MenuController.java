@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ import java.util.List;
  * @author Jesse
  * @since 2022-01-19 16:02:56
  */
-@Api("菜单控制器")
+@Api(tags = "菜单控制器")
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
@@ -61,7 +62,7 @@ public class MenuController {
     @ApiOperation("添加菜单")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @PostMapping("/add")
-    public Result add(@RequestBody MenuVO menuVO) {
+    public Result add(@RequestBody @Validated MenuVO menuVO) {
         menuService.addMenu(menuVO);
         return Result.success();
     }

@@ -15,6 +15,7 @@ import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.MenuVO;
 import com.wms.admin.vo.RouteMeta;
 import com.wms.admin.vo.RouteVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import java.util.*;
  * @author Jesse
  * @since 2022-01-19 16:02:56
  */
+@Slf4j
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> implements IMenuService {
 
@@ -113,19 +115,17 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
 
     @Override
     public boolean addMenu(MenuVO menuVO) {
-        String parentId = menuVO.getParentId();
-        MenuEntity parentMenu = getById(parentId);
-        checkParentMenu(parentMenu);
-        checkMenuCode(menuVO.getId(), menuVO.getMenuCode());
+        MenuEntity parentMenu = getById(menuVO.getParentId());
+        if(parentMenu==null){
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"父菜单"+menuVO.getParentId());
+        }
         checkMenuForAdd(parentMenu, menuVO);
         MenuEntity menu = new MenuEntity();
         menu.setId(UUIDUtil.uuid());
         menu.setMenuName(menuVO.getMenuName());
         menu.setMenuCode(menuVO.getMenuCode());
-        menu.setLevelPath(parentMenu.getLevelPath() + "/" + menu.getLevelPath());
+        menu.setLevelPath(parentMenu.getLevelPath() + "/" + menu.getId());
         menu.setLevelNo(parentMenu.getLevelNo() + 1);
-        menu.setCreateBy(UserInfoContext.getUsername());
-        menu.setUpdateBy(UserInfoContext.getUsername());
         menu.setSeq(menuVO.getSeq());
         menu.setDelFlag(WMSConstants.DEL_FLG_1);
         menu.setType(menuVO.getType());
@@ -136,10 +136,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         menu.setRedirect(menuVO.getRedirect());
         menu.setIcon(menuVO.getIcon());
         menu.setStatus(menuVO.getStatus());
+        menu.setCreateBy(UserInfoContext.getUsername());
+        menu.setUpdateBy(UserInfoContext.getUsername());
         return save(menu);
     }
 
     private void checkMenuForAdd(MenuEntity parentMenu, MenuVO menuVO) {
+        checkParentMenu(parentMenu);
+        checkMenuCode(menuVO.getId(), menuVO.getMenuCode());
         Integer parentLevel = parentMenu.getLevelNo();
         checkMenuSeq(parentMenu.getId(), null, Integer.sum(parentLevel, 1), menuVO.getSeq());
     }
@@ -165,6 +169,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
      * @param parentMenu
      */
     private void checkParentMenu(MenuEntity parentMenu) {
+
         if (!WMSConstants.DEL_FLG_1.equals(parentMenu.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, parentMenu.getMenuCode());
         }

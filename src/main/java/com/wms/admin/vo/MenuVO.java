@@ -1,12 +1,11 @@
 package com.wms.admin.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,6 +30,7 @@ public class MenuVO implements Comparable<MenuVO> {
     /**
      * 父ID
      */
+    @NotBlank(message = "父ID不能为空")
     private String parentId;
 
     /**
