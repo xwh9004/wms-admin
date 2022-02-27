@@ -11,13 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DiscardRecordServiceImpl implements IDiscardRecordService {
     @Override
-    public void addDiscard(ReceiptRecordVO<DiscardDetailRecordVO> recordVO) {
-
-    }
-
-    @Override
     public IPage<ReceiptRecordVO<DiscardDetailRecordVO>> listPage(ReceiptRecordQueryVO queryVO, PageParam pageParam) {
         return null;
+    }
+    @Override
+    public void addDiscard(ReceiptRecordVO<DiscardDetailRecordVO> recordVO) {
+
     }
 
     @Override

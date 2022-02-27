@@ -23,6 +23,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 
 /**
@@ -39,10 +41,17 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
     @Autowired
     private ProductMapper productMapper;
 
+    private static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
+
     @Override
     public IPage<ProductVO> productPages(ProductQueryVO queryVO, PageParam pageParam) {
         Page<ProductEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         IPage<ProductVO> resultPage = productMapper.productPage(queryVO, page);
+        resultPage = resultPage.convert(vo -> {
+            BigDecimal unitPrice = vo.getUnitPrice();
+            vo.setUnitPrice(unitPrice.divide(ONE_HUNDRED));
+            return vo;
+        });
         return resultPage;
     }
 
@@ -56,8 +65,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
     public void addProduct(ProductVO vo) {
         checkForAdd(vo);
         ProductEntity productEntity = new ProductEntity();
-        BeanUtils.copyProperties(vo,productEntity);
+        BeanUtils.copyProperties(vo, productEntity);
         productEntity.setId(UUIDUtil.uuid());
+        BigDecimal unitPrice = vo.getUnitPrice();
+        productEntity.setUnitPrice(ONE_HUNDRED.multiply(unitPrice).toBigInteger().intValue());
         productEntity.setCreateBy(UserInfoContext.getUsername());
         productEntity.setUpdateBy(UserInfoContext.getUsername());
         save(productEntity);
@@ -70,7 +81,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
     public void updateProduct(ProductVO productVO) {
         checkForUpdate(productVO);
         ProductEntity productEntity = new ProductEntity();
-        BeanUtils.copyProperties(productVO,productEntity);
+        BeanUtils.copyProperties(productVO, productEntity);
+        BigDecimal unitPrice = productVO.getUnitPrice();
+        productEntity.setUnitPrice(ONE_HUNDRED.multiply(unitPrice).toBigInteger().intValue());
         productEntity.setUpdateBy(UserInfoContext.getUsername());
         updateById(productEntity);
     }

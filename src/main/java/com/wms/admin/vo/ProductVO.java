@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Validated
@@ -23,6 +24,10 @@ public class ProductVO {
      */
     private String prodName;
 
+    /**
+     * 价格
+     */
+    private BigDecimal unitPrice;
     /**
      * 供应商
      */
