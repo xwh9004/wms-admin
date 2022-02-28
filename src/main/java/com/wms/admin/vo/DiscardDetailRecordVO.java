@@ -2,8 +2,6 @@ package com.wms.admin.vo;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class DiscardDetailRecordVO extends BaseVO {
     /**
@@ -22,6 +20,8 @@ public class DiscardDetailRecordVO extends BaseVO {
     private String prodId;
 
     private String prodNo;
+
+    private String type;
     /**
      * 供应商
      */
@@ -36,7 +36,7 @@ public class DiscardDetailRecordVO extends BaseVO {
     /**
      * 货物单价
      */
-    private BigDecimal prodUnitPrice;
+    private Money unitPrice;
 
 
     /**

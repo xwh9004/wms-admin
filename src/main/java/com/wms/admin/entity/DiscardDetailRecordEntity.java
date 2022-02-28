@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.wms.admin.convertor.MoneyTypeHandler;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
 
 /**
  * <p>
@@ -37,8 +39,8 @@ public class DiscardDetailRecordEntity extends BaseEntity {
      */
     @TableField("prod_amount")
     private Integer prodAmount;
-    @TableField("prod_unit_price")
-    private Integer prodUnitPrice;
+    @TableField(value = "prod_unit_price")
+    private Money prodUnitPrice;
     /**
      * 状态
      */
@@ -81,11 +83,11 @@ public class DiscardDetailRecordEntity extends BaseEntity {
         this.status = status;
     }
 
-    public Integer getProdUnitPrice() {
+    public Money getProdUnitPrice() {
         return prodUnitPrice;
     }
 
-    public void setProdUnitPrice(Integer prodUnitPrice) {
+    public void setProdUnitPrice(Money prodUnitPrice) {
         this.prodUnitPrice = prodUnitPrice;
     }
 

@@ -3,7 +3,10 @@ package com.wms.admin.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.wms.admin.convertor.MoneyTypeHandler;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
+
 import java.time.LocalDateTime;
 
 /**
@@ -86,8 +89,8 @@ public class ReceiptRecordEntity extends BaseEntity {
     /**
      * 货物总量
      */
-    @TableField("total_price")
-    private Integer totalPrice;
+    @TableField(value = "total_price",typeHandler = MoneyTypeHandler.class)
+    private Money totalPrice;
 
     /**
      * 描述
@@ -195,11 +198,11 @@ public class ReceiptRecordEntity extends BaseEntity {
         this.applyDate = applyDate;
     }
 
-    public Integer getTotalPrice() {
+    public Money getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Money totalPrice) {
         this.totalPrice = totalPrice;
     }
 

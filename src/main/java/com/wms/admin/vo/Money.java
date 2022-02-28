@@ -12,22 +12,25 @@ public class Money {
 
     public static final BigDecimal ONE_HUNDRED =BigDecimal.valueOf(100);
     public Money(){
+    }
 
+    public static Money valueOf(BigDecimal value){
+        return new Money(value);
     }
     public Money(String value){
-        this.value = ONE_HUNDRED.multiply(new BigDecimal(value)).toBigInteger().intValue();
+        this.value = ONE_HUNDRED.multiply(new BigDecimal(value)).toBigInteger().longValue();
     }
 
-    public Integer value(){
+    public Long value(){
         return this.value;
     }
 
-    public void value(Integer value){
+    public void value(Long value){
          this.value =value;
     }
 
     public Money(BigDecimal value){
-         this.value = ONE_HUNDRED.multiply(value).toBigInteger().intValue();
+         this.value = ONE_HUNDRED.multiply(value).toBigInteger().longValue();
     }
 
     @Override
@@ -35,5 +38,13 @@ public class Money {
         return new BigDecimal(String.valueOf(value)).divide(ONE_HUNDRED).toString();
     }
 
-    private Integer value;
+    private Long value;
+
+    public Money multiply(BigDecimal multiplier) {
+     return   new Money(multiplier.multiply(new BigDecimal(this.value))) ;
+    }
+
+    public Money add(Money adder) {
+        return new Money(BigDecimal.valueOf(adder.value+this.value));
+    }
 }

@@ -14,10 +14,7 @@ import com.wms.admin.service.IDiscardRecordService;
 import com.wms.admin.service.IReceiptRecordService;
 import com.wms.admin.util.ReceiptUtil;
 import com.wms.admin.util.UUIDUtil;
-import com.wms.admin.vo.DiscardDetailRecordVO;
-import com.wms.admin.vo.ReceiptRecordQueryVO;
-import com.wms.admin.vo.ReceiptRecordVO;
-import com.wms.admin.vo.StorageInDetailRecordVO;
+import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,21 +52,21 @@ public class DiscardRecordServiceImpl extends ServiceImpl<DiscardDetailRecordMap
             receiptRecord.setTotalAmount(Integer.valueOf(0));
             List<DiscardDetailRecordEntity> detailList = new ArrayList<>();
             Set<String> prodIdSet = new HashSet<>();
-            BigDecimal totalPrice = BigDecimal.valueOf(0);
+             Money totalPrice = Money.valueOf(BigDecimal.ZERO);
             for (DiscardDetailRecordVO item:voList){
                 receiptRecord.setTotalAmount(receiptRecord.getTotalAmount()+item.getProdAmount());
-                BigDecimal itemTotalPrice = item.getProdUnitPrice().multiply(BigDecimal.valueOf(item.getProdAmount().intValue()));
+                Money itemTotalPrice = item.getUnitPrice().multiply(BigDecimal.valueOf(item.getProdAmount().intValue()));
                 totalPrice = totalPrice.add(itemTotalPrice);
                 prodIdSet.add(item.getProdId());
                 DiscardDetailRecordEntity entity = new DiscardDetailRecordEntity();
                 BeanUtils.copyProperties(item, entity,"id");
+                entity.setProdUnitPrice(item.getUnitPrice());
                 entity.setReceiptId(receiptRecord.getId());
                 entity.setCreateBy(UserInfoContext.getUsername());
                 entity.setUpdateBy(UserInfoContext.getUsername());
                 detailList.add(entity);
             }
-            totalPrice.multiply(WMSConstants.ONE_HUNDRED);
-            receiptRecord.setTotalPrice(totalPrice.intValue());
+            receiptRecord.setTotalPrice(totalPrice);
             receiptRecord.setProdTypeNums(prodIdSet.size());
             saveBatch(detailList);
             receiptRecordService.save(receiptRecord);
@@ -81,10 +78,6 @@ public class DiscardRecordServiceImpl extends ServiceImpl<DiscardDetailRecordMap
     public ReceiptRecordVO detail(String receiptNo) {
         ReceiptRecordVO recordVO = receiptRecordService.selectByReceiptNo(receiptNo);
         List<DiscardDetailRecordVO> list = discardDetailRecordMapper.discardDetailListBy(receiptNo);
-        list.forEach(item->{
-            BigDecimal unitPrice = item.getProdUnitPrice();
-            item.setProdUnitPrice(unitPrice.divide(WMSConstants.ONE_HUNDRED));
-        });
         recordVO.setList(list);
         return recordVO;
     }

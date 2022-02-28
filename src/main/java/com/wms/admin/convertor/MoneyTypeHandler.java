@@ -12,12 +12,12 @@ import java.sql.SQLException;
 public class MoneyTypeHandler  extends BaseTypeHandler<Money> {
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, Money o, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setInt(i,o.value());
+        preparedStatement.setLong(i,o.value());
     }
 
     @Override
     public Money getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
-        int value = resultSet.getInt(columnName);
+        long value = resultSet.getLong(columnName);
         Money money = new Money();
         money.value(value);
         return money;
@@ -25,7 +25,7 @@ public class MoneyTypeHandler  extends BaseTypeHandler<Money> {
 
     @Override
     public Money getNullableResult(ResultSet resultSet, int i) throws SQLException {
-        int value = resultSet.getInt(i);
+        long value = resultSet.getLong(i);
         Money money = new Money();
         money.value(value);
         return money;
@@ -33,7 +33,7 @@ public class MoneyTypeHandler  extends BaseTypeHandler<Money> {
 
     @Override
     public Money getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
-        int value = callableStatement.getInt(i);
+        long value = callableStatement.getLong(i);
         Money money = new Money();
         money.value(value);
         return money;

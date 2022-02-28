@@ -38,8 +38,9 @@
         order by update_time desc, prod_no asc
     </select>
 
-    <select id="findByProdNo" resultType="com.wms.admin.vo.ProductVO">
-        select p.id prod_id,p.prod_no,p.prod_name,p.type,v.id vendor_id,v.name vendor_name
+    <select id="findByProdNo" resultMap="productVO">
+        select p.id prod_id,p.prod_no,p.prod_name,p.type,p.unit_price,
+        v.id vendor_id,v.name vendor_name
         from t_wms_product p
         left join t_wms_vendor v on p.vendor_id = v.id and v.del_flag='1'
         where p.del_flag ='1'
