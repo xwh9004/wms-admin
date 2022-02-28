@@ -2,7 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.ProductMapper">
 
-    <select id="productPage" parameterType="com.wms.admin.vo.ProductQueryVO" resultType="com.wms.admin.vo.ProductVO">
+
+    <resultMap id="productVO" type="com.wms.admin.vo.ProductVO">
+        <id column="id" property="id"></id>
+        <result column="prod_no" property="prodNo"></result>
+        <result column="prod_name" property="prodName"></result>
+        <result column="type" property="type"></result>
+        <result column="vendor_id" property="vendorId"></result>
+        <result column="vendor_name" property="vendorName"></result>
+        <result column="category_id" property="categoryId"></result>
+        <result column="category_name" property="categoryName"></result>
+        <result column="description" property="description"></result>
+        <result column="update_by" property="updateBy"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="unit_price"  property="unitPrice" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
+
+    </resultMap>
+
+    <select id="productPage" parameterType="com.wms.admin.vo.ProductQueryVO" resultMap="productVO">
         select p.id,p.prod_no,p.prod_name,p.unit_price,p.type,v.id vendor_id,v.name vendor_name,
         c.id category_id,c.name category_name,p.description,p.update_by,p.update_time
         from t_wms_product p

@@ -8,14 +8,14 @@ import com.wms.admin.entity.BaseEntity;
 
 /**
  * <p>
- * 报废详情录表
+ * 盘点详情录表
  * </p>
  *
  * @author Jesse
- * @since 2022-02-26 14:22:49
+ * @since 2022-02-27 20:57:49
  */
-@TableName("t_wms_discard_detail_record")
-public class DiscardDetailRecordEntity extends BaseEntity {
+@TableName("t_wms_inventory_detail_record")
+public class InventoryDetailRecordEntity extends BaseEntity {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -37,8 +37,7 @@ public class DiscardDetailRecordEntity extends BaseEntity {
      */
     @TableField("prod_amount")
     private Integer prodAmount;
-    @TableField("prod_unit_price")
-    private Integer prodUnitPrice;
+
     /**
      * 状态
      */
@@ -81,22 +80,13 @@ public class DiscardDetailRecordEntity extends BaseEntity {
         this.status = status;
     }
 
-    public Integer getProdUnitPrice() {
-        return prodUnitPrice;
-    }
-
-    public void setProdUnitPrice(Integer prodUnitPrice) {
-        this.prodUnitPrice = prodUnitPrice;
-    }
-
     @Override
     public String toString() {
-        return "DiscardDetailRecordEntity{" +
+        return "InventoryDetailRecordEntity{" +
             "id=" + id +
             ", receiptId=" + receiptId +
             ", prodId=" + prodId +
             ", prodAmount=" + prodAmount +
-            ", prodUnitPrice=" + prodUnitPrice +
             ", status=" + status +
         "}";
     }

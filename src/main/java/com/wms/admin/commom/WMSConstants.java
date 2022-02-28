@@ -1,5 +1,7 @@
 package com.wms.admin.commom;
 
+import java.math.BigDecimal;
+
 public class WMSConstants {
 
     public static final String DEL_FLG_1="1";
@@ -9,6 +11,7 @@ public class WMSConstants {
     public static final String MENU_TYPE_DIR="0";
     public static final String MENU_TYPE_MENU ="1";
     public static final String MENU_TYPE_RESOURCE ="2";
+    public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
 
 }

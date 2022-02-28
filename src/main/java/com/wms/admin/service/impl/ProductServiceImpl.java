@@ -47,11 +47,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
     public IPage<ProductVO> productPages(ProductQueryVO queryVO, PageParam pageParam) {
         Page<ProductEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         IPage<ProductVO> resultPage = productMapper.productPage(queryVO, page);
-        resultPage = resultPage.convert(vo -> {
-            BigDecimal unitPrice = vo.getUnitPrice();
-            vo.setUnitPrice(unitPrice.divide(ONE_HUNDRED));
-            return vo;
-        });
         return resultPage;
     }
 
@@ -67,8 +62,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
         ProductEntity productEntity = new ProductEntity();
         BeanUtils.copyProperties(vo, productEntity);
         productEntity.setId(UUIDUtil.uuid());
-        BigDecimal unitPrice = vo.getUnitPrice();
-        productEntity.setUnitPrice(ONE_HUNDRED.multiply(unitPrice).toBigInteger().intValue());
+
         productEntity.setCreateBy(UserInfoContext.getUsername());
         productEntity.setUpdateBy(UserInfoContext.getUsername());
         save(productEntity);
@@ -82,13 +76,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
         checkForUpdate(productVO);
         ProductEntity productEntity = new ProductEntity();
         BeanUtils.copyProperties(productVO, productEntity);
-        BigDecimal unitPrice = productVO.getUnitPrice();
-        productEntity.setUnitPrice(ONE_HUNDRED.multiply(unitPrice).toBigInteger().intValue());
         productEntity.setUpdateBy(UserInfoContext.getUsername());
         updateById(productEntity);
     }
 
     private void checkForUpdate(ProductVO productVO) {
+
     }
 
     @Override

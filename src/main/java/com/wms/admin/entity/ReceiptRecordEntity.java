@@ -84,6 +84,12 @@ public class ReceiptRecordEntity extends BaseEntity {
     private Integer totalAmount;
 
     /**
+     * 货物总量
+     */
+    @TableField("total_price")
+    private Integer totalPrice;
+
+    /**
      * 描述
      */
     @TableField("description")
@@ -189,6 +195,14 @@ public class ReceiptRecordEntity extends BaseEntity {
         this.applyDate = applyDate;
     }
 
+    public Integer getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Integer totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public String toString() {
         return "ReceiptRecordEntity{" +
@@ -203,6 +217,7 @@ public class ReceiptRecordEntity extends BaseEntity {
             ", operatorId=" + operatorId +
             ", prodTypeNums=" + prodTypeNums +
             ", totalAmount=" + totalAmount +
+            ", totalPrice=" + totalPrice +
             ", description=" + description +
             ", applyDate=" + applyDate +
         "}";

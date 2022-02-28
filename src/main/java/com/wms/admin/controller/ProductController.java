@@ -54,8 +54,8 @@ public class ProductController {
     @ApiOperation(value = "修改货物")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/update")
-    public Result update(@RequestBody ProductVO categoryVO) {
-        productService.updateProduct(categoryVO);
+    public Result update(@RequestBody ProductVO productVO) {
+        productService.updateProduct(productVO);
         return Result.success();
     }
 

@@ -201,6 +201,7 @@ create table  if not exists T_WMS_RECEIPT_RECORD(
   operator_id varChar(40) comment '经办人工号',
   prod_type_nums int(11) comment '货物种数',
   total_amount int(11) comment '货物总量',
+  total_price int(11) comment '货物总价',
   description VARCHAR(200) NOT NULL comment '描述',
   apply_date TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '申请时间',
   del_flag VARCHAR(1) default '1' comment '是否删除',
@@ -210,9 +211,6 @@ create table  if not exists T_WMS_RECEIPT_RECORD(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
   PRIMARY KEY ( id )
 )comment='申请记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-  ALTER TABLE T_WMS_RECEIPT_RECORD add from_id VARCHAR(40) comment '调拨出库库id' ;
-  ALTER TABLE T_WMS_RECEIPT_RECORD add to_id VARCHAR(40) comment '调拨入库库id' ;
 
 
 create table  if not exists T_WMS_STORAGE_IN_DETAIL_RECORD(
@@ -230,6 +228,8 @@ create table  if not exists T_WMS_STORAGE_IN_DETAIL_RECORD(
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='入库详情记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 create table  if not exists T_WMS_STOCK_CHANGE_RECORD(
   id varChar(40) NOT NULL comment '主键id',
@@ -250,6 +250,7 @@ create table  if not exists T_WMS_STORAGE_OUT_DETAIL_RECORD(
   receipt_id VARCHAR(40) NOT NULL comment '单据ID',
   prod_id VARCHAR(40) comment '产品ID',
   prod_amount int(11) comment '产品数量',
+  prod_unit_price int(11) comment '产品单价',
   status varChar(2) comment '状态',
   del_flag VARCHAR(1) default '1' comment '是否删除',
   create_by VARCHAR(200) comment '创建人',
@@ -258,11 +259,28 @@ create table  if not exists T_WMS_STORAGE_OUT_DETAIL_RECORD(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='出库详情记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+create table  if not exists T_WMS_SHIFT_DETAIL_RECORD(
+  id int(20) primary key not null auto_increment,
+  receipt_id VARCHAR(40) NOT NULL comment '单据ID',
+  prod_id VARCHAR(40) comment '产品ID',
+  prod_amount int(11) comment '产品数量',
+  prod_unit_price int(11) comment '产品单价',
+  status varChar(2) comment '状态',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='移库详情记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 create table  if not exists T_WMS_DISCARD_DETAIL_RECORD(
   id int(20) primary key not null auto_increment,
   receipt_id VARCHAR(40) NOT NULL comment '单据ID',
   prod_id VARCHAR(40) comment '产品ID',
   prod_amount int(11) comment '产品数量',
+  prod_unit_price int(11) comment '产品单价',
   status varChar(2) comment '状态',
   del_flag VARCHAR(1) default '1' comment '是否删除',
   create_by VARCHAR(200) comment '创建人',
@@ -270,6 +288,8 @@ create table  if not exists T_WMS_DISCARD_DETAIL_RECORD(
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='报废详情录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table T_WMS_SHIFT_DETAIL_RECORD add prod_unit_price int(11) comment '产品单价' after prod_amount;
 
 
 create table  if not exists T_WMS_STOCK(
@@ -297,5 +317,27 @@ create table  if not exists T_WMS_BULLETIN_INFO(
 
 
 
+create table  if not exists T_WMS_STOCK_MAINTAIN(
+  id int(20) primary key not null auto_increment,
+  prod_id VARCHAR(40) comment '产品ID',
+  up_bound int(11) comment '库存上限',
+  down_bound int(11) comment '库存下限',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='库存维护记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+create table  if not exists T_WMS_INVENTORY_DETAIL_RECORD(
+  id int(20) primary key not null auto_increment,
+  receipt_id VARCHAR(40) NOT NULL comment '单据ID',
+  prod_id VARCHAR(40) comment '产品ID',
+  prod_amount int(11) comment '产品数量',
+  status varChar(2) comment '状态',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='盘点详情录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;

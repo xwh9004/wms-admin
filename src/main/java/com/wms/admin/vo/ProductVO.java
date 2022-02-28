@@ -1,11 +1,8 @@
 package com.wms.admin.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Validated
@@ -27,7 +24,7 @@ public class ProductVO {
     /**
      * 价格
      */
-    private BigDecimal unitPrice;
+    private Money unitPrice;
     /**
      * 供应商
      */

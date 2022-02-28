@@ -3,7 +3,9 @@ package com.wms.admin.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.wms.admin.convertor.MoneyTypeHandler;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
 
 /**
  * <p>
@@ -47,8 +49,8 @@ public class ProductEntity extends BaseEntity {
     /**
      * 产品型号
      */
-    @TableField("unit_price")
-    private Integer unitPrice;
+    @TableField(value = "unit_price",typeHandler = MoneyTypeHandler.class)
+    private Money unitPrice;
 
     /**
      * 产品类目
@@ -103,11 +105,11 @@ public class ProductEntity extends BaseEntity {
         this.type = type;
     }
 
-    public Integer getUnitPrice() {
+    public Money getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Integer unitPrice) {
+    public void setUnitPrice(Money unitPrice) {
         this.unitPrice = unitPrice;
     }
 
