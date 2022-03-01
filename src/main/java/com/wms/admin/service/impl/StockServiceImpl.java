@@ -5,11 +5,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.StockChangeRecordEntity;
 import com.wms.admin.mapper.StockChangeRecordMapper;
+import com.wms.admin.mapper.StockMaintainMapper;
+import com.wms.admin.service.IInventoryDetailRecordService;
+import com.wms.admin.service.IStockMaintainService;
 import com.wms.admin.service.IStockService;
 import com.wms.admin.vo.StockInventoryQueryVO;
 import com.wms.admin.vo.StockInventoryVO;
 import com.wms.admin.vo.StockMaintainQueryVO;
 import com.wms.admin.vo.StockMaintainVO;
+import io.swagger.models.auth.In;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,25 +27,32 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class StockServiceImpl extends ServiceImpl<StockChangeRecordMapper, StockChangeRecordEntity> implements IStockService {
-
+    
+    @Autowired
+    private IStockMaintainService stockMaintainService;
+    @Autowired
+    private IInventoryDetailRecordService inventoryDetailRecordService;
+    
     @Override
     public IPage<StockMaintainVO> maintainList(StockMaintainQueryVO queryVO, PageParam pageParam) {
         return null;
     }
 
     @Override
-    public void maintainAdd(StockMaintainVO queryVO) {
+    public void maintainAdd(StockMaintainVO maintainVO) {
+        stockMaintainService.addStockMaintain(maintainVO);
+    }
 
+   
+
+    @Override
+    public void maintainUpdate(StockMaintainVO maintainVO) {
+        stockMaintainService.updateStockMaintain(maintainVO);
     }
 
     @Override
-    public void maintainUpdate(StockMaintainVO queryVO) {
-
-    }
-
-    @Override
-    public void maintainDelete(String prodNo) {
-
+    public void maintainDelete(Integer id) {
+        stockMaintainService.deleteMaintain(id);
     }
 
     @Override

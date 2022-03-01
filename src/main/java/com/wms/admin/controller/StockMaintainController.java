@@ -10,6 +10,7 @@ import com.wms.admin.vo.StockMaintainVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +40,8 @@ public class StockMaintainController {
     @ApiOperation(value = "库存维护列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
-    public Result add(@RequestBody StockMaintainVO queryVO) {
-          stockService.maintainAdd(queryVO);
+    public Result add(@RequestBody StockMaintainVO maintainVO) {
+          stockService.maintainAdd(maintainVO);
         return Result.success();
     }
     @ApiOperation(value = "库存维护列表")
@@ -52,9 +53,9 @@ public class StockMaintainController {
     }
     @ApiOperation(value = "库存维护列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/delete/{prodNo}")
-    public Result delete(@PathVariable String prodNo) {
-        stockService.maintainDelete(prodNo);
+    @PostMapping("/delete/{id}")
+    public Result delete(@PathVariable Integer id) {
+        stockService.maintainDelete(id);
         return Result.success();
     }
 }

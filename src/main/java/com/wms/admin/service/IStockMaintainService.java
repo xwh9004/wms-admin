@@ -2,6 +2,7 @@ package com.wms.admin.service;
 
 import com.wms.admin.entity.StockMaintainEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.vo.StockMaintainVO;
 
 /**
  * <p>
@@ -13,4 +14,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IStockMaintainService extends IService<StockMaintainEntity> {
 
+    void addStockMaintain(StockMaintainVO maintainVO);
+    void updateStockMaintain(StockMaintainVO maintainVO);
+
+    void deleteMaintain(Integer id);
 }

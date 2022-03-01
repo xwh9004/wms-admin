@@ -21,17 +21,17 @@ public interface IStockService extends IService<StockChangeRecordEntity> {
 
     IPage<StockMaintainVO> maintainList(StockMaintainQueryVO queryVO, PageParam pageParam);
 
-    void maintainAdd(StockMaintainVO queryVO);
+    void maintainAdd(StockMaintainVO maintainVO);
 
-    void maintainUpdate(StockMaintainVO queryVO);
+    void maintainUpdate(StockMaintainVO maintainVO);
 
-    void maintainDelete(String prodNo);
+    void maintainDelete(Integer id);
 
     IPage<StockInventoryVO> inventoryList(StockInventoryQueryVO queryVO, PageParam pageParam);
 
-    void inventoryAdd(StockInventoryVO queryVO);
+    void inventoryAdd(StockInventoryVO inventoryVO);
 
-    void inventoryUpdate(StockInventoryVO queryVO);
+    void inventoryUpdate(StockInventoryVO inventoryVO);
 
     void inventoryDetail(String receiptNo);
 }

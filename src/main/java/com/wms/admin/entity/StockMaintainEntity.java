@@ -32,6 +32,7 @@ public class StockMaintainEntity extends BaseEntity {
     @TableField("up_bound")
     private Integer upBound;
 
+
     /**
      * 库存下限
      */
