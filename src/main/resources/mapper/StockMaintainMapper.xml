@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.StockMaintainMapper">
-
+         <select id="maintainPages" resultType="com.wms.admin.vo.StockMaintainVO">
+             select m.id,m.prod_id,p.prod_no,m.up_bound,m.down_bound,m.create_time,m.create_by,
+             m.update_time,m.update_by
+             from t_wms_stock_maintain m
+             left join t_wms_product p on p.id = m.prod_id and p.del_flag ='1'
+             where m.del_flag ='1'
+             <if test="param.prodNo!=null and parma.prodNo!=''">
+                 and p.prod_no like concat(%,#{param.prodNo},%)
+             </if>
+         </select>
 </mapper>

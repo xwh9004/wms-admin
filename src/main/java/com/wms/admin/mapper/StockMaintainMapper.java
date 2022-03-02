@@ -1,7 +1,12 @@
 package com.wms.admin.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.entity.StockMaintainEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.admin.vo.StockMaintainQueryVO;
+import com.wms.admin.vo.StockMaintainVO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +18,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface StockMaintainMapper extends BaseMapper<StockMaintainEntity> {
 
+    IPage<StockMaintainVO> maintainPages(@Param("param") StockMaintainQueryVO queryVO, Page page);
 }

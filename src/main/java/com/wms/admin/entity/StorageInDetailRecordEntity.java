@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
+
 import java.time.LocalDateTime;
 
 /**
@@ -40,7 +42,7 @@ public class StorageInDetailRecordEntity extends BaseEntity {
     private Integer prodAmount;
 
     @TableField("prod_unit_price")
-    private Integer prodUnitPrice;
+    private Money prodUnitPrice;
 
     /**
      * 货架号
@@ -110,11 +112,11 @@ public class StorageInDetailRecordEntity extends BaseEntity {
         this.status = status;
     }
 
-    public Integer getProdUnitPrice() {
+    public Money getProdUnitPrice() {
         return prodUnitPrice;
     }
 
-    public void setProdUnitPrice(Integer prodUnitPrice) {
+    public void setProdUnitPrice(Money prodUnitPrice) {
         this.prodUnitPrice = prodUnitPrice;
     }
 

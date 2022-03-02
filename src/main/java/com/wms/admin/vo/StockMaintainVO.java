@@ -11,6 +11,10 @@ public class StockMaintainVO {
      * 产品ID
      */
     private String prodId;
+    /**
+     * 产品编号
+     */
+    private String prodNo;
 
     /**
      * 库存上限

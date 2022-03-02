@@ -16,7 +16,7 @@
 
     <select id="storageShiftDetailListBy" resultType="com.wms.admin.vo.StorageShiftDetailRecordVO">
         SELECT
-        rd.id,rd.receipt_id,
+        rd.id,rd.receipt_id,rd.prod_unit_price,
         rd.prod_id,p.prod_no,p.prod_name,rd.prod_amount,ven.name vendor_name,
         rd.status,rd.create_by,rd.create_time,rd.update_by,rd.update_time
         FROM t_wms_shift_detail_record rd

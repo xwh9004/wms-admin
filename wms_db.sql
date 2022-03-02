@@ -334,6 +334,7 @@ create table  if not exists T_WMS_INVENTORY_DETAIL_RECORD(
   receipt_id VARCHAR(40) NOT NULL comment '单据ID',
   prod_id VARCHAR(40) comment '产品ID',
   prod_amount int(11) comment '产品数量',
+  prod_unit_price int(11) comment '产品单价',
   status varChar(2) comment '状态',
   del_flag VARCHAR(1) default '1' comment '是否删除',
   create_by VARCHAR(200) comment '创建人',

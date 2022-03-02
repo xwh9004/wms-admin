@@ -34,6 +34,10 @@ public class StorageOutDetailRecordVO {
      */
     private Integer prodAmount;
     /**
+     * 单价
+     */
+    private Money prodUnitPrice;
+    /**
      * 出库状态
      */
     private String status;

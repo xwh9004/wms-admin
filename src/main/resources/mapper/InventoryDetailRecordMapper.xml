@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.InventoryDetailRecordMapper">
+    <select id="inventoryDetailListBy" resultType="com.wms.admin.vo.InventoryDetailRecordVO">
+        SELECT
+        rd.id,rd.receipt_id,rd.prod_id,
+        rd.prod_unit_price,rd.status,
+        p.prod_no,p.prod_name,rd.prod_amount,
+        rd.create_by,rd.create_time,rd.update_by,rd.update_time
+        FROM t_wms_inventory_detail_record rd
+        LEFT JOIN t_wms_receipt_record rp on rp.id = rd.receipt_id and rp.del_flag ='1'
+        LEFT JOIN t_wms_product p on p.id = rd.prod_id and p.del_flag ='1'
+        WHERE rd.del_flag='1'
+        and rp.receipt_no =#{receiptNo}
+    </select>
 
 </mapper>

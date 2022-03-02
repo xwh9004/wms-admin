@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.StockChangeRecordEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wms.admin.vo.StockInventoryQueryVO;
-import com.wms.admin.vo.StockInventoryVO;
-import com.wms.admin.vo.StockMaintainQueryVO;
-import com.wms.admin.vo.StockMaintainVO;
+import com.wms.admin.vo.*;
 
 /**
  * <p>
@@ -26,12 +23,4 @@ public interface IStockService extends IService<StockChangeRecordEntity> {
     void maintainUpdate(StockMaintainVO maintainVO);
 
     void maintainDelete(Integer id);
-
-    IPage<StockInventoryVO> inventoryList(StockInventoryQueryVO queryVO, PageParam pageParam);
-
-    void inventoryAdd(StockInventoryVO inventoryVO);
-
-    void inventoryUpdate(StockInventoryVO inventoryVO);
-
-    void inventoryDetail(String receiptNo);
 }

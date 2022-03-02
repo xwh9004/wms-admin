@@ -2,6 +2,10 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.InventoryDetailRecordEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.admin.vo.InventoryDetailRecordVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface InventoryDetailRecordMapper extends BaseMapper<InventoryDetailRecordEntity> {
 
+    List<InventoryDetailRecordVO> inventoryDetailListBy(@Param("receiptNo") String receiptNo);
 }

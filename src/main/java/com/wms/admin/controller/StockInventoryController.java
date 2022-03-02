@@ -4,9 +4,11 @@ package com.wms.admin.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
+import com.wms.admin.service.IInventoryRecordService;
 import com.wms.admin.service.IStockService;
-import com.wms.admin.vo.StockInventoryQueryVO;
-import com.wms.admin.vo.StockInventoryVO;
+import com.wms.admin.vo.InventoryDetailRecordVO;
+import com.wms.admin.vo.ReceiptRecordQueryVO;
+import com.wms.admin.vo.ReceiptRecordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -27,35 +29,30 @@ import org.springframework.web.bind.annotation.*;
 public class StockInventoryController {
 
     @Autowired
-    private IStockService stockService;
+    private IInventoryRecordService inventoryRecordService;
 
     @ApiOperation(value = "库存盘点列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/list")
-    public Result list(@RequestBody StockInventoryQueryVO queryVO, PageParam pageParam) {
-        IPage<StockInventoryVO> rolePage = stockService.inventoryList(queryVO,pageParam);
+    public Result list(@RequestBody ReceiptRecordQueryVO queryVO, PageParam pageParam) {
+        IPage<ReceiptRecordVO<InventoryDetailRecordVO>> rolePage = inventoryRecordService.inventoryPages(queryVO, pageParam);
         return Result.success().data(rolePage);
     }
 
     @ApiOperation(value = "库存盘点详情")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @GetMapping("/detail/{receiptNo}")
-    public Result delete(@PathVariable String receiptNo) {
-        stockService.inventoryDetail(receiptNo);
+    public Result detail(@PathVariable String receiptNo) {
+        inventoryRecordService.detail(receiptNo);
         return Result.success();
     }
-    @ApiOperation(value = "库存盘点列表")
+
+    @ApiOperation(value = "新增库存盘点")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
-    public Result add(@RequestBody StockInventoryVO queryVO) {
-          stockService.inventoryAdd(queryVO);
-        return Result.success();
-    }
-    @ApiOperation(value = "库存盘点列表")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("update")
-    public Result update(@RequestBody StockInventoryVO queryVO) {
-        stockService.inventoryUpdate(queryVO);
+    public Result add(@RequestBody ReceiptRecordVO<InventoryDetailRecordVO> recordVO) {
+        recordVO.setReceiptType("PD");
+        inventoryRecordService.addInventory(recordVO);
         return Result.success();
     }
 

@@ -34,6 +34,7 @@ public class StorageShiftDetailRecordVO {
      * 产品数量
      */
     private Integer prodAmount;
+    private Money prodUnitPrice;
     /**
      * 出库状态
      */

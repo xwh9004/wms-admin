@@ -3,7 +3,10 @@ package com.wms.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.auth.UserInfoContext;
+import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.ProductEntity;
@@ -14,6 +17,7 @@ import com.wms.admin.service.IProductService;
 import com.wms.admin.service.IStockMaintainService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.vo.ProductVO;
+import com.wms.admin.vo.StockMaintainQueryVO;
 import com.wms.admin.vo.StockMaintainVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -118,5 +122,12 @@ public class StockMaintainServiceImpl extends ServiceImpl<StockMaintainMapper, S
         .set(StockMaintainEntity::getDelFlag,WMSConstants.DEL_FLG_0)
         .set(StockMaintainEntity::getUpdateBy,UserInfoContext.getUsername());
         update(updateQuery);
+    }
+
+    @Override
+    public IPage<StockMaintainVO> maintainPages(StockMaintainQueryVO queryVO, PageParam pageParam) {
+        Page page = new Page(pageParam.getPage(), pageParam.getLimit());
+        IPage<StockMaintainVO> result =stockMaintainMapper.maintainPages(queryVO,page);
+        return result;
     }
 }

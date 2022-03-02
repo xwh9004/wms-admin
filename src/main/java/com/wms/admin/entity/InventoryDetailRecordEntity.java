@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
 
 /**
  * <p>
@@ -39,6 +40,11 @@ public class InventoryDetailRecordEntity extends BaseEntity {
     private Integer prodAmount;
 
     /**
+     * 产品单价
+     */
+    @TableField("prod_unit_price")
+    private Money prodUnitPrice;
+    /**
      * 状态
      */
     @TableField("status")
@@ -72,6 +78,15 @@ public class InventoryDetailRecordEntity extends BaseEntity {
     public void setProdAmount(Integer prodAmount) {
         this.prodAmount = prodAmount;
     }
+
+    public Money getProdUnitPrice() {
+        return prodUnitPrice;
+    }
+
+    public void setProdUnitPrice(Money prodUnitPrice) {
+        this.prodUnitPrice = prodUnitPrice;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -87,6 +102,7 @@ public class InventoryDetailRecordEntity extends BaseEntity {
             ", receiptId=" + receiptId +
             ", prodId=" + prodId +
             ", prodAmount=" + prodAmount +
+            ", prodUnitPrice=" + prodUnitPrice +
             ", status=" + status +
         "}";
     }

@@ -5,15 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.StockChangeRecordEntity;
 import com.wms.admin.mapper.StockChangeRecordMapper;
-import com.wms.admin.mapper.StockMaintainMapper;
-import com.wms.admin.service.IInventoryDetailRecordService;
 import com.wms.admin.service.IStockMaintainService;
 import com.wms.admin.service.IStockService;
-import com.wms.admin.vo.StockInventoryQueryVO;
-import com.wms.admin.vo.StockInventoryVO;
 import com.wms.admin.vo.StockMaintainQueryVO;
 import com.wms.admin.vo.StockMaintainVO;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,12 +25,10 @@ public class StockServiceImpl extends ServiceImpl<StockChangeRecordMapper, Stock
     
     @Autowired
     private IStockMaintainService stockMaintainService;
-    @Autowired
-    private IInventoryDetailRecordService inventoryDetailRecordService;
     
     @Override
     public IPage<StockMaintainVO> maintainList(StockMaintainQueryVO queryVO, PageParam pageParam) {
-        return null;
+        return stockMaintainService.maintainPages(queryVO,pageParam);
     }
 
     @Override
@@ -55,24 +48,5 @@ public class StockServiceImpl extends ServiceImpl<StockChangeRecordMapper, Stock
         stockMaintainService.deleteMaintain(id);
     }
 
-    @Override
-    public IPage<StockInventoryVO> inventoryList(StockInventoryQueryVO queryVO, PageParam pageParam) {
-        return null;
-    }
-
-    @Override
-    public void inventoryAdd(StockInventoryVO queryVO) {
-
-    }
-
-    @Override
-    public void inventoryUpdate(StockInventoryVO queryVO) {
-
-    }
-
-    @Override
-    public void inventoryDetail(String receiptNo) {
-
-    }
 
 }
