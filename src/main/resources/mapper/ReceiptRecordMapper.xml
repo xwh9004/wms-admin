@@ -6,7 +6,7 @@
         select
         r.id , r.receipt_no , r.receipt_type , r.sub_type ,
         r.region_id , SR.region_name,
-        r.apply_id ,r.operator_id ,r.prod_type_nums,r.total_amount ,
+        r.apply_id ,r.operator_id ,r.prod_type_nums,r.total_amount ,r.total_price,
         r.description , r.apply_date ,
         r.del_flag ,r.create_by , r.create_time , r.update_by ,r.update_time
         from T_WMS_RECEIPT_RECORD r

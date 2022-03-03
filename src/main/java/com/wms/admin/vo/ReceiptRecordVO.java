@@ -63,6 +63,7 @@ public class ReceiptRecordVO<T> {
      * 货物总量
      */
     private Integer totalAmount;
+    private Money totalPrice;
 
     /**
      * 描述

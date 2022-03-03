@@ -15,15 +15,13 @@ import com.wms.admin.service.IRegionRacksService;
 import com.wms.admin.service.IStorageInRecordService;
 import com.wms.admin.util.ReceiptUtil;
 import com.wms.admin.util.UUIDUtil;
-import com.wms.admin.vo.ReceiptRecordQueryVO;
-import com.wms.admin.vo.ReceiptRecordVO;
-import com.wms.admin.vo.RegionRackVO;
-import com.wms.admin.vo.StorageInDetailRecordVO;
+import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -68,18 +66,22 @@ public class StorageInRecordServiceImpl extends ServiceImpl<StorageInDetailRecor
             recordEntity.setProdTypeNums(Integer.valueOf(0));
             recordEntity.setTotalAmount(Integer.valueOf(0));
             List<StorageInDetailRecordEntity> detailList = new ArrayList<>();
+            Money totalPrice = Money.valueOf(BigDecimal.ZERO);
             Set<String> prodIdSet = new HashSet<>();
-            voList.forEach(item -> {
-                recordEntity.setTotalAmount(recordEntity.getTotalAmount()+item.getProdAmount());
+            for (StorageInDetailRecordVO item : voList) {
+                recordEntity.setTotalAmount(recordEntity.getTotalAmount() + item.getProdAmount());
+                Money itemTotalPrice = item.getUnitPrice().multiply(item.getProdAmount().intValue());
+                totalPrice = totalPrice.add(itemTotalPrice);
                 prodIdSet.add(item.getProdId());
                 StorageInDetailRecordEntity entity = new StorageInDetailRecordEntity();
-                BeanUtils.copyProperties(item, entity,"id");
+                BeanUtils.copyProperties(item, entity, "id");
                 entity.setReceiptId(recordEntity.getId());
+                entity.setProdUnitPrice(item.getUnitPrice());
                 entity.setCreateBy(UserInfoContext.getUsername());
                 entity.setUpdateBy(UserInfoContext.getUsername());
                 detailList.add(entity);
-
-            });
+            }
+            recordEntity.setTotalPrice(totalPrice);
             recordEntity.setProdTypeNums(prodIdSet.size());
             saveBatch(detailList);
             receiptRecordService.save(recordEntity);
@@ -101,12 +103,12 @@ public class StorageInRecordServiceImpl extends ServiceImpl<StorageInDetailRecor
     public List<RegionRackVO> regionRacks(String regionId) {
         LambdaQueryWrapper<RegionRacksEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
-                .eq(RegionRacksEntity::getDelFlag,WMSConstants.DEL_FLG_1)
-                .eq(RegionRacksEntity::getRegionId,regionId)
-        .select(RegionRacksEntity::getId,RegionRacksEntity::getRackNo);
+                .eq(RegionRacksEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(RegionRacksEntity::getRegionId, regionId)
+                .select(RegionRacksEntity::getId, RegionRacksEntity::getRackNo);
         List<RegionRacksEntity> list = regionRacksService.list(queryWrapper);
         List<RegionRackVO> regionRackVOS = new ArrayList<>();
-        list.forEach(item->{
+        list.forEach(item -> {
             RegionRackVO vo = new RegionRackVO();
             vo.setId(item.getId());
             vo.setRackNo(item.getRackNo());

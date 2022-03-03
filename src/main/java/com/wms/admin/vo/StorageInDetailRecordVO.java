@@ -34,7 +34,7 @@ public class StorageInDetailRecordVO {
      */
     private Integer prodAmount;
 
-    private Money prodUnitPrice;
+    private Money unitPrice;
 
     /**
      * 货架ID
