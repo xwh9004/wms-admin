@@ -62,7 +62,7 @@ public class InventoryRecordServiceImpl extends ServiceImpl<InventoryDetailRecor
             Set<String> prodIdSet = new HashSet<>();
             for (InventoryDetailRecordVO item : voList) {
                 recordEntity.setTotalAmount(recordEntity.getTotalAmount() + item.getProdAmount());
-                Money itemTotalPrice = item.getProdUnitPrice().multiply(BigDecimal.valueOf(item.getProdAmount()));
+                Money itemTotalPrice = item.getUnitPrice().multiply(BigDecimal.valueOf(item.getProdAmount()));
                 totalPrice = totalPrice.add(itemTotalPrice);
                 prodIdSet.add(item.getProdId());
                 InventoryDetailRecordEntity entity = new InventoryDetailRecordEntity();
@@ -71,9 +71,7 @@ public class InventoryRecordServiceImpl extends ServiceImpl<InventoryDetailRecor
                 entity.setCreateBy(UserInfoContext.getUsername());
                 entity.setUpdateBy(UserInfoContext.getUsername());
                 detailList.add(entity);
-
             }
-            ;
             recordEntity.setTotalPrice(totalPrice);
             recordEntity.setProdTypeNums(prodIdSet.size());
             saveBatch(detailList);

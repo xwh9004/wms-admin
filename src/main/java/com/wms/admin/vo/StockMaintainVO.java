@@ -1,10 +1,9 @@
 package com.wms.admin.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 @Data
-public class StockMaintainVO {
+public class StockMaintainVO extends BaseVO {
     private Integer id;
 
     /**
@@ -25,5 +24,11 @@ public class StockMaintainVO {
      * 库存下限
      */
     private Integer downBound;
+
+    private String prodName;
+    private String prodType;
+
+    private String vendorName;
+
 
 }

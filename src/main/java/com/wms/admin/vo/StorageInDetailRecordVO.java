@@ -29,6 +29,8 @@ public class StorageInDetailRecordVO {
 
     private String prodName;
 
+    private String prodType;
+
     /**
      * 产品数量
      */

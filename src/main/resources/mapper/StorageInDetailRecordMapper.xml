@@ -5,8 +5,8 @@
     <select id="storageInDetailListBy" resultType="com.wms.admin.vo.StorageInDetailRecordVO">
         SELECT
         rd.id,rd.receipt_id,
-        rd.prod_id,rd.prod_unit_price,
-        p.prod_no,p.prod_name,rd.prod_amount,ven.name vendor_name,
+        rd.prod_id,rd.prod_unit_price unit_price,
+        p.prod_no,p.prod_name,rd.prod_amount,ven.name vendor_name, p.type prod_type,
         rd.rack_id,rr.rack_no,rd.rack_takes,rd.status,
         rd.create_by,rd.create_time,rd.update_by,rd.update_time
         FROM t_wms_storage_in_detail_record rd

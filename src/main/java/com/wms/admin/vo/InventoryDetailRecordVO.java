@@ -24,7 +24,7 @@ public class InventoryDetailRecordVO extends BaseVO{
     /**
      * 产品单价
      */
-    private Money prodUnitPrice;
+    private Money unitPrice;
     /**
      * 状态
      */

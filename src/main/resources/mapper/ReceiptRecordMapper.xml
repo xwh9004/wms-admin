@@ -39,7 +39,7 @@
     <select id="selectByReceiptNo" resultType="com.wms.admin.vo.ReceiptRecordVO">
         SELECT r.id , r.receipt_no ,r.receipt_type ,r.sub_type ,
         r.region_id ,SR.region_name,
-        r.apply_id , r.operator_id , r.prod_type_nums, r.total_amount , r.description ,
+        r.apply_id , r.operator_id , r.prod_type_nums, r.total_amount ,r.total_price, r.description ,
         r.apply_date , r.del_flag ,r.create_by , r.create_time , r.update_by , r.update_time
         FROM t_wms_receipt_record r
         left join T_WMS_STORAGES_REGION SR on r.region_id = SR.id and SR.del_flag='1'

@@ -60,9 +60,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
         checkRole(roleVO);
         RoleEntity roleEntity = new RoleEntity();
         BeanUtils.copyProperties(roleVO, roleEntity);
-        roleEntity.setId(UUIDUtil.uuid());
+        String roleId = UUIDUtil.uuid();
+        roleEntity.setId(roleId);
         roleEntity.setCreateBy(UserInfoContext.getUsername());
         roleEntity.setUpdateBy(UserInfoContext.getUsername());
+        roleVO.setId(roleId);
         saveRoleMenu(roleVO);
         return save(roleEntity);
     }

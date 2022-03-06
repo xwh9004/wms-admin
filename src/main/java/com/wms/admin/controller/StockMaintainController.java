@@ -37,14 +37,14 @@ public class StockMaintainController {
         IPage<StockMaintainVO> rolePage = stockService.maintainList(queryVO,pageParam);
         return Result.success().data(rolePage);
     }
-    @ApiOperation(value = "库存维护列表")
+    @ApiOperation(value = "库存维护新增")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
     public Result add(@RequestBody StockMaintainVO maintainVO) {
           stockService.maintainAdd(maintainVO);
         return Result.success();
     }
-    @ApiOperation(value = "库存维护列表")
+    @ApiOperation(value = "库存维护更新")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("update")
     public Result update(@RequestBody StockMaintainVO queryVO) {
