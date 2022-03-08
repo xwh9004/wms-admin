@@ -121,21 +121,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         }
         checkMenuForAdd(parentMenu, menuVO);
         MenuEntity menu = new MenuEntity();
+        BeanUtils.copyProperties(menuVO,menu);
         menu.setId(UUIDUtil.uuid());
-        menu.setMenuName(menuVO.getMenuName());
-        menu.setMenuCode(menuVO.getMenuCode());
         menu.setLevelPath(parentMenu.getLevelPath() + "/" + menu.getId());
         menu.setLevelNo(parentMenu.getLevelNo() + 1);
-        menu.setSeq(menuVO.getSeq());
         menu.setDelFlag(WMSConstants.DEL_FLG_1);
-        menu.setType(menuVO.getType());
         menu.setParentId(parentMenu.getId());
-        menu.setUrl(menuVO.getUrl()); //
-        menu.setHidden(menuVO.getHidden());
-        menu.setPath(menuVO.getPath());
-        menu.setRedirect(menuVO.getRedirect());
-        menu.setIcon(menuVO.getIcon());
-        menu.setStatus(menuVO.getStatus());
         menu.setCreateBy(UserInfoContext.getUsername());
         menu.setUpdateBy(UserInfoContext.getUsername());
         return save(menu);

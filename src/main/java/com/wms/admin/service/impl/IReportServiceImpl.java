@@ -3,10 +3,7 @@ package com.wms.admin.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.commom.PageParam;
-import com.wms.admin.mapper.ProductMapper;
-import com.wms.admin.mapper.StorageInDetailRecordMapper;
-import com.wms.admin.mapper.StorageOutDetailRecordMapper;
-import com.wms.admin.mapper.StorageShiftDetailRecordMapper;
+import com.wms.admin.mapper.*;
 import com.wms.admin.service.IReportService;
 import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +18,9 @@ public class IReportServiceImpl implements IReportService {
     private StorageOutDetailRecordMapper storageOutDetailRecordMapper;
     @Autowired
     private StorageShiftDetailRecordMapper storageShiftDetailRecordMapper;
+    @Autowired
+    private DiscardDetailRecordMapper discardDetailRecordMapper;
+
     @Autowired
     private ProductMapper productMapper;
 
@@ -43,8 +43,9 @@ public class IReportServiceImpl implements IReportService {
     }
 
     @Override
-    public IPage<StorageInDetailRecordVO> discardList(ReportQueryVO queryVO, PageParam pageParam) {
-        return null;
+    public IPage<ReportRecordVO> discardList(ReportQueryVO queryVO, PageParam pageParam) {
+        Page page = new Page(pageParam.getPage(),pageParam.getLimit());
+        return discardDetailRecordMapper.discardReportList(queryVO,page);
     }
 
     @Override

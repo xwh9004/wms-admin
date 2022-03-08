@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,14 +39,14 @@ public class StorageShiftRecordServiceImpl extends ServiceImpl<StorageShiftDetai
 
     @Autowired
     private IReceiptRecordService receiptRecordService;
+
     @Override
     public IPage<ReceiptRecordVO<StorageShiftDetailRecordVO>> listPage(ReceiptRecordQueryVO queryVO, PageParam pageParam) {
         queryVO.setReceiptType("DB");
         Page page = new Page(pageParam.getPage(), pageParam.getLimit());
-        return  storageShiftDetailRecordMapper.receiptPage(queryVO,page);
+        return storageShiftDetailRecordMapper.receiptPage(queryVO, page);
     }
 
-  
 
     @Transactional
     @Override
@@ -63,16 +64,21 @@ public class StorageShiftRecordServiceImpl extends ServiceImpl<StorageShiftDetai
             recordEntity.setTotalAmount(Integer.valueOf(0));
             List<ShiftDetailRecordEntity> detailList = new ArrayList<>();
             Set<String> prodIdSet = new HashSet<>();
-            voList.forEach(item -> {
-                recordEntity.setTotalAmount(recordEntity.getTotalAmount()+item.getProdAmount());
+            Money totalPrice = Money.valueOf(BigDecimal.ZERO);
+            for (StorageShiftDetailRecordVO item : voList) {
+                recordEntity.setTotalAmount(recordEntity.getTotalAmount() + item.getProdAmount());
+                Money itemTotalPrice = item.getUnitPrice().multiply(item.getProdAmount().intValue());
+                totalPrice = totalPrice.add(itemTotalPrice);
                 prodIdSet.add(item.getProdId());
                 ShiftDetailRecordEntity entity = new ShiftDetailRecordEntity();
-                BeanUtils.copyProperties(item, entity,"id");
+                BeanUtils.copyProperties(item, entity, "id");
+                entity.setProdUnitPrice(item.getUnitPrice());
                 entity.setReceiptId(recordEntity.getId());
                 entity.setCreateBy(UserInfoContext.getUsername());
                 entity.setUpdateBy(UserInfoContext.getUsername());
                 detailList.add(entity);
-            });
+            }
+            recordEntity.setTotalPrice(totalPrice);
             recordEntity.setProdTypeNums(prodIdSet.size());
             saveBatch(detailList);
             receiptRecordService.save(recordEntity);

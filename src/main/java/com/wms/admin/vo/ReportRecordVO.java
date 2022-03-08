@@ -54,6 +54,9 @@ public class ReportRecordVO {
     private String applyId;
     private LocalDateTime applyDate;
 
+    private String fromName;
+    private String toName;
+
     /**
      * 入库状态
      */

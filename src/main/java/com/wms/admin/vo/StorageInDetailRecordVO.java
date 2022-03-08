@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class StorageInDetailRecordVO {
+public class StorageInDetailRecordVO extends BaseVO{
     /**
      * 主键id
      */
@@ -56,8 +56,4 @@ public class StorageInDetailRecordVO {
      * 入库状态
      */
     private String status;
-    private String createBy;
-    private String updateBy;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
 }

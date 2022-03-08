@@ -43,8 +43,8 @@ public class StockInventoryController {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @GetMapping("/detail/{receiptNo}")
     public Result detail(@PathVariable String receiptNo) {
-        inventoryRecordService.detail(receiptNo);
-        return Result.success();
+        ReceiptRecordVO<InventoryDetailRecordVO> detail = inventoryRecordService.detail(receiptNo);
+        return Result.success().data(detail);
     }
 
     @ApiOperation(value = "新增库存盘点")

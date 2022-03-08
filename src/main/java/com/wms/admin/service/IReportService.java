@@ -11,7 +11,7 @@ public interface IReportService {
 
      IPage<ReportRecordVO> storageShiftList(ReportQueryVO queryVO, PageParam pageParam);
 
-     IPage<StorageInDetailRecordVO> discardList(ReportQueryVO queryVO, PageParam pageParam) ;
+     IPage<ReportRecordVO>  discardList(ReportQueryVO queryVO, PageParam pageParam) ;
 
      IPage<ProductVO> productList(ReportQueryVO queryVO, PageParam pageParam) ;
 

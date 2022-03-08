@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Validated
 @Data
-public class StoragesRegionVO {
+public class StoragesRegionVO extends BaseVO {
 
     private String id;
     /**
@@ -32,8 +32,4 @@ public class StoragesRegionVO {
      * 描述
      */
     private String description;
-    private String createBy;
-    private String updateBy;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
 }

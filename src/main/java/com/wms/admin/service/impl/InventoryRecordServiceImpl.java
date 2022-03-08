@@ -68,6 +68,7 @@ public class InventoryRecordServiceImpl extends ServiceImpl<InventoryDetailRecor
                 InventoryDetailRecordEntity entity = new InventoryDetailRecordEntity();
                 BeanUtils.copyProperties(item, entity, "id");
                 entity.setReceiptId(recordEntity.getId());
+                entity.setProdUnitPrice(item.getUnitPrice());
                 entity.setCreateBy(UserInfoContext.getUsername());
                 entity.setUpdateBy(UserInfoContext.getUsername());
                 detailList.add(entity);

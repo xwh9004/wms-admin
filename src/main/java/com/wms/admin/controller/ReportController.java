@@ -49,11 +49,11 @@ public class ReportController {
         IPage<ReportRecordVO> pages = reportService.storageShiftList(queryVO, pageParam);
         return Result.success().data(pages);
     }
-    @ApiOperation(value = "调拨报表列表")
+    @ApiOperation(value = "报废报表列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/discard/list")
     public Result discardList(@RequestBody ReportQueryVO queryVO, PageParam pageParam) {
-        IPage<StorageInDetailRecordVO> pages = reportService.discardList(queryVO, pageParam);
+        IPage<ReportRecordVO> pages = reportService.discardList(queryVO, pageParam);
         return Result.success().data(pages);
     }
     @ApiOperation(value = "货物列表报表")

@@ -12,14 +12,12 @@ import com.wms.admin.service.IReceiptRecordService;
 import com.wms.admin.service.IStorageOutRecordService;
 import com.wms.admin.util.ReceiptUtil;
 import com.wms.admin.util.UUIDUtil;
-import com.wms.admin.vo.ReceiptRecordQueryVO;
-import com.wms.admin.vo.ReceiptRecordVO;
-import com.wms.admin.vo.StorageInDetailRecordVO;
-import com.wms.admin.vo.StorageOutDetailRecordVO;
+import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -62,16 +60,21 @@ public class StorageOutRecordServiceImpl extends ServiceImpl<StorageOutDetailRec
             recordEntity.setTotalAmount(Integer.valueOf(0));
             List<StorageOutDetailRecordEntity> detailList = new ArrayList<>();
             Set<String> prodIdSet = new HashSet<>();
-            voList.forEach(item -> {
-                recordEntity.setTotalAmount(recordEntity.getTotalAmount()+item.getProdAmount());
+            Money totalPrice = Money.valueOf(BigDecimal.ZERO);
+            for (StorageOutDetailRecordVO item : voList) {
+                recordEntity.setTotalAmount(recordEntity.getTotalAmount() + item.getProdAmount());
+                Money itemTotalPrice = item.getUnitPrice().multiply(item.getProdAmount().intValue());
+                totalPrice = totalPrice.add(itemTotalPrice);
                 prodIdSet.add(item.getProdId());
                 StorageOutDetailRecordEntity entity = new StorageOutDetailRecordEntity();
-                BeanUtils.copyProperties(item, entity,"id");
+                BeanUtils.copyProperties(item, entity, "id");
+                entity.setProdUnitPrice(item.getUnitPrice());
                 entity.setReceiptId(recordEntity.getId());
                 entity.setCreateBy(UserInfoContext.getUsername());
                 entity.setUpdateBy(UserInfoContext.getUsername());
                 detailList.add(entity);
-            });
+            }
+            recordEntity.setTotalPrice(totalPrice);
             recordEntity.setProdTypeNums(prodIdSet.size());
             saveBatch(detailList);
             receiptRecordService.save(recordEntity);

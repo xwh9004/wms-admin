@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 @Data
-public class StorageOutDetailRecordVO {
+public class StorageOutDetailRecordVO extends BaseVO{
     /**
      * 主键id
      */
@@ -28,6 +28,10 @@ public class StorageOutDetailRecordVO {
      * 产品名称
      */
     private String prodName;
+    /**
+     * 产品类型
+     */
+    private String prodType;
 
     /**
      * 产品数量
@@ -36,13 +40,9 @@ public class StorageOutDetailRecordVO {
     /**
      * 单价
      */
-    private Money prodUnitPrice;
+    private Money unitPrice;
     /**
      * 出库状态
      */
     private String status;
-    private String createBy;
-    private String updateBy;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
 }

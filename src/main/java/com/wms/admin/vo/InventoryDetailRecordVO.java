@@ -15,7 +15,9 @@ public class InventoryDetailRecordVO extends BaseVO{
      * 产品ID
      */
     private String prodId;
-
+    private String prodNo;
+    private String prodName;
+    private String prodType;
     /**
      * 产品数量
      */
@@ -25,6 +27,8 @@ public class InventoryDetailRecordVO extends BaseVO{
      * 产品单价
      */
     private Money unitPrice;
+
+    private String vendorName;
     /**
      * 状态
      */

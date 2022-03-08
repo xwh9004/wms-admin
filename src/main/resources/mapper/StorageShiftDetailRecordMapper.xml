@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.StorageShiftDetailRecordMapper">
     <select id="selectByReceiptNo" resultType="com.wms.admin.vo.ReceiptRecordVO">
-        SELECT r.id , r.receipt_no ,r.receipt_type ,r.sub_type ,
+        SELECT r.id , r.receipt_no ,r.receipt_type ,r.sub_type ,r.total_price,
         r.from_id ,SR1.region_name from_name, r.to_id ,SR1.region_name to_name,
         r.apply_id , r.operator_id , r.prod_type_nums, r.total_amount , r.description ,
         r.apply_date , r.del_flag ,r.create_by , r.create_time , r.update_by , r.update_time
@@ -16,8 +16,8 @@
 
     <select id="storageShiftDetailListBy" resultType="com.wms.admin.vo.StorageShiftDetailRecordVO">
         SELECT
-        rd.id,rd.receipt_id,rd.prod_unit_price,
-        rd.prod_id,p.prod_no,p.prod_name,rd.prod_amount,ven.name vendor_name,
+        rd.id,rd.receipt_id,rd.prod_unit_price unit_price,
+        rd.prod_id,p.prod_no,p.prod_name,p.type prod_type,rd.prod_amount,ven.name vendor_name,
         rd.status,rd.create_by,rd.create_time,rd.update_by,rd.update_time
         FROM t_wms_shift_detail_record rd
         LEFT JOIN t_wms_receipt_record rp on rp.id = rd.receipt_id and rp.del_flag ='1'
@@ -28,25 +28,28 @@
     </select>
     <select id="storageShiftReportList" resultType="com.wms.admin.vo.ReportRecordVO">
         SELECT
-        rd.id,rd.receipt_id,
-        rd.prod_id,p.prod_no,p.prod_name,rd.prod_amount,ven.name vendor_name,
-        rd.status,rd.create_by,rd.create_time,rd.update_by,rd.update_time
+        rd.id,rd.receipt_id,rp.receipt_no,SR1.region_name from_name, SR2.region_name to_name,
+        rd.prod_id,p.prod_no,p.type prod_type,p.prod_name,rd.prod_amount,ven.name vendor_name,
+        rd.status,rd.create_by,rd.create_time,rd.update_by,rd.update_time,
+        rp.apply_date,rp.apply_id
         FROM t_wms_shift_detail_record rd
         LEFT JOIN t_wms_receipt_record rp on rp.id = rd.receipt_id and rp.del_flag ='1'
         LEFT JOIN t_wms_product p on p.id = rd.prod_id and p.del_flag ='1'
         LEFT JOIN t_wms_vendor ven on ven.id = p.vendor_id and ven.del_flag ='1'
+        left join T_WMS_STORAGES_REGION SR1 on rp.from_id = SR1.id and SR1.del_flag='1'
+        left join T_WMS_STORAGES_REGION SR2 on rp.to_id = SR2.id and SR2.del_flag='1'
         WHERE rd.del_flag='1'
         <if test="query.fromId!=null and query.fromId!=''">
             and rp.from_id =#{query.fromId}
         </if>
         <if test="query.toId!=null and query.toId!=''">
-            and rp.to_id =#{query.fromId}
+            and rp.to_id =#{query.toId}
         </if>
     </select>
     <select id="receiptPage" parameterType="com.wms.admin.vo.ReceiptRecordQueryVO"
             resultType="com.wms.admin.vo.ReceiptRecordVO">
         select
-        r.id , r.receipt_no , r.receipt_type , r.sub_type ,
+        r.id , r.receipt_no , r.receipt_type , r.sub_type ,r.total_price,
         r.from_id , SR1.region_name from_name,  r.to_id , SR2.region_name to_name,
         r.apply_id ,r.operator_id ,r.prod_type_nums,r.total_amount ,
         r.description , r.apply_date ,
