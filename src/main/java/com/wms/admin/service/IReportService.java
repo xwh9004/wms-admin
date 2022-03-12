@@ -16,4 +16,6 @@ public interface IReportService {
      IPage<ProductVO> productList(ReportQueryVO queryVO, PageParam pageParam) ;
 
      IPage<ProdStockVO> stockList(ReportQueryVO queryVO, PageParam pageParam) ;
+
+     IPage<ReportRecordVO> inventoryList(ReportQueryVO queryVO, PageParam pageParam);
 }

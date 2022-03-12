@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.ReceiptRecordEntity;
 import com.wms.admin.entity.StorageInDetailRecordEntity;
 import com.wms.admin.entity.StorageOutDetailRecordEntity;
 import com.wms.admin.mapper.StorageOutDetailRecordMapper;
 import com.wms.admin.service.IReceiptRecordService;
+import com.wms.admin.service.IStockChangeRecordService;
 import com.wms.admin.service.IStorageOutRecordService;
 import com.wms.admin.util.ReceiptUtil;
 import com.wms.admin.util.UUIDUtil;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +41,8 @@ public class StorageOutRecordServiceImpl extends ServiceImpl<StorageOutDetailRec
 
     @Autowired
     private StorageOutDetailRecordMapper storageOutDetailRecordMapper;
+    @Autowired
+    private IStockChangeRecordService stockChangeRecordService;
 
     @Override
     public IPage<ReceiptRecordVO<StorageOutDetailRecordVO>> listPage(ReceiptRecordQueryVO queryVO, PageParam pageParam) {
@@ -49,9 +54,10 @@ public class StorageOutRecordServiceImpl extends ServiceImpl<StorageOutDetailRec
     public void addStorageOut(ReceiptRecordVO<StorageOutDetailRecordVO> recordVO) {
         checkForAdd(recordVO);
         final ReceiptRecordEntity recordEntity = new ReceiptRecordEntity();
+        String receiptNo = ReceiptUtil.generateNo(recordVO.getReceiptType());
+        recordVO.setReceiptNo(receiptNo);
         BeanUtils.copyProperties(recordVO, recordEntity);
         recordEntity.setId(UUIDUtil.uuid());
-        recordEntity.setReceiptNo(ReceiptUtil.generateNo(recordVO.getReceiptType()));
         recordEntity.setCreateBy(UserInfoContext.getUsername());
         recordEntity.setUpdateBy(UserInfoContext.getUsername());
         List<StorageOutDetailRecordVO> voList = recordVO.getList();
@@ -78,7 +84,17 @@ public class StorageOutRecordServiceImpl extends ServiceImpl<StorageOutDetailRec
             recordEntity.setProdTypeNums(prodIdSet.size());
             saveBatch(detailList);
             receiptRecordService.save(recordEntity);
+            stockChangeRecordService.subStocks(buildStockChangeRecordParams(recordVO));
         }
+    }
+
+    private List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordVO<StorageOutDetailRecordVO> recordVO) {
+
+        return stockChangeRecordService.buildStockChangeRecordParams(recordVO,(vo,detail)->{
+            vo.setProdId(detail.getProdId());
+            vo.setProdNo(detail.getProdNo());
+            vo.setChangeStock(0-detail.getProdAmount());
+        });
     }
 
     private void checkForAdd(ReceiptRecordVO<StorageOutDetailRecordVO> recordVO) {

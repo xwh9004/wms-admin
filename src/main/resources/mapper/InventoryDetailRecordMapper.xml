@@ -15,4 +15,20 @@
         and rp.receipt_no =#{receiptNo}
     </select>
 
+    <select id="inventoryReportList" resultType="com.wms.admin.vo.ReportRecordVO">
+        SELECT
+        rd.id,rd.receipt_id,rp.receipt_no,rp.apply_id,rp.apply_date,
+        rd.prod_id,p.prod_no,p.prod_name,rd.prod_amount,p.type prod_type,
+        rg.region_name,ven.name vendor_name,rd.status,
+        rd.create_by,rd.create_time,rd.update_by,rd.update_time
+        FROM t_wms_inventory_detail_record rd
+        LEFT JOIN t_wms_receipt_record rp on rp.id = rd.receipt_id and rp.del_flag ='1'
+        LEFT JOIN t_wms_product p on p.id = rd.prod_id and p.del_flag ='1'
+        LEFT JOIN t_wms_vendor ven on ven.id = p.vendor_id and ven.del_flag ='1'
+        LEFT JOIN t_wms_storages_region rg on rg.id = rp.region_id and rg.del_flag ='1'
+        WHERE rd.del_flag='1'
+        <if test="query.regionId!=null and query.regionId!=''">
+            and rp.regionId =#{query.regionId}
+        </if>
+    </select>
 </mapper>

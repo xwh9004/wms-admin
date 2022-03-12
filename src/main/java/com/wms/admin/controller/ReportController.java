@@ -56,6 +56,13 @@ public class ReportController {
         IPage<ReportRecordVO> pages = reportService.discardList(queryVO, pageParam);
         return Result.success().data(pages);
     }
+    @ApiOperation(value = "报废报表列表")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/inventory/list")
+    public Result inventoryList(@RequestBody ReportQueryVO queryVO, PageParam pageParam) {
+        IPage<ReportRecordVO> pages = reportService.inventoryList(queryVO, pageParam);
+        return Result.success().data(pages);
+    }
     @ApiOperation(value = "货物列表报表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/product/list")

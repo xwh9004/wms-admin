@@ -41,9 +41,10 @@ public class DiscardRecordServiceImpl extends ServiceImpl<DiscardDetailRecordMap
     @Override
     public void addDiscard(ReceiptRecordVO<DiscardDetailRecordVO> recordVO) {
         ReceiptRecordEntity receiptRecord = new ReceiptRecordEntity();
+        String receiptNo = ReceiptUtil.generateNo(recordVO.getReceiptType());
+        recordVO.setReceiptNo(receiptNo);
         BeanUtils.copyProperties(recordVO, receiptRecord);
         receiptRecord.setId(UUIDUtil.uuid());
-        receiptRecord.setReceiptNo(ReceiptUtil.generateNo(recordVO.getReceiptType()));
         receiptRecord.setCreateBy(UserInfoContext.getUsername());
         receiptRecord.setUpdateBy(UserInfoContext.getUsername());
         List<DiscardDetailRecordVO> voList = recordVO.getList();

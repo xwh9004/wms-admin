@@ -2,6 +2,10 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.StockChangeRecordEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.admin.vo.StockChangeRecordVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2022-02-26 14:22:49
  */
 public interface StockChangeRecordMapper extends BaseMapper<StockChangeRecordEntity> {
-
+    void saveChangeRecords(@Param("list") List<StockChangeRecordVO> changeRecordVOS);
 }

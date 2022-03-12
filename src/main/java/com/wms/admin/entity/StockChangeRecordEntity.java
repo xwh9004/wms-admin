@@ -1,10 +1,9 @@
 package com.wms.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.wms.admin.entity.BaseEntity;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Jesse
- * @since 2022-02-26 14:22:49
+ * @since 2022-03-08 19:58:52
  */
 @TableName("t_wms_stock_change_record")
 public class StockChangeRecordEntity extends BaseEntity {
@@ -20,14 +19,20 @@ public class StockChangeRecordEntity extends BaseEntity {
     /**
      * 主键id
      */
-    @TableId("id")
+    @TableId(value = "id", type = IdType.AUTO)
     private String id;
 
+
     /**
-     * 单据ID
+     * 单据编号
      */
-    @TableField("receipt_id")
-    private String receiptId;
+    @TableField("receipt_no")
+    private String receiptNo;
+    /**
+     * 库区ID
+     */
+    @TableField("region_id")
+    private String regionId;
 
     /**
      * 产品ID
@@ -36,40 +41,16 @@ public class StockChangeRecordEntity extends BaseEntity {
     private String prodId;
 
     /**
-     * 产品数量
+     * 当前库存
      */
-    @TableField("prod_amount")
-    private Integer prodAmount;
+    @TableField("current_stock")
+    private Integer currentStock;
 
     /**
-     * 货架号
+     * 变化库存
      */
-    @TableField("rack_id")
-    private String rackId;
-
-    /**
-     * 占用货架数量
-     */
-    @TableField("rack_takes")
-    private Integer rackTakes;
-
-    /**
-     * 入库状态
-     */
-    @TableField("status")
-    private String status;
-
-    /**
-     * 描述
-     */
-    @TableField("description")
-    private String description;
-
-    /**
-     * 入库时间
-     */
-    @TableField("complete_time")
-    private LocalDateTime completeTime;
+    @TableField("change_stock")
+    private Integer changeStock;
 
     public String getId() {
         return id;
@@ -78,13 +59,15 @@ public class StockChangeRecordEntity extends BaseEntity {
     public void setId(String id) {
         this.id = id;
     }
-    public String getReceiptId() {
-        return receiptId;
+
+    public String getRegionId() {
+        return regionId;
     }
 
-    public void setReceiptId(String receiptId) {
-        this.receiptId = receiptId;
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
     }
+
     public String getProdId() {
         return prodId;
     }
@@ -92,61 +75,32 @@ public class StockChangeRecordEntity extends BaseEntity {
     public void setProdId(String prodId) {
         this.prodId = prodId;
     }
-    public Integer getProdAmount() {
-        return prodAmount;
+
+    public Integer getCurrentStock() {
+        return currentStock;
     }
 
-    public void setProdAmount(Integer prodAmount) {
-        this.prodAmount = prodAmount;
-    }
-    public String getRackId() {
-        return rackId;
+    public void setCurrentStock(Integer currentStock) {
+        this.currentStock = currentStock;
     }
 
-    public void setRackId(String rackId) {
-        this.rackId = rackId;
-    }
-    public Integer getRackTakes() {
-        return rackTakes;
+    public Integer getChangeStock() {
+        return changeStock;
     }
 
-    public void setRackTakes(Integer rackTakes) {
-        this.rackTakes = rackTakes;
-    }
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public LocalDateTime getCompleteTime() {
-        return completeTime;
-    }
-
-    public void setCompleteTime(LocalDateTime completeTime) {
-        this.completeTime = completeTime;
+    public void setChangeStock(Integer changeStock) {
+        this.changeStock = changeStock;
     }
 
     @Override
     public String toString() {
         return "StockChangeRecordEntity{" +
-            "id=" + id +
-            ", receiptId=" + receiptId +
-            ", prodId=" + prodId +
-            ", prodAmount=" + prodAmount +
-            ", rackId=" + rackId +
-            ", rackTakes=" + rackTakes +
-            ", status=" + status +
-            ", description=" + description +
-            ", completeTime=" + completeTime +
-        "}";
+                "id=" + id +
+                ", receiptNo=" + receiptNo +
+                ", regionId=" + regionId +
+                ", prodId=" + prodId +
+                ", currentStock=" + currentStock +
+                ", changeStock=" + changeStock +
+                "}";
     }
 }

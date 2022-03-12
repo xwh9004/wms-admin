@@ -23,7 +23,6 @@ public interface IStorageInRecordService extends IService<StorageInDetailRecordE
 
     IPage<ReceiptRecordVO<StorageInDetailRecordVO>> listPage(ReceiptRecordQueryVO queryVO, PageParam pageParam);
 
-
     void addStorageIn(ReceiptRecordVO<StorageInDetailRecordVO> recordVO);
 
     ReceiptRecordVO detail(String receiptNo);

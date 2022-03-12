@@ -41,7 +41,6 @@ public class UserInfoInterceptor implements HandlerInterceptor {
         log.info("###请求路径: " +request.getRequestURI());
         // 获取请求头信息authorization信息
         final String authHeader = request.getHeader(JwtTokenUtil.AUTH_HEADER_KEY);
-//        log.info("## authHeader= {}", authHeader);
         if (StringUtils.isBlank(authHeader) || !authHeader.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
             log.info("### 用户未登录，请先登录 ###");
             throw new BusinessException(ResultCode.USER_NOT_LOGGED_IN);

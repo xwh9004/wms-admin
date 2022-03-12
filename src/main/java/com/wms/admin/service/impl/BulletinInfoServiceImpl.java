@@ -9,6 +9,8 @@ import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.dto.BulletinInfoDto;
+import com.wms.admin.dto.BulletinQueryDto;
 import com.wms.admin.entity.BulletinInfoEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.BulletinInfoMapper;
@@ -41,21 +43,20 @@ public class BulletinInfoServiceImpl extends ServiceImpl<BulletinInfoMapper, Bul
     private static final String PUBLISH_N ="0";
 
     @Override
-    public IPage<BulletinInfoVO> bulletinPages(@RequestBody BulletinQueryVO queryVO, PageParam pageParam) {
-
-        IPage<BulletinInfoEntity> page = new Page<>(pageParam.getPage(),pageParam.getLimit());
+    public IPage<BulletinInfoDto> bulletinPages(BulletinQueryDto queryCond) {
+        IPage<BulletinInfoEntity> page = new Page<>(queryCond.getPage(),queryCond.getLimit());
         LambdaQueryWrapper<BulletinInfoEntity> queryWrapper =new LambdaQueryWrapper<>();
         queryWrapper.eq(BulletinInfoEntity::getDelFlag,WMSConstants.DEL_FLG_1);
-        if(queryVO.getStartTime()!=null){
-            queryWrapper.gt(BulletinInfoEntity::getCreateTime,queryVO.getStartTime());
+        if(queryCond.getStartTime()!=null){
+            queryWrapper.gt(BulletinInfoEntity::getCreateTime,queryCond.getStartTime());
         }
-        if(queryVO.getEndTime()!=null){
-            queryWrapper.lt(BulletinInfoEntity::getCreateTime,queryVO.getEndTime());
+        if(queryCond.getEndTime()!=null){
+            queryWrapper.lt(BulletinInfoEntity::getCreateTime,queryCond.getEndTime());
         }
-        IPage<BulletinInfoVO> result= page(page,queryWrapper).convert(item -> {
-            BulletinInfoVO bulletinInfoVO = new BulletinInfoVO();
-            BeanUtils.copyProperties(item,bulletinInfoVO);
-            return bulletinInfoVO;
+        IPage<BulletinInfoDto> result= page(page,queryWrapper).convert(item -> {
+            BulletinInfoDto bulletinInfo = new BulletinInfoDto();
+            BeanUtils.copyProperties(item,bulletinInfo);
+            return bulletinInfo;
         });
         return result;
     }
@@ -111,15 +112,15 @@ public class BulletinInfoServiceImpl extends ServiceImpl<BulletinInfoMapper, Bul
     }
 
     @Override
-    public BulletinInfoVO findPublished() {
+    public BulletinInfoDto findPublished() {
         LambdaQueryWrapper<BulletinInfoEntity> publishedCond =new LambdaQueryWrapper<>();
         publishedCond
                 .eq(BulletinInfoEntity::getDelFlag,WMSConstants.DEL_FLG_1)
                 .eq(BulletinInfoEntity::getIsPublish,PUBLISH_Y);
         BulletinInfoEntity entity =getOne(publishedCond);
-        BulletinInfoVO bulletinInfoVO = new BulletinInfoVO();
-        BeanUtils.copyProperties(entity,bulletinInfoVO);
-        return bulletinInfoVO;
+        BulletinInfoDto bulletinInfo = new BulletinInfoDto();
+        BeanUtils.copyProperties(entity,bulletinInfo);
+        return bulletinInfo;
     }
 
     public void resetAll(){

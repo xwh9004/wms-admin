@@ -5,6 +5,7 @@ import com.wms.admin.commom.Result;
 import com.wms.admin.service.IOrgService;
 import com.wms.admin.vo.MenuVO;
 import com.wms.admin.vo.OrgVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author Jesse
  * @since 2022-02-26 14:22:49
  */
+@Api("组织控制器")
 @RestController
 @RequestMapping("/org")
 public class OrgController {

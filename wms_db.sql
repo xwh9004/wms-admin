@@ -232,7 +232,8 @@ create table  if not exists T_WMS_STORAGE_IN_DETAIL_RECORD(
 
 
 create table  if not exists T_WMS_STOCK_CHANGE_RECORD(
-  id varChar(40) NOT NULL comment '主键id',
+  id int(20) primary key not null auto_increment,
+  receipt_no VARCHAR(40) NOT NULL comment '单据编号',
   region_id VARCHAR(40) NOT NULL comment '库区ID',
   prod_id VARCHAR(40) comment '产品ID',
   current_stock int(11) comment '当前库存',
@@ -241,8 +242,7 @@ create table  if not exists T_WMS_STOCK_CHANGE_RECORD(
   create_by VARCHAR(200) comment '创建人',
   create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
   update_by VARCHAR(200)   comment '最后更新人',
-  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
-  PRIMARY KEY ( id )
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='产品库存变更记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table  if not exists T_WMS_STORAGE_OUT_DETAIL_RECORD(
@@ -303,6 +303,7 @@ create table  if not exists T_WMS_STOCK(
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='库存记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into T_WMS_STOCK (id) values(-1);
 
 create table  if not exists T_WMS_BULLETIN_INFO(
   id int(20) primary key not null auto_increment,

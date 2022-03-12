@@ -48,9 +48,10 @@ public class InventoryRecordServiceImpl extends ServiceImpl<InventoryDetailRecor
     public void addInventory(ReceiptRecordVO<InventoryDetailRecordVO> recordVO) {
         checkForAdd(recordVO);
         final ReceiptRecordEntity recordEntity = new ReceiptRecordEntity();
+        String receiptNo = ReceiptUtil.generateNo(recordVO.getReceiptType());
+        recordVO.setReceiptNo(receiptNo);
         BeanUtils.copyProperties(recordVO, recordEntity);
         recordEntity.setId(UUIDUtil.uuid());
-        recordEntity.setReceiptNo(ReceiptUtil.generateNo(recordVO.getReceiptType()));
         recordEntity.setCreateBy(UserInfoContext.getUsername());
         recordEntity.setUpdateBy(UserInfoContext.getUsername());
         List<InventoryDetailRecordVO> voList = recordVO.getList();

@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.StockChangeRecordEntity;
+import com.wms.admin.entity.StockEntity;
 import com.wms.admin.mapper.StockChangeRecordMapper;
+import com.wms.admin.mapper.StockMapper;
 import com.wms.admin.service.IStockMaintainService;
 import com.wms.admin.service.IStockService;
 import com.wms.admin.vo.StockMaintainQueryVO;
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @since 2022-02-16 21:10:29
  */
 @Service
-public class StockServiceImpl extends ServiceImpl<StockChangeRecordMapper, StockChangeRecordEntity> implements IStockService {
+public class StockServiceImpl extends ServiceImpl<StockMapper, StockEntity> implements IStockService {
     
     @Autowired
     private IStockMaintainService stockMaintainService;

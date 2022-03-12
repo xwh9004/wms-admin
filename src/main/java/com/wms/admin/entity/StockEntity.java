@@ -38,6 +38,18 @@ public class StockEntity extends BaseEntity {
     @TableField("current_stock")
     private Integer currentStock;
 
+    public StockEntity() {
+
+    }
+
+    public StockEntity(String prodId, String regionId, Integer currentStock,String createBy) {
+        this.prodId = prodId;
+        this.regionId = regionId;
+        this.currentStock = currentStock;
+        setCreateBy(createBy);
+        setUpdateBy(createBy);
+    }
+
     public Integer getId() {
         return id;
     }
@@ -45,6 +57,7 @@ public class StockEntity extends BaseEntity {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getRegionId() {
         return regionId;
     }
@@ -52,6 +65,7 @@ public class StockEntity extends BaseEntity {
     public void setRegionId(String regionId) {
         this.regionId = regionId;
     }
+
     public String getProdId() {
         return prodId;
     }
@@ -59,6 +73,7 @@ public class StockEntity extends BaseEntity {
     public void setProdId(String prodId) {
         this.prodId = prodId;
     }
+
     public Integer getCurrentStock() {
         return currentStock;
     }
@@ -70,10 +85,10 @@ public class StockEntity extends BaseEntity {
     @Override
     public String toString() {
         return "StockEntity{" +
-            "id=" + id +
-            ", regionId=" + regionId +
-            ", prodId=" + prodId +
-            ", currentStock=" + currentStock +
-        "}";
+                "id=" + id +
+                ", regionId=" + regionId +
+                ", prodId=" + prodId +
+                ", currentStock=" + currentStock +
+                "}";
     }
 }

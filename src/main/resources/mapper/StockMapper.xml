@@ -2,4 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.StockMapper">
 
+    <select id="stockPage" resultType="com.wms.admin.vo.ProdStockVO">
+        select s.id,s.current_stock,p.prod_no,p.prod_name ,c.name category_name,
+        p.type prod_type,ven.name vendor_name,r.region_name
+        from t_wms_stock s
+        left join t_wms_product p on p.id = s.prod_id and p.del_flag ='1'
+        left join T_WMS_PROD_CATEGORY c on c.id = p.category_id and c.del_flag ='1'
+        LEFT JOIN t_wms_vendor ven on ven.id = p.vendor_id and ven.del_flag ='1'
+        left join T_WMS_STORAGES_REGION r on r.id = s.region_id and r.del_flag ='1'
+        <if test="param.regionId!=null and param.regionId!=''">
+            and s.region_id =#{query.regionId}
+        </if>
+    </select>
+
 </mapper>

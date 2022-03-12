@@ -2,6 +2,8 @@ package com.wms.admin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.dto.BulletinInfoDto;
+import com.wms.admin.dto.BulletinQueryDto;
 import com.wms.admin.entity.BulletinInfoEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.admin.vo.BulletinInfoVO;
@@ -19,7 +21,7 @@ import com.wms.admin.vo.ProdCategoryVO;
  */
 public interface IBulletinInfoService extends IService<BulletinInfoEntity> {
 
-    IPage<BulletinInfoVO> bulletinPages(BulletinQueryVO queryVO, PageParam pageParam);
+    IPage<BulletinInfoDto> bulletinPages(BulletinQueryDto queryCond);
 
     void addBulletin(BulletinInfoVO bulletinVO);
 
@@ -29,5 +31,5 @@ public interface IBulletinInfoService extends IService<BulletinInfoEntity> {
 
     void publish(Integer id);
 
-    BulletinInfoVO findPublished();
+    BulletinInfoDto findPublished();
 }
