@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.StockChangeRecordEntity;
 import com.wms.admin.entity.StockEntity;
 import com.wms.admin.exception.BusinessException;
@@ -94,7 +95,7 @@ public class StockChangeRecordServiceImpl extends ServiceImpl<StockChangeRecordM
     }
 
     @Override
-    public <T> List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordVO<T> recordVO, BiConsumer<StockChangeRecordVO, T> consumer) {
+    public <T> List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordDto<T> recordVO, BiConsumer<StockChangeRecordVO, T> consumer) {
 
         LocalDateTime now = LocalDateTime.now();
         List<T> items = recordVO.getList();

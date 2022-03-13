@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.ReceiptRecordEntity;
 import com.wms.admin.entity.StorageInDetailRecordEntity;
 import com.wms.admin.entity.StorageOutDetailRecordEntity;
+import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.StorageOutDetailRecordMapper;
 import com.wms.admin.service.IReceiptRecordService;
 import com.wms.admin.service.IStockChangeRecordService;
@@ -18,6 +21,7 @@ import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,54 +54,48 @@ public class StorageOutRecordServiceImpl extends ServiceImpl<StorageOutDetailRec
         return receiptRecordService.receiptPage(queryVO, pageParam);
     }
 
+    @Transactional
     @Override
     public void addStorageOut(ReceiptRecordVO<StorageOutDetailRecordVO> recordVO) {
         checkForAdd(recordVO);
-        final ReceiptRecordEntity recordEntity = new ReceiptRecordEntity();
-        String receiptNo = ReceiptUtil.generateNo(recordVO.getReceiptType());
-        recordVO.setReceiptNo(receiptNo);
-        BeanUtils.copyProperties(recordVO, recordEntity);
-        recordEntity.setId(UUIDUtil.uuid());
-        recordEntity.setCreateBy(UserInfoContext.getUsername());
-        recordEntity.setUpdateBy(UserInfoContext.getUsername());
-        List<StorageOutDetailRecordVO> voList = recordVO.getList();
-        if (!voList.isEmpty()) {
-            recordEntity.setProdTypeNums(Integer.valueOf(0));
-            recordEntity.setTotalAmount(Integer.valueOf(0));
-            List<StorageOutDetailRecordEntity> detailList = new ArrayList<>();
-            Set<String> prodIdSet = new HashSet<>();
-            Money totalPrice = Money.valueOf(BigDecimal.ZERO);
-            for (StorageOutDetailRecordVO item : voList) {
-                recordEntity.setTotalAmount(recordEntity.getTotalAmount() + item.getProdAmount());
-                Money itemTotalPrice = item.getUnitPrice().multiply(item.getProdAmount().intValue());
-                totalPrice = totalPrice.add(itemTotalPrice);
-                prodIdSet.add(item.getProdId());
-                StorageOutDetailRecordEntity entity = new StorageOutDetailRecordEntity();
-                BeanUtils.copyProperties(item, entity, "id");
-                entity.setProdUnitPrice(item.getUnitPrice());
-                entity.setReceiptId(recordEntity.getId());
-                entity.setCreateBy(UserInfoContext.getUsername());
-                entity.setUpdateBy(UserInfoContext.getUsername());
-                detailList.add(entity);
-            }
-            recordEntity.setTotalPrice(totalPrice);
-            recordEntity.setProdTypeNums(prodIdSet.size());
-            saveBatch(detailList);
-            receiptRecordService.save(recordEntity);
-            stockChangeRecordService.subStocks(buildStockChangeRecordParams(recordVO));
-        }
+        ReceiptRecordDto<StorageOutDetailRecordVO> recordDto = new ReceiptRecordDto();
+        BeanUtils.copyProperties(recordVO, recordDto);
+        ArrayList<StorageOutDetailRecordEntity> detailList = new ArrayList<>();
+        receiptRecordService.saveReceiptRecord(recordDto, (item, prodItem) -> {
+            StorageOutDetailRecordEntity entity = buildDetailEntity(item);
+            entity.setReceiptId(recordDto.getId());
+            detailList.add(entity);
+            prodItem.setProdId(entity.getProdId());
+            prodItem.setProdAmount(entity.getProdAmount());
+            prodItem.setUnitPrice(entity.getProdUnitPrice());
+        });
+        saveBatch(detailList);
+        stockChangeRecordService.subStocks(buildStockChangeRecordParams(recordDto));
+
     }
 
-    private List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordVO<StorageOutDetailRecordVO> recordVO) {
+    private StorageOutDetailRecordEntity buildDetailEntity(StorageOutDetailRecordVO item) {
+        StorageOutDetailRecordEntity entity = new StorageOutDetailRecordEntity();
+        BeanUtils.copyProperties(item, entity, "id");
+        entity.setProdUnitPrice(item.getUnitPrice());
+        entity.setCreateBy(UserInfoContext.getUsername());
+        entity.setUpdateBy(UserInfoContext.getUsername());
+        return entity;
+    }
 
-        return stockChangeRecordService.buildStockChangeRecordParams(recordVO,(vo,detail)->{
+    private List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordDto<StorageOutDetailRecordVO> recordVO) {
+
+        return stockChangeRecordService.buildStockChangeRecordParams(recordVO, (vo, detail) -> {
             vo.setProdId(detail.getProdId());
             vo.setProdNo(detail.getProdNo());
-            vo.setChangeStock(0-detail.getProdAmount());
+            vo.setChangeStock(0 - detail.getProdAmount());
         });
     }
 
     private void checkForAdd(ReceiptRecordVO<StorageOutDetailRecordVO> recordVO) {
+        if (recordVO.getList().isEmpty()) {
+            throw new BusinessException(ResultCode.PARAM_NOT_NULL, "单据明细");
+        }
     }
 
     @Override

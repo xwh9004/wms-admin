@@ -1,5 +1,6 @@
 package com.wms.admin.service;
 
+import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.StockChangeRecordEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.admin.entity.StorageOutDetailRecordEntity;
@@ -24,5 +25,5 @@ public interface IStockChangeRecordService extends IService<StockChangeRecordEnt
 
   void subStocks(List<StockChangeRecordVO> changeRecordVOS);
 
-  <T>List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordVO<T> recordVO, BiConsumer<StockChangeRecordVO,T> consumer);
+  <T>List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordDto<T> recordVO, BiConsumer<StockChangeRecordVO,T> consumer);
 }

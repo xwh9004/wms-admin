@@ -5,10 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.dto.ProdItemDto;
+import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.ReceiptRecordEntity;
 import com.wms.admin.entity.RegionRacksEntity;
 import com.wms.admin.entity.StorageInDetailRecordEntity;
+import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.StockChangeRecordMapper;
 import com.wms.admin.mapper.StockMapper;
 import com.wms.admin.mapper.StorageInDetailRecordMapper;
@@ -60,61 +64,45 @@ public class StorageInRecordServiceImpl extends ServiceImpl<StorageInDetailRecor
     @Override
     public void addStorageIn(ReceiptRecordVO<StorageInDetailRecordVO> recordVO) {
         checkForAdd(recordVO);
-        final ReceiptRecordEntity recordEntity = new ReceiptRecordEntity();
-        String receiptNo = ReceiptUtil.generateNo(recordVO.getReceiptType());
-        recordVO.setReceiptNo(receiptNo);
-        BeanUtils.copyProperties(recordVO, recordEntity);
-        recordEntity.setId(UUIDUtil.uuid());
-        recordEntity.setCreateBy(UserInfoContext.getUsername());
-        recordEntity.setUpdateBy(UserInfoContext.getUsername());
-        List<StorageInDetailRecordVO> voList = recordVO.getList();
-        if (!voList.isEmpty()) {
-            recordEntity.setProdTypeNums(Integer.valueOf(0));
-            recordEntity.setTotalAmount(Integer.valueOf(0));
-            List<StorageInDetailRecordEntity> detailList = new ArrayList<>();
-            Money totalPrice = Money.valueOf(BigDecimal.ZERO);
-            Set<String> prodIdSet = new HashSet<>();
-            for (StorageInDetailRecordVO item : voList) {
-                recordEntity.setTotalAmount(recordEntity.getTotalAmount() + item.getProdAmount());
-                Money itemTotalPrice = item.getUnitPrice().multiply(item.getProdAmount().intValue());
-                totalPrice = totalPrice.add(itemTotalPrice);
-                prodIdSet.add(item.getProdId());
-                StorageInDetailRecordEntity entity = new StorageInDetailRecordEntity();
-                BeanUtils.copyProperties(item, entity, "id");
-                entity.setReceiptId(recordEntity.getId());
-                entity.setProdUnitPrice(item.getUnitPrice());
-                entity.setCreateBy(UserInfoContext.getUsername());
-                entity.setUpdateBy(UserInfoContext.getUsername());
-                detailList.add(entity);
-            }
-            recordEntity.setTotalPrice(totalPrice);
-            recordEntity.setProdTypeNums(prodIdSet.size());
-            saveBatch(detailList);
-            receiptRecordService.save(recordEntity);
-            stockChangeRecordService.addStocks(buildStockChangeRecordParams(recordVO));
 
-        }
+        final ReceiptRecordDto<StorageInDetailRecordVO> recordDto = new ReceiptRecordDto<>();
+        BeanUtils.copyProperties(recordVO, recordDto);
+        List<StorageInDetailRecordEntity> detailList = new ArrayList<>();
+        receiptRecordService.saveReceiptRecord(recordDto, (item, prodItem) -> {
+            StorageInDetailRecordEntity entity = buildDetailEntity(item);
+            detailList.add(entity);
+            prodItem.setProdId(entity.getProdId());
+            prodItem.setProdAmount(entity.getProdAmount());
+            prodItem.setUnitPrice(entity.getProdUnitPrice());
+            entity.setReceiptId(recordDto.getId());
+        });
+        saveBatch(detailList);
+        stockChangeRecordService.addStocks(buildStockChangeRecordParams(recordDto));
     }
 
-    private List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordVO<StorageInDetailRecordVO> recordVO) {
+    private StorageInDetailRecordEntity buildDetailEntity(StorageInDetailRecordVO item) {
+        StorageInDetailRecordEntity entity = new StorageInDetailRecordEntity();
+        BeanUtils.copyProperties(item, entity, "id");
+        entity.setProdUnitPrice(item.getUnitPrice());
+        entity.setCreateBy(UserInfoContext.getUsername());
+        entity.setUpdateBy(UserInfoContext.getUsername());
+        return entity;
+    }
 
-        return stockChangeRecordService.buildStockChangeRecordParams(recordVO,(vo,detail)->{
+    private List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordDto<StorageInDetailRecordVO> recordVO) {
+        return stockChangeRecordService.buildStockChangeRecordParams(recordVO, (vo, detail) -> {
             vo.setProdNo(detail.getProdNo());
             vo.setProdId(detail.getProdId());
             vo.setChangeStock(detail.getProdAmount());
         });
     }
 
-    private void saveStockChangeRecord(List<StockChangeRecordVO> changeRecordVOS) {
-
-    }
-
-    private void saveStock() {
-
-    }
-
 
     private void checkForAdd(ReceiptRecordVO recordVO) {
+        List<StorageInDetailRecordVO> voList = recordVO.getList();
+        if (voList.isEmpty()) {
+            throw new BusinessException(ResultCode.PARAM_NOT_NULL, "单据明细");
+        }
     }
 
     @Override
