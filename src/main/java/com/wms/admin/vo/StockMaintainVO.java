@@ -20,10 +20,17 @@ public class StockMaintainVO extends BaseVO {
      */
     private Integer upBound;
 
+
+
     /**
      * 库存下限
      */
     private Integer downBound;
+
+    /**
+     * 当前库存
+     */
+    private Integer currentStock;
 
     private String prodName;
     private String prodType;

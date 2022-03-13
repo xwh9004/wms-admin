@@ -289,7 +289,6 @@ create table  if not exists T_WMS_DISCARD_DETAIL_RECORD(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='报废详情录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table T_WMS_SHIFT_DETAIL_RECORD add prod_unit_price int(11) comment '产品单价' after prod_amount;
 
 
 create table  if not exists T_WMS_STOCK(

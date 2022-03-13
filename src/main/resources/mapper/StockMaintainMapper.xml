@@ -3,10 +3,11 @@
 <mapper namespace="com.wms.admin.mapper.StockMaintainMapper">
          <select id="maintainPages" resultType="com.wms.admin.vo.StockMaintainVO">
              select m.id,m.prod_id,p.prod_no,m.up_bound,m.down_bound,m.create_time,m.create_by,
-             m.update_time,m.update_by,
+             m.update_time,m.update_by,s.current_stock,
              p.prod_name ,p.type prod_type,ven.name vendor_name
              from t_wms_stock_maintain m
              left join t_wms_product p on p.id = m.prod_id and p.del_flag ='1'
+             left join (select prod_id,sum(current_stock) current_stock from t_wms_stock  group by prod_id) s   on s.prod_id = p.id
              LEFT JOIN t_wms_vendor ven on ven.id = p.vendor_id and ven.del_flag ='1'
              where m.del_flag ='1'
              <if test="param.prodNo!=null and parma.prodNo!=''">
