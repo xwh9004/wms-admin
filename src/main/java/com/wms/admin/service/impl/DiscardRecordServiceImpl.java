@@ -5,13 +5,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.DiscardDetailRecordEntity;
 import com.wms.admin.entity.ReceiptRecordEntity;
 import com.wms.admin.entity.StorageInDetailRecordEntity;
+import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.DiscardDetailRecordMapper;
 import com.wms.admin.service.IDiscardRecordService;
 import com.wms.admin.service.IReceiptRecordService;
+import com.wms.admin.service.IStockChangeRecordService;
 import com.wms.admin.util.ReceiptUtil;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.*;
@@ -26,53 +30,62 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class DiscardRecordServiceImpl extends ServiceImpl<DiscardDetailRecordMapper,DiscardDetailRecordEntity> implements IDiscardRecordService {
+public class DiscardRecordServiceImpl extends ServiceImpl<DiscardDetailRecordMapper, DiscardDetailRecordEntity> implements IDiscardRecordService {
     @Autowired
     private IReceiptRecordService receiptRecordService;
     @Autowired
     private DiscardDetailRecordMapper discardDetailRecordMapper;
-
+    @Autowired
+    private IStockChangeRecordService stockChangeRecordService;
 
     @Override
     public IPage<ReceiptRecordVO<DiscardDetailRecordVO>> listPage(ReceiptRecordQueryVO queryVO, PageParam pageParam) {
         queryVO.setReceiptType("BF");
         return receiptRecordService.receiptPage(queryVO, pageParam);
     }
+
     @Override
     public void addDiscard(ReceiptRecordVO<DiscardDetailRecordVO> recordVO) {
-        ReceiptRecordEntity receiptRecord = new ReceiptRecordEntity();
-        String receiptNo = ReceiptUtil.generateNo(recordVO.getReceiptType());
-        recordVO.setReceiptNo(receiptNo);
-        BeanUtils.copyProperties(recordVO, receiptRecord);
-        receiptRecord.setId(UUIDUtil.uuid());
-        receiptRecord.setCreateBy(UserInfoContext.getUsername());
-        receiptRecord.setUpdateBy(UserInfoContext.getUsername());
-        List<DiscardDetailRecordVO> voList = recordVO.getList();
-        if (!voList.isEmpty()) {
-            receiptRecord.setProdTypeNums(Integer.valueOf(0));
-            receiptRecord.setTotalAmount(Integer.valueOf(0));
-            List<DiscardDetailRecordEntity> detailList = new ArrayList<>();
-            Set<String> prodIdSet = new HashSet<>();
-             Money totalPrice = Money.valueOf(BigDecimal.ZERO);
-            for (DiscardDetailRecordVO item:voList){
-                receiptRecord.setTotalAmount(receiptRecord.getTotalAmount()+item.getProdAmount());
-                Money itemTotalPrice = item.getUnitPrice().multiply(BigDecimal.valueOf(item.getProdAmount().intValue()));
-                totalPrice = totalPrice.add(itemTotalPrice);
-                prodIdSet.add(item.getProdId());
-                DiscardDetailRecordEntity entity = new DiscardDetailRecordEntity();
-                BeanUtils.copyProperties(item, entity,"id");
-                entity.setProdUnitPrice(item.getUnitPrice());
-                entity.setReceiptId(receiptRecord.getId());
-                entity.setCreateBy(UserInfoContext.getUsername());
-                entity.setUpdateBy(UserInfoContext.getUsername());
-                detailList.add(entity);
-            }
-            receiptRecord.setTotalPrice(totalPrice);
-            receiptRecord.setProdTypeNums(prodIdSet.size());
-            saveBatch(detailList);
-            receiptRecordService.save(receiptRecord);
-        }
+        checkForAdd(recordVO);
+        final ReceiptRecordDto<DiscardDetailRecordVO> recordDto = new ReceiptRecordDto<>();
+        BeanUtils.copyProperties(recordVO, recordDto);
 
+        List<DiscardDetailRecordEntity> detailList = new ArrayList<>();
+        receiptRecordService.saveReceiptRecord(recordDto, (item, prodItem) -> {
+            DiscardDetailRecordEntity entity = buildDetailEntity(item);
+            detailList.add(entity);
+            prodItem.setProdId(entity.getProdId());
+            prodItem.setProdAmount(entity.getProdAmount());
+            prodItem.setUnitPrice(entity.getProdUnitPrice());
+            entity.setReceiptId(recordDto.getId());
+        });
+        saveBatch(detailList);
+        stockChangeRecordService.subStocks(buildStockChangeRecordParams(recordDto));
+
+    }
+
+    private List<StockChangeRecordVO> buildStockChangeRecordParams(ReceiptRecordDto<DiscardDetailRecordVO> recordDto) {
+        return stockChangeRecordService.buildStockChangeRecordParams(recordDto, (vo, detail) -> {
+            vo.setProdNo(detail.getProdNo());
+            vo.setProdId(detail.getProdId());
+            vo.setChangeStock(0-detail.getProdAmount());
+        });
+    }
+
+    private DiscardDetailRecordEntity buildDetailEntity(DiscardDetailRecordVO item) {
+        DiscardDetailRecordEntity entity = new DiscardDetailRecordEntity();
+        BeanUtils.copyProperties(item, entity, "id");
+        entity.setProdUnitPrice(item.getUnitPrice());
+        entity.setCreateBy(UserInfoContext.getUsername());
+        entity.setUpdateBy(UserInfoContext.getUsername());
+        return entity;
+    }
+
+    private void checkForAdd(ReceiptRecordVO<DiscardDetailRecordVO> recordVO) {
+        List<DiscardDetailRecordVO> voList = recordVO.getList();
+        if (voList.isEmpty()) {
+            throw new BusinessException(ResultCode.PARAM_NOT_NULL, "单据明细");
+        }
     }
 
     @Override

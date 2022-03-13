@@ -7,31 +7,23 @@ import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
-import com.wms.admin.dto.ProdItemDto;
 import com.wms.admin.dto.ReceiptRecordDto;
-import com.wms.admin.entity.ReceiptRecordEntity;
 import com.wms.admin.entity.RegionRacksEntity;
 import com.wms.admin.entity.StorageInDetailRecordEntity;
 import com.wms.admin.exception.BusinessException;
-import com.wms.admin.mapper.StockChangeRecordMapper;
-import com.wms.admin.mapper.StockMapper;
 import com.wms.admin.mapper.StorageInDetailRecordMapper;
 import com.wms.admin.service.IReceiptRecordService;
 import com.wms.admin.service.IRegionRacksService;
 import com.wms.admin.service.IStockChangeRecordService;
 import com.wms.admin.service.IStorageInRecordService;
-import com.wms.admin.util.ReceiptUtil;
-import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.zip.DataFormatException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -50,8 +42,6 @@ public class StorageInRecordServiceImpl extends ServiceImpl<StorageInDetailRecor
     @Autowired
     private StorageInDetailRecordMapper storageInDetailRecordMapper;
     @Autowired
-    private StockMapper stockMapper;
-    @Autowired
     private IStockChangeRecordService stockChangeRecordService;
 
     @Override
@@ -64,7 +54,6 @@ public class StorageInRecordServiceImpl extends ServiceImpl<StorageInDetailRecor
     @Override
     public void addStorageIn(ReceiptRecordVO<StorageInDetailRecordVO> recordVO) {
         checkForAdd(recordVO);
-
         final ReceiptRecordDto<StorageInDetailRecordVO> recordDto = new ReceiptRecordDto<>();
         BeanUtils.copyProperties(recordVO, recordDto);
         List<StorageInDetailRecordEntity> detailList = new ArrayList<>();

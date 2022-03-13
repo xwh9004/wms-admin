@@ -102,7 +102,6 @@ public class StockChangeRecordServiceImpl extends ServiceImpl<StockChangeRecordM
         List<StockChangeRecordVO> changeRecordVOList = new ArrayList<>();
         items.forEach(t -> {
             StockChangeRecordVO changeRecordVO = new StockChangeRecordVO();
-            consumer.accept(changeRecordVO, t);
             changeRecordVO.setReceiptNo(recordVO.getReceiptNo());
             changeRecordVO.setRegionId(recordVO.getRegionId());
             changeRecordVO.setRegionName(recordVO.getRegionName());
@@ -111,6 +110,7 @@ public class StockChangeRecordServiceImpl extends ServiceImpl<StockChangeRecordM
             changeRecordVO.setCreateTime(now);
             changeRecordVO.setUpdateTime(now);
             changeRecordVO.setDelFlag(WMSConstants.DEL_FLG_1);
+            consumer.accept(changeRecordVO, t);
             changeRecordVOList.add(changeRecordVO);
         });
         return changeRecordVOList;

@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.commom.ResultCode;
+import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.InventoryDetailRecordEntity;
 import com.wms.admin.entity.ReceiptRecordEntity;
+import com.wms.admin.entity.StorageInDetailRecordEntity;
+import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.InventoryDetailRecordMapper;
 import com.wms.admin.service.IInventoryRecordService;
 import com.wms.admin.service.IReceiptRecordService;
@@ -47,42 +51,36 @@ public class InventoryRecordServiceImpl extends ServiceImpl<InventoryDetailRecor
     @Override
     public void addInventory(ReceiptRecordVO<InventoryDetailRecordVO> recordVO) {
         checkForAdd(recordVO);
-        final ReceiptRecordEntity recordEntity = new ReceiptRecordEntity();
-        String receiptNo = ReceiptUtil.generateNo(recordVO.getReceiptType());
-        recordVO.setReceiptNo(receiptNo);
-        BeanUtils.copyProperties(recordVO, recordEntity);
-        recordEntity.setId(UUIDUtil.uuid());
-        recordEntity.setCreateBy(UserInfoContext.getUsername());
-        recordEntity.setUpdateBy(UserInfoContext.getUsername());
-        List<InventoryDetailRecordVO> voList = recordVO.getList();
-        if (!voList.isEmpty()) {
-            recordEntity.setProdTypeNums(Integer.valueOf(0));
-            recordEntity.setTotalAmount(Integer.valueOf(0));
-            Money totalPrice = Money.valueOf(BigDecimal.ZERO);
-            List<InventoryDetailRecordEntity> detailList = new ArrayList<>();
-            Set<String> prodIdSet = new HashSet<>();
-            for (InventoryDetailRecordVO item : voList) {
-                recordEntity.setTotalAmount(recordEntity.getTotalAmount() + item.getProdAmount());
-                Money itemTotalPrice = item.getUnitPrice().multiply(BigDecimal.valueOf(item.getProdAmount()));
-                totalPrice = totalPrice.add(itemTotalPrice);
-                prodIdSet.add(item.getProdId());
-                InventoryDetailRecordEntity entity = new InventoryDetailRecordEntity();
-                BeanUtils.copyProperties(item, entity, "id");
-                entity.setReceiptId(recordEntity.getId());
-                entity.setProdUnitPrice(item.getUnitPrice());
-                entity.setCreateBy(UserInfoContext.getUsername());
-                entity.setUpdateBy(UserInfoContext.getUsername());
-                detailList.add(entity);
-            }
-            recordEntity.setTotalPrice(totalPrice);
-            recordEntity.setProdTypeNums(prodIdSet.size());
-            saveBatch(detailList);
-            receiptRecordService.save(recordEntity);
-        }
+        final ReceiptRecordDto<InventoryDetailRecordVO> recordDto = new ReceiptRecordDto<>();
+        BeanUtils.copyProperties(recordVO, recordDto);
+        List<InventoryDetailRecordEntity> detailList = new ArrayList<>();
+        receiptRecordService.saveReceiptRecord(recordDto, (item, prodItem) -> {
+            InventoryDetailRecordEntity entity = buildDetailEntity(item);
+            detailList.add(entity);
+            prodItem.setProdId(entity.getProdId());
+            prodItem.setProdAmount(entity.getProdAmount());
+            prodItem.setUnitPrice(entity.getProdUnitPrice());
+            entity.setReceiptId(recordDto.getId());
+        });
+
+        saveBatch(detailList);
     }
 
-    private void checkForAdd(ReceiptRecordVO<InventoryDetailRecordVO> recordVO) {
+    private InventoryDetailRecordEntity buildDetailEntity(InventoryDetailRecordVO item) {
+        InventoryDetailRecordEntity entity = new InventoryDetailRecordEntity();
+        BeanUtils.copyProperties(item, entity, "id");
+        entity.setProdUnitPrice(item.getUnitPrice());
+        entity.setCreateBy(UserInfoContext.getUsername());
+        entity.setUpdateBy(UserInfoContext.getUsername());
+        return entity;
+    }
 
+
+    private void checkForAdd(ReceiptRecordVO<InventoryDetailRecordVO> recordVO) {
+        List<InventoryDetailRecordVO> voList = recordVO.getList();
+        if (voList.isEmpty()) {
+            throw new BusinessException(ResultCode.PARAM_NOT_NULL, "单据明细");
+        }
 
     }
 
