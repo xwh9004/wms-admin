@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wms.admin.mapper.StatisticMapper">
+    <select id="annulStatistic" resultType="com.wms.admin.dto.AnnualStatisticDto">
+        select receipt_type,sum(total_amount) total_amount from t_wms_receipt_record where year(apply_date) =
+        year(now())
+        and receipt_type!='PD' group by receipt_type ;
+    </select>
+
+    <select id="monthStatistic" resultType="com.wms.admin.dto.MonthStatisticDto">
+        select month(apply_date) month,receipt_type,sum(total_amount) from t_wms_receipt_record
+        where receipt_type!='PD' group by month, receipt_type ;
+    </select>
+
+    <select id="weekStatistic" resultType="com.wms.admin.dto.WeekStatisticDto">
+        select weekday(apply_date) day,receipt_type,sum(total_amount) total_amount
+        from t_wms_receipt_record where yearweek(apply_date) = yearweek(now())
+        and receipt_type!='PD' group by day,receipt_type;
+    </select>
+</mapper>
