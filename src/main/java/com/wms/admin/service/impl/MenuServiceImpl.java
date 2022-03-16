@@ -204,6 +204,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
 
     @Override
     public boolean deleteMenu(String id) {
+        //TODO 改成逻辑删除
         return removeById(id);
     }
 
