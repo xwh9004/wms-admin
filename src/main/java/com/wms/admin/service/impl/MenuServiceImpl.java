@@ -49,7 +49,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     public List<MenuVO> queryList() {
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1);
-        List<MenuEntity> list =list(queryWrapper);
+        List<MenuEntity> list = list(queryWrapper);
         return toMenuTree(list);
     }
 
@@ -68,6 +68,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
 
     /**
      * 用户路由
+     *
      * @param roleIds
      * @return
      */
@@ -116,12 +117,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     @Override
     public boolean addMenu(MenuVO menuVO) {
         MenuEntity parentMenu = getById(menuVO.getParentId());
-        if(parentMenu==null){
-            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"父菜单"+menuVO.getParentId());
+        if (parentMenu == null) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "父菜单" + menuVO.getParentId());
         }
         checkMenuForAdd(parentMenu, menuVO);
         MenuEntity menu = new MenuEntity();
-        BeanUtils.copyProperties(menuVO,menu);
+        BeanUtils.copyProperties(menuVO, menu);
         menu.setId(UUIDUtil.uuid());
         menu.setLevelPath(parentMenu.getLevelPath() + "/" + menu.getId());
         menu.setLevelNo(parentMenu.getLevelNo() + 1);
@@ -260,8 +261,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
             if (TOP_PARENT.equals(parentId)) {
                 topMenus.add(menu);
             } else {
-                MenuVO parentMenu = menuMap.get(parentId);
-                parentMenu.getChildren().add(menu);
+                if (menuMap.containsKey(parentId)) {
+                    MenuVO parentMenu = menuMap.get(parentId);
+                    parentMenu.getChildren().add(menu);
+                }
+
             }
         });
         return new ArrayList<>(topMenus);
