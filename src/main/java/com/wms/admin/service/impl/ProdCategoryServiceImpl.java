@@ -74,7 +74,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
     }
 
     @Override
-    public void addCategory(ProdCategoryVO vo) {
+    public void  addCategory(ProdCategoryVO vo) {
         checkForAdd(vo);
         ProdCategoryEntity entity = new ProdCategoryEntity();
         BeanUtils.copyProperties(vo,entity);

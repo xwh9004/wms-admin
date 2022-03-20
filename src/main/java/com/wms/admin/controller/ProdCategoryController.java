@@ -64,9 +64,9 @@ public class ProdCategoryController {
 
     @ApiOperation(value = "删除大类")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/delete/{regionId}")
-    public Result delete(@PathVariable String regionId) {
-        prodCategoryService.deleteCategory(regionId);
+    @GetMapping("/delete/{categoryId}")
+    public Result delete(@PathVariable String categoryId) {
+        prodCategoryService.deleteCategory(categoryId);
         return Result.success();
     }
 

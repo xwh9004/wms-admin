@@ -21,7 +21,7 @@ public class BaseEntity {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    @TableField(value = "create_time")
     private LocalDateTime createTime;
 
     /**
@@ -33,7 +33,7 @@ public class BaseEntity {
     /**
      * 最后更新时间
      */
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "update_time")
     private LocalDateTime updateTime;
 
     public String getDelFlag() {
