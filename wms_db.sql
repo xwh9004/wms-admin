@@ -136,9 +136,9 @@ create table  if not exists T_WMS_REGION_RACKS(
      description VARCHAR(200) NOT NULL comment '描述',
      del_flag VARCHAR(1) default '1' comment '是否删除',
      create_by VARCHAR(200) comment '创建人',
-     create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+     create_time TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
      update_by VARCHAR(200)   comment '最后更新人',
-     update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+     update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
      PRIMARY KEY ( id )
     )comment='货物大类表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
