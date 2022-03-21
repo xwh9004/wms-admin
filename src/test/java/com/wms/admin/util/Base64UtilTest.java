@@ -1,4 +1,4 @@
-package com.wms.admin;
+package com.wms.admin.util;
 
 import com.wms.admin.util.Base64Util;
 import org.junit.jupiter.api.Test;

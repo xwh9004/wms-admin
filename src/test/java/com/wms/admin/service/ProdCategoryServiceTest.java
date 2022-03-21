@@ -1,6 +1,7 @@
 package com.wms.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.wms.admin.BaseTest;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.entity.ProdCategoryEntity;
 import com.wms.admin.exception.BusinessException;
@@ -23,9 +24,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-@PrepareForTest(UserInfoContext.class)
 @RunWith(PowerMockRunner.class)
-public class ProdCategoryServiceTest {
+public class ProdCategoryServiceTest extends BaseTest {
 
     @InjectMocks
     private ProdCategoryServiceImpl categoryService;
@@ -36,9 +36,9 @@ public class ProdCategoryServiceTest {
 
     @Before
     public void before() {
+        super.before();
         Mockito.when(prodCategoryMapper.insert(Mockito.any(ProdCategoryEntity.class))).thenReturn(1);
-        PowerMockito.mockStatic(UserInfoContext.class);
-        PowerMockito.when(UserInfoContext.getUsername()).thenReturn("test");
+
     }
 
     @Test
@@ -52,7 +52,7 @@ public class ProdCategoryServiceTest {
     public void add_exist_code_test() {
         ProdCategoryVO vo = new ProdCategoryVO();
         vo.setCode("test");
-        Mockito.when(prodCategoryMapper.selectOne(Mockito.any(Wrapper.class))).thenReturn(existOne());
+        Mockito.when(prodCategoryMapper.selectList(Mockito.any(Wrapper.class))).thenReturn(existList());
         categoryService.addCategory(vo);
     }
     @Test(expected = BusinessException.class)
