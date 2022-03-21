@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class ProdCategoryController {
     @ApiOperation(value = "新增大类")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
-    public Result add(@RequestBody ProdCategoryVO vo) {
+    public Result add(@RequestBody @Validated ProdCategoryVO vo) {
         prodCategoryService.addCategory(vo);
         return Result.success();
     }
@@ -64,7 +65,7 @@ public class ProdCategoryController {
 
     @ApiOperation(value = "删除大类")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/delete/{categoryId}")
+    @PostMapping("/delete/{categoryId}")
     public Result delete(@PathVariable String categoryId) {
         prodCategoryService.deleteCategory(categoryId);
         return Result.success();

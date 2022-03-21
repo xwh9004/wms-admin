@@ -13,7 +13,7 @@ public class MenuServiceTest {
     @InjectMocks
     IMenuService menuService;
 
-//    @Test
+    @Test
     public void insertMenu(){
         String name ="仓库作业";
         String code ="operate";

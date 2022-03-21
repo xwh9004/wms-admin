@@ -1,6 +1,8 @@
 package com.wms.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.auth.UserInfoContext;
@@ -17,10 +19,12 @@ import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.ProdCategoryQueryVO;
 import com.wms.admin.vo.ProdCategoryVO;
 import com.wms.admin.vo.StoragesRegionVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
  * @author Jesse
  * @since 2022-02-13 20:34:21
  */
+@Slf4j
 @Service
 public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, ProdCategoryEntity> implements IProdCategoryService {
 
@@ -74,42 +79,68 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
     }
 
     @Override
-    public void  addCategory(ProdCategoryVO vo) {
+    public boolean addCategory(ProdCategoryVO vo) {
         checkForAdd(vo);
         ProdCategoryEntity entity = new ProdCategoryEntity();
-        BeanUtils.copyProperties(vo,entity);
+        BeanUtils.copyProperties(vo, entity);
         entity.setId(UUIDUtil.uuid());
-        entity.setCreateBy(UserInfoContext.getUsername());
-        entity.setUpdateBy(UserInfoContext.getUsername());
-        prodCategoryMapper.insert(entity);
+        return save(entity);
     }
 
     private void checkForAdd(ProdCategoryVO vo) {
+        List<ProdCategoryEntity> categories = queryByCode(vo.getCode());
+        if (!categories.isEmpty()) {
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "大类" + vo.getCode());
+        }
+    }
 
+    private List<ProdCategoryEntity> queryByCode(String code) {
+        QueryWrapper<ProdCategoryEntity> cond = new QueryWrapper<>();
+        cond.lambda().eq(ProdCategoryEntity::getDelFlag, DEL_FLG_1).eq(ProdCategoryEntity::getCode, code);
+        return prodCategoryMapper.selectList(cond);
     }
 
     @Override
-    public void updateCategory(ProdCategoryVO categoryVO) {
+    public boolean updateCategory(ProdCategoryVO categoryVO) {
         checkForUpdate(categoryVO);
         ProdCategoryEntity entity = prodCategoryMapper.selectById(categoryVO.getId());
-        entity.setName(categoryVO.getName());
-        entity.setCode(categoryVO.getCode());
-        entity.setDescription(categoryVO.getDescription());
-        entity.setUpdateBy(UserInfoContext.getUsername());
-        updateById(entity);
+        if (entity == null || WMSConstants.DEL_FLG_0.equals(entity.getDelFlag())) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, categoryVO.getId());
+        }
+        BeanUtils.copyProperties(categoryVO, entity);
+        return updateById(entity);
     }
 
     private void checkForUpdate(ProdCategoryVO categoryVO) {
+        if (StringUtils.isBlank(categoryVO.getId())) {
+            throw new BusinessException(ResultCode.PARAM_NOT_NULL, "ID");
+        }
+        List<ProdCategoryEntity> existCategories = queryByCode(categoryVO.getCode());
+        if (existCategories.isEmpty()) {
+            return;
+        }
+        if (existCategories.size() == 1) {
+            ProdCategoryEntity category = existCategories.get(0);
+            if (category.getId().equals(categoryVO.getId())) {
+                return;
+            }
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "产品大类" + category.getCode());
+        }
+        if (existCategories.size() > 1) {
+            log.error("存在多条[{}条] 产品大类编号{}的记录", existCategories.size(), categoryVO.getCode());
+            throw new BusinessException(ResultCode.DATA_ERROR, "产品大类数据异常");
+        }
     }
 
     @Override
-    public void deleteCategory(String id) {
+    public boolean deleteCategory(String id) {
+        Assert.notNull(id, "ID不能为空");
         ProdCategoryEntity entity = prodCategoryMapper.selectById(id);
-        if(WMSConstants.DEL_FLG_0.equals(entity.getDelFlag())){
-            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"大类");
+
+        if (entity == null || WMSConstants.DEL_FLG_0.equals(entity.getDelFlag())) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "大类");
         }
         entity.setDelFlag(WMSConstants.DEL_FLG_0);
-        entity.setUpdateBy(UserInfoContext.getUsername());
-        updateById(entity);
+        return updateById(entity);
     }
 }

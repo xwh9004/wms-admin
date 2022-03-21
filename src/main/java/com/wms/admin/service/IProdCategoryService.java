@@ -24,10 +24,10 @@ public interface IProdCategoryService extends IService<ProdCategoryEntity> {
 
     IPage<ProdCategoryVO> categoryPages(ProdCategoryQueryVO queryVO, PageParam pageParam);
 
-    void addCategory(ProdCategoryVO vo);
+    boolean addCategory(ProdCategoryVO vo);
 
-    void updateCategory(ProdCategoryVO categoryVO);
+    boolean updateCategory(ProdCategoryVO categoryVO);
 
-    void deleteCategory(String regionId);
+    boolean deleteCategory(String regionId);
 
 }

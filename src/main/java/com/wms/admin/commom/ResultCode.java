@@ -10,6 +10,7 @@ public enum ResultCode {
     DATA_NO_MODIFY("400005", "%s,不可修改"),
     DATA_REPEAT("400006", "%s,不可重复"),
     STOCK_LACKED("400007", "%s,库存不足"),
+    DATA_ERROR("400008", "%s,数据异常"),
     COMMON_ERROR("410000", "%s"),
     SYS_ERROR("999999", "系统异常，%s"),
     PERMISSION_TOKEN_EXPIRED("PERMISSION TOKEN EXPIRED", "TOKEN已过期，请重新验证"),
