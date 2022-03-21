@@ -21,8 +21,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -45,6 +48,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     @Autowired
     private MenuMapper menuMapper;
 
+    /**
+     * 菜单列表
+     *
+     * @return
+     */
     @Override
     public List<MenuVO> queryList() {
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
@@ -53,6 +61,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         return toMenuTree(list);
     }
 
+    /**
+     * 用户权限配置使用
+     *
+     * @return
+     */
     @Override
     public List<RouteVO> queryRoutes() {
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
@@ -86,23 +99,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         }
         List<RouteVO> routes = new ArrayList<>();
         for (MenuVO menu : menuList) {
-            RouteVO routeVO = new RouteVO();
-            routeVO.setId(menu.getId());
-            routeVO.setPath(menu.getPath());
-            if (WMSConstants.MENU_TYPE_DIR.equals(menu.getType())) {
-                routeVO.setComponent("layout/Layout");
-            } else {
-                routeVO.setComponent(menu.getComponent());
-                routeVO.setName(menu.getMenuName());
-            }
-            routeVO.setMeta(RouteMeta.build(menu));
-
-            if ("0".equals(menu.getHidden())) {
-                routeVO.setHidden(false);
-            } else {
-                routeVO.setHidden(true);
-            }
-            routeVO.setRedirect(menu.getRedirect());
+            RouteVO routeVO = menu.toRoute();
             List<MenuVO> menuChildren = new ArrayList(menu.getChildren());
             if (!menuChildren.isEmpty()) {
                 List<RouteVO> children = toRoutes(menuChildren);
@@ -112,7 +109,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         }
         return routes;
     }
-
 
     @Override
     public boolean addMenu(MenuVO menuVO) {
@@ -124,7 +120,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         MenuEntity menu = new MenuEntity();
         BeanUtils.copyProperties(menuVO, menu);
         menu.setId(UUIDUtil.uuid());
-        menu.setLevelPath(parentMenu.getLevelPath() + "/" + menu.getId());
+        menu.setLevelPath(parentMenu.getLevelPath() + SLASH + menu.getId());
         menu.setLevelNo(parentMenu.getLevelNo() + 1);
         menu.setDelFlag(WMSConstants.DEL_FLG_1);
         menu.setParentId(parentMenu.getId());
@@ -205,7 +201,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
 
     @Override
     public boolean deleteMenu(String id) {
-        //TODO 改成逻辑删除
+        Assert.notNull(id, "ID不能为空");
+        //因为 菜单数据不允许非超级管理操作,可以采用物理删除
         return removeById(id);
     }
 
@@ -217,7 +214,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         menu.setId(UUIDUtil.uuid());
         menu.setMenuName(menuVO.getMenuName());
         menu.setMenuCode(menuVO.getMenuCode());
-        menu.setLevelPath("/" + menu.getId());
+        menu.setLevelPath(SLASH + menu.getId());
         menu.setLevelNo(1);
         menu.setCreateBy(UserInfoContext.getUsername());
         menu.setUpdateBy(UserInfoContext.getUsername());
@@ -225,7 +222,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         menu.setType(menuVO.getType());
         menu.setStatus(menuVO.getStatus());
         menu.setHidden(menuVO.getHidden());
-        menu.setParentId("-1"); //-1表示顶级菜单
+        menu.setParentId(TOP_PARENT); //-1表示顶级菜单
         menu.setUrl(menuVO.getUrl()); //
         menu.setRedirect(menuVO.getRedirect());
         menu.setPath(menuVO.getPath());

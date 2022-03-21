@@ -35,7 +35,7 @@ public class MenuController {
     @Autowired
     private IMenuService menuService;
 
-    @ApiOperation(value = "所有路径")
+    @ApiOperation(value = "权限配置使用 所有路径")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @GetMapping("/routes")
     public Result routes() {
@@ -54,7 +54,7 @@ public class MenuController {
     @ApiOperation("添加顶层菜单")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @PostMapping("/addTop")
-    public Result addTopMenu(@RequestBody MenuVO menuVO) {
+    public Result addTopMenu(@RequestBody @Validated MenuVO menuVO) {
         menuService.addTopMenu(menuVO);
         return Result.success();
     }
@@ -70,7 +70,7 @@ public class MenuController {
     @ApiOperation("修改菜单")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @PostMapping("/update")
-    public Result update(@RequestBody MenuVO menuVO) {
+    public Result update(@RequestBody @Validated MenuVO menuVO) {
         menuService.updateMenu(menuVO);
         return Result.success();
     }
