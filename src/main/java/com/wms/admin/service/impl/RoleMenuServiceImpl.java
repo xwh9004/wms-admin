@@ -44,15 +44,15 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenuEnt
     @Override
     public boolean updateRoleMenu(String roleId, List<String> menuIds) {
         List<String> newMenuIds = menuIds;
-        List<String> previewMenuIds = roleMenuIds(roleId);
-        if (CollectionUtils.isEmpty(previewMenuIds)) {
+        List<String> previousMenuIds = roleMenuIds(roleId);
+        if (CollectionUtils.isEmpty(previousMenuIds)) {
             insertRoleMenu(roleId, menuIds);
             return true;
         }
         //没有修改的角色菜单
-        Collection<String> intersection = CollectionUtils.intersection(previewMenuIds, newMenuIds);
+        Collection<String> intersection = CollectionUtils.intersection(previousMenuIds, newMenuIds);
         Collection<String> insertCollections = CollectionUtils.subtract(newMenuIds, intersection);
-        Collection<String> deleteCollections = CollectionUtils.subtract(previewMenuIds, intersection);
+        Collection<String> deleteCollections = CollectionUtils.subtract(previousMenuIds, intersection);
         deleteRoleMenu(roleId, deleteCollections);
         insertRoleMenu(roleId, insertCollections);
         return true;

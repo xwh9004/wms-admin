@@ -18,9 +18,9 @@ public class MyBatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "del_flag", String.class, "1"); // 起始版本 3.3.0(推荐使用)
         this.strictInsertFill(metaObject, "createBy", String.class, UserInfoContext.getUsername()); // 起始版本 3.3.0(推荐使用)
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now()); // 起始版本 3.3.0(推荐使用)
+        this.strictInsertFill(metaObject, "updateBy", String.class, UserInfoContext.getUsername()); // 起始版本 3.3.0(推荐使用)
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now()); // 起始版本 3.3.0(推荐使用)
 
     }
@@ -30,4 +30,5 @@ public class MyBatisMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName( "updateTime", LocalDateTime.now(),metaObject);
         this.setFieldValByName( "updateBy", UserInfoContext.getUsername(),metaObject);
     }
+
 }

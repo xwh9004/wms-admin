@@ -140,7 +140,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         if (entity == null || WMSConstants.DEL_FLG_0.equals(entity.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "大类");
         }
-        entity.setDelFlag(WMSConstants.DEL_FLG_0);
-        return updateById(entity);
+//        entity.setDelFlag(WMSConstants.DEL_FLG_0);
+        return removeById(id);
     }
 }

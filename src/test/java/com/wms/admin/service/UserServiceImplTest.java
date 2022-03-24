@@ -1,17 +1,14 @@
 package com.wms.admin.service;
 
+import com.wms.admin.BaseTest;
 import com.wms.admin.auth.UserInfoContext;
-import com.wms.admin.entity.ProdCategoryEntity;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-@PrepareForTest(UserInfoContext.class)
 @RunWith(PowerMockRunner.class)
-public class UserServiceImplTest {
+public class UserServiceImplTest extends BaseTest {
 
     @Before
     public void before() {
