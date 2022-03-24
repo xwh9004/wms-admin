@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -42,7 +43,7 @@ public class UserController {
     @ApiOperation(value = "新增用户")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
-    public Result add(@RequestBody UserVO userVO) {
+    public Result add(@RequestBody @Validated UserVO userVO) {
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userVO,userDto);
         userService.addUser(userDto);
@@ -62,7 +63,7 @@ public class UserController {
 
     @ApiOperation(value = "删除用户")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/delete/{roleId}")
+    @PostMapping("/delete/{userId}")
     public Result delete(@PathVariable String userId) {
         userService.deleteUser(userId);
         return Result.success();

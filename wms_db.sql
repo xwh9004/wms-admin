@@ -67,7 +67,6 @@ create table  if not exists T_WMS_ORG(
    create table  if not exists T_WMS_USER(
      id VARCHAR(40) comment '主键ID',
      user_name VARCHAR(40) NOT NULL comment '用户名称',
-     role_code VARCHAR(40) NOT NULL comment '角色代码',
      user_pwd VARCHAR(500) NOT NULL comment '用户密码',
      dept_name VARCHAR(100)  comment '部门名称',,
      del_flag VARCHAR(1) default '1' comment '是否删除',

@@ -9,8 +9,6 @@ import java.util.List;
 @Data
 public class UserVO {
     private String id;
-    @NotNull(message = "工号不能为空")
-    private String cardNo;
     @NotNull(message = "用户名不能为空")
     private String userName;
     private String password;

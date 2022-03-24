@@ -10,9 +10,11 @@ import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.dto.UserDto;
+import com.wms.admin.entity.RoleEntity;
 import com.wms.admin.entity.UserEntity;
 import com.wms.admin.entity.UserRoleEntity;
 import com.wms.admin.exception.BusinessException;
+import com.wms.admin.mapper.RoleMapper;
 import com.wms.admin.mapper.UserMapper;
 import com.wms.admin.mapper.UserRoleMapper;
 import com.wms.admin.service.IUserService;
@@ -46,6 +48,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     private UserRoleMapper userRoleMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Override
     public UserVO selectUser(String userId) {
@@ -69,6 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         }
     }
 
+    @Transactional
     @Override
     public boolean addUser(UserDto userDto) {
         checkForAdd(userDto);
@@ -77,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         userEntity.setId(UUIDUtil.uuid());
         userEntity.setUserPwd(Base64Util.encode(userDto.getPassword()));
         save(userEntity);
-        saveUserRole(userEntity.getId(),userDto.getRoleId());
+        saveUserRole(userEntity.getId(), userDto.getRoleId());
         return true;
     }
 
@@ -87,17 +92,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     private void checkUserNameExisted(String userName) {
         QueryWrapper<UserEntity> cond = new QueryWrapper<>();
-        cond.lambda().eq(UserEntity::getUserName,userName);
+        cond.lambda().eq(UserEntity::getUserName, userName);
         UserEntity user = getOne(cond);
-        if(Objects.nonNull(user)){
-            throw new BusinessException(ResultCode.RESOURCE_EXISTS,"用户".concat(userName));
+        if (Objects.nonNull(user)) {
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "用户".concat(userName));
         }
     }
 
     private void saveUserRole(String userId, String roleId) {
         Assert.notNull(roleId, "角色不能为空");
         //check roleId;
-        UserRoleEntity role = userRoleMapper.selectById(roleId);
+        RoleEntity role = roleMapper.selectById(roleId);
         if (role == null) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "角色".concat(roleId));
         }
@@ -114,11 +119,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         UserEntity userEntity = getById(userDto.getId());
         BeanUtils.copyProperties(userDto, userEntity);
         updateById(userEntity);
-        updateUserRole(userDto.getId(),userDto.getRoleId());
+        updateUserRole(userDto.getId(), userDto.getRoleId());
         return true;
     }
 
-    private void updateUserRole(String userId,String roleId) {
+    private void updateUserRole(String userId, String roleId) {
         LambdaUpdateWrapper<UserRoleEntity> queryWrapper = new LambdaUpdateWrapper<>();
         queryWrapper.eq(UserRoleEntity::getUserId, userId);
         final UserRoleEntity userRoleEntity = userRoleMapper.selectOne(queryWrapper);
@@ -138,13 +143,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     @Override
     public boolean deleteUser(String userId) {
         checkUserForDelete(userId);
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(userId);
-        userEntity.setDelFlag(DEL_FLG_0);
-        return updateById(userEntity);
+        return removeById(userId);
     }
 
     private void checkUserForDelete(String userId) {
-
+        UserEntity user = getById(userId);
+        if(Objects.isNull(user)){
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"用户不存在");
+        }
     }
 }
