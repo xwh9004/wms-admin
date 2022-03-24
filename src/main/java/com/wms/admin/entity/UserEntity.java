@@ -40,24 +40,6 @@ public class UserEntity extends BaseEntity {
     @TableField("dept_name")
     private String deptName;
 
-    /**
-     * 工号
-     */
-    @TableField("card_no")
-    private String cardNo;
-
-    /**
-     * 电话
-     */
-    @TableField("phone")
-    private String phone;
-
-    /**
-     * 教育 
-     */
-    @TableField("education")
-    private String education;
-
     public String getId() {
         return id;
     }
@@ -87,27 +69,7 @@ public class UserEntity extends BaseEntity {
     public void setDeptName(String deptName) {
         this.deptName = deptName;
     }
-    public String getCardNo() {
-        return cardNo;
-    }
 
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
-    }
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
-    }
 
     @Override
     public String toString() {
@@ -116,9 +78,6 @@ public class UserEntity extends BaseEntity {
             ", userName=" + userName +
             ", userPwd=" + userPwd +
             ", deptName=" + deptName +
-            ", cardNo=" + cardNo +
-            ", phone=" + phone +
-            ", education=" + education +
         "}";
     }
 }

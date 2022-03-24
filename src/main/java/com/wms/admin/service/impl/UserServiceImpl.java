@@ -1,7 +1,7 @@
 package com.wms.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
+import com.wms.admin.dto.UserDto;
 import com.wms.admin.entity.UserEntity;
 import com.wms.admin.entity.UserRoleEntity;
 import com.wms.admin.exception.BusinessException;
@@ -24,6 +25,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.Objects;
 
 /**
  * <p>
@@ -66,58 +70,67 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     }
 
     @Override
-    public boolean addUser(UserVO userVO) {
+    public boolean addUser(UserDto userDto) {
+        checkForAdd(userDto);
         final UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userVO, userEntity);
+        BeanUtils.copyProperties(userDto, userEntity);
         userEntity.setId(UUIDUtil.uuid());
-        String pwd = userVO.getPassword();
-        if (StringUtils.isBlank(pwd)) {
-            pwd = "123456";
-        }
-        userEntity.setUserPwd(Base64Util.encode(pwd));
-        userEntity.setCreateBy(UserInfoContext.getUsername());
-        userEntity.setUpdateBy(UserInfoContext.getUsername());
+        userEntity.setUserPwd(Base64Util.encode(userDto.getPassword()));
         save(userEntity);
-        saveUserRole(userVO);
+        saveUserRole(userEntity.getId(),userDto.getRoleId());
         return true;
     }
 
-    private void saveUserRole(UserVO userVO) {
-        if (StringUtils.isBlank(userVO.getRoleId())) {
-            throw new BusinessException(ResultCode.PARAM_NOT_NULL, "角色ID");
+    private void checkForAdd(UserDto userDto) {
+        checkUserNameExisted(userDto.getUserName());
+    }
+
+    private void checkUserNameExisted(String userName) {
+        QueryWrapper<UserEntity> cond = new QueryWrapper<>();
+        cond.lambda().eq(UserEntity::getUserName,userName);
+        UserEntity user = getOne(cond);
+        if(Objects.nonNull(user)){
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS,"用户".concat(userName));
+        }
+    }
+
+    private void saveUserRole(String userId, String roleId) {
+        Assert.notNull(roleId, "角色不能为空");
+        //check roleId;
+        UserRoleEntity role = userRoleMapper.selectById(roleId);
+        if (role == null) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "角色".concat(roleId));
         }
         UserRoleEntity userRoleEntity = new UserRoleEntity();
-        userRoleEntity.setUserId(userVO.getId());
-        userRoleEntity.setRoleId(userVO.getRoleId());
-        userRoleEntity.setCreateBy(UserInfoContext.getUsername());
-        userRoleEntity.setUpdateBy(UserInfoContext.getUsername());
+        userRoleEntity.setUserId(userId);
+        userRoleEntity.setRoleId(roleId);
         userRoleMapper.insert(userRoleEntity);
     }
 
     @Transactional
     @Override
-    public boolean updateUser(UserVO userVO) {
-        checkUserForUpdate(userVO);
-        UserEntity userEntity = getById(userVO.getId());
-        BeanUtils.copyProperties(userVO, userEntity, "id");
+    public boolean updateUser(UserDto userDto) {
+        checkUserForUpdate(userDto);
+        UserEntity userEntity = getById(userDto.getId());
+        BeanUtils.copyProperties(userDto, userEntity);
         updateById(userEntity);
-        updateUserRole(userVO);
+        updateUserRole(userDto.getId(),userDto.getRoleId());
         return true;
     }
 
-    private void updateUserRole(UserVO userVO) {
+    private void updateUserRole(String userId,String roleId) {
         LambdaUpdateWrapper<UserRoleEntity> queryWrapper = new LambdaUpdateWrapper<>();
-        queryWrapper.eq(UserRoleEntity::getUserId, userVO.getId()).eq(UserRoleEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(UserRoleEntity::getUserId, userId);
         final UserRoleEntity userRoleEntity = userRoleMapper.selectOne(queryWrapper);
-        if(userRoleEntity ==null){
-            throw new BusinessException(ResultCode.SYS_ERROR,"用户选择的角色不存在");
+        if (userRoleEntity == null) {
+            throw new BusinessException(ResultCode.SYS_ERROR, "用户选择的角色不存在");
         }
         userRoleEntity.setUpdateBy(UserInfoContext.getUsername());
-        userRoleEntity.setRoleId(userVO.getRoleId());
+        userRoleEntity.setRoleId(roleId);
         userRoleMapper.updateById(userRoleEntity);
     }
 
-    private void checkUserForUpdate(UserVO userVO) {
+    private void checkUserForUpdate(UserDto userDto) {
 
     }
 
