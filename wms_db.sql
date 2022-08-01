@@ -329,4 +329,63 @@ create table  if not exists T_WMS_INVENTORY_DETAIL_RECORD(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='盘点详情录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+create table  if not exists T_WMS_MEASUREMENT_UNIT (
+  id int(20) primary key not null auto_increment,
+  unit_symbol VARCHAR(40) NOT NULL comment '单位编号',
+  unit_name VARCHAR(40) NOT NULL comment '单位名称',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='计量单位表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table  if not exists T_WMS_LESSEE_INFO (
+  id int(20) primary key not null auto_increment,
+  lessee_no VARCHAR(40) NOT NULL comment '承租单位编号',
+  lessee_company VARCHAR(200) NOT NULL comment '承租单位',
+  contact VARCHAR(40) NOT NULL comment '承租联系人',
+  phone   VARCHAR(20) comment '承租联系人电话',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='承租单位表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table  if not exists T_WMS_LESSEE_ADDRESS (
+  id int(20) primary key not null auto_increment,
+  lessee_id int(20) NOT NULL comment '承租单位ID',
+  company_address VARCHAR(50) NOT NULL comment '承租单位地址',
+  contact   VARCHAR(50) comment '承租联系人电话',
+  phone   VARCHAR(20) comment '联系人',
+  is_default VARCHAR(1) comment '默认地址',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='承租单位地址表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table  if not exists T_WMS_LEASE_CONTRACT (
+  id int(20) primary key not null auto_increment,
+  contract_no varChar(40) comment '合同编号',
+  business_user varChar(40) comment '业务人员',
+  lessee_no varChar(40) NOT NULL comment '承租方编号',
+  lessee_company varChar(200) NOT NULL comment '承租方单位',
+  lessee_addr varChar(200)  comment '承租方单位地址',
+  lessee_contact varChar(40)  comment '承租方电话',
+  lessee_phone varChar(20) comment '承租方单位',
+  sign_date   datetime comment '签约日期',
+  effective_date   datetime comment '生效日期',
+  expire_date   datetime comment '到期日期',
+  deposit   int(11) comment '合同押金',
+  bill_method   VARCHAR(1) comment '1 算头又算尾 2 算头不算尾',
+  is_default VARCHAR(1) comment '默认地址',
+  del_flag VARCHAR(1) default '1' comment '是否删除',
+  create_by VARCHAR(200) comment '创建人',
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  update_by VARCHAR(200)   comment '最后更新人',
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+)comment='合同表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
