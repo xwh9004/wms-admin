@@ -19,13 +19,11 @@ public class MyBatisPlusGenerator {
         String path = "D:/我的项目/wms/";
         String xmlPath="D:/我的项目/wms/mapper";
 
-        String[] tableNames={"T_WMS_STOCK_CHANGE_RECORD"};
-
-//        String[] tableNames = {"T_WMS_STORAGES_REGION",
-//                "T_WMS_REGION_RACKS",
-//                "T_WMS_PROD_CATEGORY",
-//        "T_WMS_PRODUCT",
-//        "T_WMS_VENDOR"};
+        String[] tableNames ={};
+//        String[] tableNames = {"T_WMS_LEASE_CONTRACT",
+//                "T_WMS_LESSEE_ADDRESS",
+//                "T_WMS_LESSEE_INFO",
+//        "T_WMS_MEASUREMENT_UNIT"};
         if(tableNames.length==0){
             return;
         }
