@@ -2,6 +2,7 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.MeasurementUnitEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface MeasurementUnitMapper extends BaseMapper<MeasurementUnitEntity> {
 
+    MeasurementUnitEntity queryUnitSymbol(@Param("symbol") String symbol);
 }

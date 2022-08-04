@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.MeasurementUnitMapper">
 
+    <select id="queryUnitSymbol" resultType="com.wms.admin.entity.MeasurementUnitEntity">
+        select id,unit_symbol,unit_name
+        from t_wms_measurement_unit
+        where unit_symbol =#{symbol}
+    </select>
+
 </mapper>
