@@ -1,7 +1,12 @@
 package com.wms.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
+import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.MeasurementUnitEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.MeasurementUnitMapper;
@@ -9,10 +14,14 @@ import com.wms.admin.service.IMeasurementUnitService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.VOUtil;
 import com.wms.admin.vo.MeasurementUnitVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -27,7 +36,25 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
 
 
     @Override
-    public void selectList(MeasurementUnitVO vo, PageParam pageParam) {
+    public IPage<MeasurementUnitVO> selectList(MeasurementUnitVO vo, PageParam pageParam) {
+
+        QueryWrapper<MeasurementUnitEntity> queryWrapper = new QueryWrapper<>();
+        if (StringUtils.isNotBlank(vo.getUnitName())) {
+            queryWrapper.lambda().like(MeasurementUnitEntity::getUnitName,
+                    vo.getUnitName());
+        }
+        if (StringUtils.isNotBlank(vo.getUnitSymbol())) {
+            queryWrapper.lambda().like(MeasurementUnitEntity::getUnitSymbol
+                    , vo.getUnitSymbol());
+        }
+        IPage<MeasurementUnitEntity> page = Page.of(pageParam.getPage(), pageParam.getLimit());
+        page = baseMapper.selectPage(page, queryWrapper);
+        IPage<MeasurementUnitVO> result = page.convert(entity -> {
+            MeasurementUnitVO unitVO = new MeasurementUnitVO();
+            BeanUtils.copyProperties(entity, unitVO);
+            return unitVO;
+        });
+        return result;
 
     }
 
@@ -44,24 +71,81 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
 
     @Override
     public void updateUnit(MeasurementUnitVO vo) {
+        MeasurementUnitEntity entity = checkForUpdate(vo);
+        entity.setUnitName(vo.getUnitName());
+        entity.setUnitSymbol(vo.getUnitSymbol());
+        updateById(entity);
 
+    }
+
+    private MeasurementUnitEntity checkForUpdate(MeasurementUnitVO vo) {
+        if (Objects.isNull(vo.getId())) {
+            throw new BusinessException(ResultCode.PARAM_NOT_NULL, "符号ID");
+        }
+        MeasurementUnitEntity entity = getById(vo.getId());
+        if (Objects.nonNull(entity)) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "数据");
+        }
+        if (StringUtils.equals(WMSConstants.DEL_FLG_1, entity.getDelFlag())) {
+            throw new BusinessException(ResultCode.PARAM_ERROR, "数据已删除");
+        }
+        QueryWrapper<MeasurementUnitEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+                .lambda()
+                .eq(MeasurementUnitEntity::getUnitSymbol, vo.getUnitSymbol())
+                .ne(MeasurementUnitEntity::getId, vo.getId());
+        MeasurementUnitEntity other = getOne(queryWrapper);
+        if (Objects.nonNull(other)) {
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "符号" + vo.getUnitSymbol());
+        }
+        return entity;
     }
 
     @Override
     public MeasurementUnitVO queryUnitSymbol(String symbol) {
         MeasurementUnitEntity unitEntity = baseMapper.queryUnitSymbol(symbol);
         MeasurementUnitVO vo = new MeasurementUnitVO();
-        BeanUtils.copyProperties(unitEntity,vo);
+        BeanUtils.copyProperties(unitEntity, vo);
         return vo;
+    }
+
+    @Override
+    public List<MeasurementUnitVO> selectAll() {
+        QueryWrapper<MeasurementUnitEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(MeasurementUnitEntity::getDelFlag, WMSConstants.DEL_FLG_0);
+        List<MeasurementUnitEntity> entities = list(queryWrapper);
+        List<MeasurementUnitVO> list = entities.stream().map(e -> {
+            MeasurementUnitVO vo = new MeasurementUnitVO();
+            BeanUtils.copyProperties(e, vo);
+            return vo;
+        }).collect(Collectors.toList());
+        return list;
     }
 
     private void checkForAdd(MeasurementUnitVO vo) {
         //单位是否存在
-        String symbol =vo.getUnitSymbol();
+        String symbol = vo.getUnitSymbol();
         MeasurementUnitEntity unitEntity = baseMapper.queryUnitSymbol(symbol);
-        if(Objects.nonNull(unitEntity)){
-            throw new BusinessException(ResultCode.RESOURCE_EXISTS,String.format("符号%s",symbol));
+        if (Objects.nonNull(unitEntity)) {
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, String.format("符号%s", symbol));
         }
     }
 
+    @Override
+    public void deleteBy(String id) {
+        //TODO 要校验是否有使用了该符号的物品
+        MeasurementUnitEntity entity = getById(id);
+        if (entity == null) {
+            return;
+        }
+        String symbol = entity.getUnitSymbol();
+        if (deletable(symbol)) {
+            baseMapper.deleteById(id);
+        }
+        throw new BusinessException(ResultCode.COMMON_ERROR, "该单位被使用，不能删除");
+    }
+
+    private boolean deletable(String symbol) {
+        return true;
+    }
 }

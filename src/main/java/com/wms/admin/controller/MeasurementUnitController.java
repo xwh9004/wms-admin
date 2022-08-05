@@ -9,11 +9,7 @@ import com.wms.admin.vo.ProductVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -24,16 +20,24 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-08-01 16:53:12
  */
 @RestController
-@RequestMapping("/measurement-unit")
+@RequestMapping("/unit")
 public class MeasurementUnitController {
 
     private IMeasurementUnitService measurementUnitService;
 
-    @ApiOperation(value = "新增计量单位")
+    @ApiOperation(value = "计量单位列表")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/all")
+    public Result all() {
+        measurementUnitService.selectAll();
+        return Result.success();
+    }
+
+    @ApiOperation(value = "计量单位列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/list")
     public Result list(@RequestBody MeasurementUnitVO vo, PageParam pageParam) {
-        measurementUnitService.selectList(vo,pageParam);
+        measurementUnitService.selectList(vo, pageParam);
         return Result.success();
     }
 
@@ -50,6 +54,14 @@ public class MeasurementUnitController {
     @PostMapping("/update")
     public Result update(@Validated @RequestBody MeasurementUnitVO vo) {
         measurementUnitService.updateUnit(vo);
+        return Result.success();
+    }
+
+    @ApiOperation(value = "新增计量单位")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/delete/{id}")
+    public Result delete(@PathVariable("id") String id) {
+        measurementUnitService.deleteBy(id);
         return Result.success();
     }
 }

@@ -1,9 +1,12 @@
 package com.wms.admin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.MeasurementUnitEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.admin.vo.MeasurementUnitVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,26 +19,43 @@ import com.wms.admin.vo.MeasurementUnitVO;
 public interface IMeasurementUnitService extends IService<MeasurementUnitEntity> {
     /**
      * 查询单位
+     *
      * @param vo
      * @param pageParam
      */
-    void selectList(MeasurementUnitVO vo, PageParam pageParam);
+    IPage<MeasurementUnitVO> selectList(MeasurementUnitVO vo, PageParam pageParam);
+
     /**
      * 新增计量单位
+     *
      * @param vo
      */
     void addUnit(MeasurementUnitVO vo);
 
     /**
      * 修改单位
+     *
      * @param vo
      */
     void updateUnit(MeasurementUnitVO vo);
 
     /**
      * 根据符号查询 计量单位
+     *
      * @param symbol
      * @return
      */
     MeasurementUnitVO queryUnitSymbol(String symbol);
+
+    /**
+     * 查询所有计量单位
+     * @return
+     */
+    List<MeasurementUnitVO> selectAll();
+
+    /**
+     * 删除
+     * @param id
+     */
+    void deleteBy(String id);
 }
