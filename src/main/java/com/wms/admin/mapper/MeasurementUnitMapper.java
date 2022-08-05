@@ -14,5 +14,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface MeasurementUnitMapper extends BaseMapper<MeasurementUnitEntity> {
 
-    MeasurementUnitEntity queryUnitSymbol(@Param("symbol") String symbol);
+    MeasurementUnitEntity queryUnitByName(@Param("name") String symbol);
 }

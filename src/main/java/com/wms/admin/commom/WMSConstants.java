@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class WMSConstants {
     /**
-     * 删除
+     * 不删除
      */
     public static final String DEL_FLG_1="1";
     /**

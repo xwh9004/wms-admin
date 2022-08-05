@@ -42,10 +42,10 @@ public interface IMeasurementUnitService extends IService<MeasurementUnitEntity>
     /**
      * 根据符号查询 计量单位
      *
-     * @param symbol
+     * @param name
      * @return
      */
-    MeasurementUnitVO queryUnitSymbol(String symbol);
+    MeasurementUnitVO queryByName(String name);
 
     /**
      * 查询所有计量单位

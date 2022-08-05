@@ -1,6 +1,5 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,8 +15,8 @@ import com.wms.admin.util.VOUtil;
 import com.wms.admin.vo.MeasurementUnitVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +46,7 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
             queryWrapper.lambda().like(MeasurementUnitEntity::getUnitSymbol
                     , vo.getUnitSymbol());
         }
+        queryWrapper.lambda().orderByDesc(MeasurementUnitEntity::getUpdateTime);
         IPage<MeasurementUnitEntity> page = Page.of(pageParam.getPage(), pageParam.getLimit());
         page = baseMapper.selectPage(page, queryWrapper);
         IPage<MeasurementUnitVO> result = page.convert(entity -> {
@@ -57,7 +57,7 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
         return result;
 
     }
-
+    @Transactional
     @Override
     public void addUnit(MeasurementUnitVO vo) {
         checkForAdd(vo);
@@ -69,6 +69,7 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
         save(measurementUnitEntity);
     }
 
+    @Transactional
     @Override
     public void updateUnit(MeasurementUnitVO vo) {
         MeasurementUnitEntity entity = checkForUpdate(vo);
@@ -83,27 +84,27 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
             throw new BusinessException(ResultCode.PARAM_NOT_NULL, "符号ID");
         }
         MeasurementUnitEntity entity = getById(vo.getId());
-        if (Objects.nonNull(entity)) {
+        if (Objects.isNull(entity)) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "数据");
         }
-        if (StringUtils.equals(WMSConstants.DEL_FLG_1, entity.getDelFlag())) {
+        if (StringUtils.equals(WMSConstants.DEL_FLG_0, entity.getDelFlag())) {
             throw new BusinessException(ResultCode.PARAM_ERROR, "数据已删除");
         }
         QueryWrapper<MeasurementUnitEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper
                 .lambda()
-                .eq(MeasurementUnitEntity::getUnitSymbol, vo.getUnitSymbol())
+                .eq(MeasurementUnitEntity::getUnitName, vo.getUnitName())
                 .ne(MeasurementUnitEntity::getId, vo.getId());
         MeasurementUnitEntity other = getOne(queryWrapper);
         if (Objects.nonNull(other)) {
-            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "符号" + vo.getUnitSymbol());
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "单位" + vo.getUnitName());
         }
         return entity;
     }
 
     @Override
-    public MeasurementUnitVO queryUnitSymbol(String symbol) {
-        MeasurementUnitEntity unitEntity = baseMapper.queryUnitSymbol(symbol);
+    public MeasurementUnitVO queryByName(String unitName) {
+        MeasurementUnitEntity unitEntity = baseMapper.queryUnitByName(unitName);
         MeasurementUnitVO vo = new MeasurementUnitVO();
         BeanUtils.copyProperties(unitEntity, vo);
         return vo;
@@ -124,13 +125,13 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
 
     private void checkForAdd(MeasurementUnitVO vo) {
         //单位是否存在
-        String symbol = vo.getUnitSymbol();
-        MeasurementUnitEntity unitEntity = baseMapper.queryUnitSymbol(symbol);
+        String name = vo.getUnitName();
+        MeasurementUnitEntity unitEntity = baseMapper.queryUnitByName(name);
         if (Objects.nonNull(unitEntity)) {
-            throw new BusinessException(ResultCode.RESOURCE_EXISTS, String.format("符号%s", symbol));
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, String.format("单位%s", name));
         }
     }
-
+    @Transactional
     @Override
     public void deleteBy(String id) {
         //TODO 要校验是否有使用了该符号的物品
@@ -138,14 +139,15 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
         if (entity == null) {
             return;
         }
-        String symbol = entity.getUnitSymbol();
-        if (deletable(symbol)) {
+        String name = entity.getUnitName();
+        if (deletable(name)) {
             baseMapper.deleteById(id);
+            return;
         }
         throw new BusinessException(ResultCode.COMMON_ERROR, "该单位被使用，不能删除");
     }
 
-    private boolean deletable(String symbol) {
+    private boolean deletable(String name) {
         return true;
     }
 }
