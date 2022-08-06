@@ -138,6 +138,7 @@ create table  if not exists T_WMS_REGION_RACKS(
      PRIMARY KEY ( id )
     )comment='货物大类表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+alter table T_WMS_PROD_CATEGORY add column unit_id VARCHAR(40) Not null comment '单位ID' before description
 
 create table  if not exists T_WMS_PRODUCT(
   id VARCHAR(40) NOT NULL comment '产品ID',

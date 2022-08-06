@@ -25,7 +25,12 @@ public class ProdCategoryVO extends BaseVO{
     private String code;
 
     /**
+     * 计量单位ID
+     */
+    private String unitId;
+    /**
      * 描述
      */
     private String description;
+
 }

@@ -9,10 +9,13 @@ import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.entity.MeasurementUnitEntity;
 import com.wms.admin.entity.ProdCategoryEntity;
 import com.wms.admin.entity.StoragesRegionEntity;
 import com.wms.admin.exception.BusinessException;
+import com.wms.admin.mapper.MeasurementUnitMapper;
 import com.wms.admin.mapper.ProdCategoryMapper;
+import com.wms.admin.service.IMeasurementUnitService;
 import com.wms.admin.service.IProdCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.UUIDUtil;
@@ -28,6 +31,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 
@@ -45,6 +49,9 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
 
     @Autowired
     private ProdCategoryMapper prodCategoryMapper;
+
+    @Autowired
+    private MeasurementUnitMapper measurementUnitMapper;
 
     @Override
     public List<ProdCategoryVO> categoryAll() {
@@ -92,6 +99,18 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         if (!categories.isEmpty()) {
             throw new BusinessException(ResultCode.RESOURCE_EXISTS, "大类" + vo.getCode());
         }
+        checkUnit(vo);
+    }
+
+    private void checkUnit(ProdCategoryVO vo) {
+        String unitId = vo.getUnitId();
+        MeasurementUnitEntity unit = measurementUnitMapper.selectById(unitId);
+        if(Objects.isNull(unit)){
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "单位" + vo.getCode());
+        }
+        if(StringUtils.equals(unit.getDelFlag(),WMSConstants.DEL_FLG_0)){
+            throw new BusinessException(ResultCode.COMMON_ERROR, "单位不可以");
+        }
     }
 
     private List<ProdCategoryEntity> queryByCode(String code) {
@@ -130,6 +149,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
             log.error("存在多条[{}条] 产品大类编号{}的记录", existCategories.size(), categoryVO.getCode());
             throw new BusinessException(ResultCode.DATA_ERROR, "产品大类数据异常");
         }
+        checkUnit(categoryVO);
     }
 
     @Override
