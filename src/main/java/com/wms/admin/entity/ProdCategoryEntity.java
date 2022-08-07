@@ -36,7 +36,7 @@ public class ProdCategoryEntity extends BaseEntity {
      * 单位ID
      */
     @TableField("unit_id")
-    private String unitId;
+    private Integer unitId;
     /**
      * 描述
      */
@@ -69,11 +69,12 @@ public class ProdCategoryEntity extends BaseEntity {
         return description;
     }
 
-    public String getUnitId() {
+    public Integer
+    getUnitId() {
         return unitId;
     }
 
-    public void setUnitId(String unitId) {
+    public void setUnitId(Integer unitId) {
         this.unitId = unitId;
     }
 

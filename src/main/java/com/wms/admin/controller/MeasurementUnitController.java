@@ -32,7 +32,7 @@ public class MeasurementUnitController {
 
     @ApiOperation(value = "计量单位列表")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/all")
+    @GetMapping("/all")
     public Result all() {
         List<MeasurementUnitVO> result = measurementUnitService.selectAll();
         return Result.success().data(result);

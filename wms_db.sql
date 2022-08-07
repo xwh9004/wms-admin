@@ -64,7 +64,7 @@ create table  if not exists T_WMS_ORG(
    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
   )comment='角色菜单表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-   create table  if not exists T_WMS_USER(
+create table  if not exists T_WMS_USER(
      id VARCHAR(40) comment '主键ID',
      user_name VARCHAR(40) NOT NULL comment '用户名称',
      user_pwd VARCHAR(500) NOT NULL comment '用户密码',
@@ -75,10 +75,7 @@ create table  if not exists T_WMS_ORG(
      update_by VARCHAR(200)   comment '最后更新人',
      update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
      PRIMARY KEY ( id )
-    )comment='角色表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
+ )comment='用户表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
  create table  if not exists T_WMS_USER_ROLE(
    id int(20) primary key not null auto_increment,
@@ -129,6 +126,7 @@ create table  if not exists T_WMS_REGION_RACKS(
      id VARCHAR(40) NOT NULL comment 'ID',
      name VARCHAR(100) NOT NULL comment '大类名称',
      code VARCHAR(40) NOT NULL comment '大类编码',
+     unit_id VARCHAR(40) Not null comment '单位ID',
      description VARCHAR(200) NOT NULL comment '描述',
      del_flag VARCHAR(1) default '1' comment '是否删除',
      create_by VARCHAR(200) comment '创建人',
@@ -138,7 +136,6 @@ create table  if not exists T_WMS_REGION_RACKS(
      PRIMARY KEY ( id )
     )comment='货物大类表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table T_WMS_PROD_CATEGORY add column unit_id VARCHAR(40) Not null comment '单位ID' before description
 
 create table  if not exists T_WMS_PRODUCT(
   id VARCHAR(40) NOT NULL comment '产品ID',

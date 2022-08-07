@@ -76,6 +76,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         if (StringUtils.isNotBlank(queryVO.getName())) {
             queryWrapper.like(ProdCategoryEntity::getName, queryVO.getName());
         }
+
         queryWrapper.orderByDesc(ProdCategoryEntity::getCreateTime);
         IPage<ProdCategoryVO> resultPage = page(page, queryWrapper).convert(entity -> {
             ProdCategoryVO vo = new ProdCategoryVO();
@@ -103,7 +104,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
     }
 
     private void checkUnit(ProdCategoryVO vo) {
-        String unitId = vo.getUnitId();
+        Integer unitId = vo.getUnitId();
         MeasurementUnitEntity unit = measurementUnitMapper.selectById(unitId);
         if(Objects.isNull(unit)){
             throw new BusinessException(ResultCode.RESOURCE_EXISTS, "单位" + vo.getCode());

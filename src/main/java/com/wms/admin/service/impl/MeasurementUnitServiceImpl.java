@@ -113,7 +113,7 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
     @Override
     public List<MeasurementUnitVO> selectAll() {
         QueryWrapper<MeasurementUnitEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(MeasurementUnitEntity::getDelFlag, WMSConstants.DEL_FLG_0);
+        queryWrapper.lambda().eq(MeasurementUnitEntity::getDelFlag, WMSConstants.DEL_FLG_1);
         List<MeasurementUnitEntity> entities = list(queryWrapper);
         List<MeasurementUnitVO> list = entities.stream().map(e -> {
             MeasurementUnitVO vo = new MeasurementUnitVO();
