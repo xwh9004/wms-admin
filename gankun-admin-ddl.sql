@@ -159,3 +159,4 @@ create table  if not exists T_WMS_BULLETIN_INFO(
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='布告信息表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

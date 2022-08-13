@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-08-01 16:53:12
  */
 @RestController
-@RequestMapping("/lease-contract-entity")
+@RequestMapping("/contract")
 public class LeaseContractController {
 
 }
