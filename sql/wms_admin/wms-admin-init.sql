@@ -1,7 +1,7 @@
 --初始化sql 数据
-INSERT INTO T_WMS_USER (id,user_name,role_code,user_pwd,create_by,update_by) values('574a612414b3464fb8e135bfc18ee777','super','superAdmin','MTIzNDU2','sys' ,'sys');
-INSERT INTO `t_wms_role` VALUES ('5e9066572ab8463392c3b418edd3b914','超级管理员','superAdmin','1','1','sys','2022-01-27 06:33:22','super','2022-01-27 06:33:22')
-INSERT INTO `t_wms_menu` (id,menu_name, menu_code, parent_id, level_path, level_no, url, seq , type, del_flag, create_by,
+INSERT INTO T_WMS_USER (id,user_name,user_pwd,create_by,update_by) values('574a612414b3464fb8e135bfc18ee777','superAdmin','MTIzNDU2','sys' ,'sys');
+INSERT INTO T_WMS_ROLE VALUES ('5e9066572ab8463392c3b418edd3b914','超级管理员','superAdmin','1','1','sys','2022-01-27 06:33:22','super','2022-01-27 06:33:22');
+INSERT INTO T_WMS_MENU (id,menu_name, menu_code, parent_id, level_path, level_no, url, seq , type, del_flag, create_by,
  create_time, update_by, update_time, status, icon, hidden, redirect, path, component) VALUES
   ('05bd84d9f8734ff884c1a8dd106e2dfc','供应商管理','vendor','0e4e797b0f1345ea95235c33451f56d1','/0e4e797b0f1345ea95235c33451f56d1/null',2,'vendor',6,'1','1','super','2022-01-29 05:59:39','super','2022-01-29 05:59:39','1',NULL,'0',NULL,'vendor','views/system/vendor/vendor-list'),
   ('0e4e797b0f1345ea95235c33451f56d1','系统管理','system','-1','/0e4e797b0f1345ea95235c33451f56d1',1,'/system',4,'0','1','admin','2022-01-28 02:08:29','super','2022-01-28 02:08:29','1','setting','0','noRedirect','/system',NULL),
@@ -53,7 +53,8 @@ INSERT INTO `t_wms_menu` (id,menu_name, menu_code, parent_id, level_path, level_
   ('fe5c63a3ea934205ae27e46393255b02','用户管理','user','0e4e797b0f1345ea95235c33451f56d1','/0e4e797b0f1345ea95235c33451f56d1/null',2,'user',3,'1','1','super','2022-01-29 03:24:16','super','2022-01-29 03:24:16','1',NULL,'0',NULL,'user','views/system/user/user');
 
 --管理员角色表
-INSERT INTO `T_WMS_USER_ROLE` VALUES('eafe8c5b0a424d09be556d575c2e1b2e','574a612414b3464fb8e135bfc18ee777','5e9066572ab8463392c3b418edd3b914','1','sys',now(),'sys',now()),
+INSERT INTO T_WMS_USER_ROLE (id,user_name,user_pwd,create_by,update_by)
+ VALUES('eafe8c5b0a424d09be556d575c2e1b2e','574a612414b3464fb8e135bfc18ee777','5e9066572ab8463392c3b418edd3b914','1','sys',now(),'sys',now()),
 --管理员菜单权限
 INSERT INTO `t_wms_role_menu` VALUES
 ('5e9066572ab8463392c3b418edd3b914','a15d581a64414abe9ff11b2784c29991','1','sys',now(),'sys',now()),
