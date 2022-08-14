@@ -8,17 +8,18 @@
         <result column="lessee_company" property="lesseeCompany"/>
         <result column="contact" property="contact"/>
         <result column="phone" property="phone"/>
-        <collection property="list">
+        <collection property="list" ofType="com.wms.admin.vo.AddressVO">
             <id column="a_id" property="id"/>
             <result column="company_address" property="address"/>
             <result column="contact" property="contact"/>
-            <result column="phone" property="phone"/>
+            <result column="a_phone" property="phone"/>
+            <result column="is_default" property="isDefault"/>
         </collection>
     </resultMap>
 
-    <select id="lesseeDetail" resultMap="detailMap">
+    <select id="lesseeDetail" parameterType="int" resultMap="detailMap">
         select l.id,l.lessee_no,l.lessee_company,l.contact,l.phone,
-        a.id a_id,a.lessee_id,a.company_address ,a.contact,a.phone,a.is_default
+        a.id a_id,a.lessee_id,a.company_address ,a.contact,a.phone a_phone,a.is_default
         from t_wms_lessee_info l
         left join t_wms_lessee_address a on l.id = a.lessee_id and a.del_flag ='1'
         where l.del_flag ='1'

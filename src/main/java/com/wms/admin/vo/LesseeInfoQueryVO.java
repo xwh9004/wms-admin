@@ -12,4 +12,5 @@ public class LesseeInfoQueryVO {
     private String contact;
     private String phone;
     private String lesseeNo;
+    private String lesseeCompany;
 }

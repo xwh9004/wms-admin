@@ -13,7 +13,6 @@ public class BaseEntity {
     /**
      * 是否删除
      */
-    @TableLogic(value ="1",delval = "0")
     @TableField(value = "del_flag")
     private String delFlag;
 

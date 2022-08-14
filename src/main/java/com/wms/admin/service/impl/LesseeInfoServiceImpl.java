@@ -1,9 +1,11 @@
 package com.wms.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
@@ -14,6 +16,7 @@ import com.wms.admin.mapper.LesseeInfoMapper;
 import com.wms.admin.service.ILesseeAddressService;
 import com.wms.admin.service.ILesseeInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wms.admin.util.VOUtil;
 import com.wms.admin.vo.AddressVO;
 import com.wms.admin.vo.LesseeInfoQueryVO;
 import com.wms.admin.vo.LesseeInfoVO;
@@ -25,9 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -55,14 +60,18 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
     public IPage<LesseeInfoVO> lesseeList(LesseeInfoQueryVO queryVO, PageParam pageParam) {
         IPage<LesseeInfoEntity> page = Page.of(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<LesseeInfoEntity> queryCond = new LambdaQueryWrapper<>();
+        queryCond.eq(LesseeInfoEntity::getDelFlag,WMSConstants.DEL_FLG_N);
         if (StringUtils.isNotBlank(queryVO.getLesseeNo())) {
             queryCond.like(LesseeInfoEntity::getLesseeNo, queryVO.getLesseeNo());
         }
         if (StringUtils.isNotBlank(queryVO.getContact())) {
             queryCond.like(LesseeInfoEntity::getContact, queryVO.getContact());
         }
-        if (StringUtils.isNotBlank(queryVO.getLesseeNo())) {
+        if (StringUtils.isNotBlank(queryVO.getPhone())) {
             queryCond.like(LesseeInfoEntity::getPhone, queryVO.getPhone());
+        }
+        if (StringUtils.isNotBlank(queryVO.getLesseeCompany())) {
+            queryCond.like(LesseeInfoEntity::getLesseeCompany, queryVO.getLesseeCompany());
         }
         page = page(page, queryCond);
         IPage<LesseeInfoVO> result = page.convert(item -> {
@@ -72,6 +81,16 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
         });
         return result;
     }
+
+    @Override
+    public LesseeInfoVO detail(Integer id) {
+        final LesseeInfoVO detail = baseMapper.lesseeDetail(id);
+        if (Objects.isNull(detail)) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "承租单位");
+        }
+        return detail;
+    }
+
     @Transactional
     @Override
     public void addLessee(LesseeInfoVO infoVO) {
@@ -81,19 +100,25 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
         }
         LesseeInfoEntity infoEntity = new LesseeInfoEntity();
         List<AddressVO> addressList = infoVO.getList();
+        BeanUtils.copyProperties(infoVO, infoEntity);
         if (!CollectionUtils.isEmpty(addressList)) {
             final AddressVO defaultAddress = setAndGetDefaultAddress(addressList);
-            saveAddresses(addressList);
             infoEntity.setContact(defaultAddress.getContact());
             infoEntity.setPhone(defaultAddress.getPhone());
+            save(infoEntity);
+            saveAddresses(infoEntity.getId(), addressList);
+        } else {
+            save(infoEntity);
         }
-        save(infoEntity);
     }
 
-    private void saveAddresses(List<AddressVO> addrList) {
+    private void saveAddresses(Integer lesseeId, List<AddressVO> addrList) {
         List<LesseeAddressEntity> addressEntities = addrList.stream().map(vo -> {
             LesseeAddressEntity entity = new LesseeAddressEntity();
             BeanUtils.copyProperties(vo, entity);
+            entity.setCompanyAddress(vo.getAddress());
+            entity.setLesseeId(lesseeId);
+            entity.setDelFlag(WMSConstants.DEL_FLG_N);
             if (vo.isDefault()) {
                 entity.setIsDefault(IS_DEFAULT);
             } else {
@@ -101,7 +126,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
             }
             return entity;
         }).collect(Collectors.toList());
-        lesseeAddressService.saveBatch(addressEntities);
+        lesseeAddressService.saveOrUpdateBatch(addressEntities);
     }
 
     private AddressVO setAndGetDefaultAddress(List<AddressVO> addrList) {
@@ -135,24 +160,43 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
         if (lesseeNoExist(infoVO.getLesseeNo(), infoVO.getId())) {
             throw new BusinessException(ResultCode.RESOURCE_EXISTS, "承租编号" + infoVO.getLesseeNo());
         }
+        List<AddressVO> addressList = infoVO.getList();
         LesseeInfoEntity infoEntity = new LesseeInfoEntity();
-        BeanUtils.copyProperties(infoVO, infoEntity);
-        updateById(infoEntity);
+        BeanUtils.copyProperties(infoVO,infoEntity);
+        if (!CollectionUtils.isEmpty(addressList)) {
+            final AddressVO defaultAddress = setAndGetDefaultAddress(addressList);
+            infoEntity.setContact(defaultAddress.getContact());
+            infoEntity.setPhone(defaultAddress.getPhone());
+            updateById(infoEntity);
+            removeAllAddress(infoEntity.getId());
+            saveAddresses(infoEntity.getId(), addressList);
+        } else {
+            updateById(infoEntity);
+            removeAllAddress(infoEntity.getId());
+        }
     }
 
+
+    private void removeAllAddress(Integer lesseeId){
+        LesseeAddressEntity addressEntity = new LesseeAddressEntity();
+        addressEntity.setLesseeId(lesseeId);
+        LambdaUpdateWrapper<LesseeAddressEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper
+                .eq(LesseeAddressEntity::getLesseeId, lesseeId)
+                .set(LesseeAddressEntity::getDelFlag, WMSConstants.DEL_FLG_Y)
+                .set(LesseeAddressEntity::getUpdateBy, UserInfoContext.getUsername())
+                .set(LesseeAddressEntity::getUpdateTime, LocalDateTime.now());
+        lesseeAddressService.update(addressEntity,updateWrapper);
+    }
 
 
     @Transactional
     @Override
     public void deleteLessee(Integer id) {
-        LesseeInfoEntity lesseeInfo = new LesseeInfoEntity();
-        lesseeInfo.setId(id);
-        lesseeInfo.setDelFlag(WMSConstants.DEL_FLG_Y);
-        updateById(lesseeInfo);
-
-        LambdaUpdateWrapper<LesseeAddressEntity> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(LesseeAddressEntity::getLesseeId,id).set(LesseeAddressEntity::getDelFlag,WMSConstants.DEL_FLG_Y);
-
-        lesseeAddressService.update(updateWrapper);
+        LesseeInfoEntity infoEntity = new LesseeInfoEntity();
+        infoEntity.setDelFlag(WMSConstants.DEL_FLG_Y);
+        infoEntity.setId(id);
+        updateById(infoEntity);
+        removeAllAddress(infoEntity.getId());
     }
 }

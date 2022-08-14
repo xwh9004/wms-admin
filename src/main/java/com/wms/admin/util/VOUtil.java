@@ -9,7 +9,11 @@ import java.util.function.Function;
  */
 public class VOUtil {
 
-   public static <V,E> E convertTo(V vo, Function<V,E> function){
-       return  function.apply(vo);
-   }
+    public static <V, E> E toEntity(V vo, Function<V, E> function) {
+        return function.apply(vo);
+    }
+
+    public static <E, V> V toVO(E entity, Function<E, V> function) {
+        return function.apply(entity);
+    }
 }

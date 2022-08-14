@@ -61,7 +61,7 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
     @Override
     public void addUnit(MeasurementUnitVO vo) {
         checkForAdd(vo);
-        MeasurementUnitEntity measurementUnitEntity = VOUtil.convertTo(vo, v -> {
+        MeasurementUnitEntity measurementUnitEntity = VOUtil.toEntity(vo, e -> {
             MeasurementUnitEntity entity = new MeasurementUnitEntity();
             BeanUtils.copyProperties(vo, entity);
             return entity;
