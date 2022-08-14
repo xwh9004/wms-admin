@@ -1,17 +1,14 @@
 package com.wms.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.WMSConstants;
-import com.wms.admin.entity.MenuEntity;
 import com.wms.admin.entity.RoleMenuEntity;
 import com.wms.admin.mapper.RoleMenuMapper;
 import com.wms.admin.service.IMenuService;
 import com.wms.admin.service.IRoleMenuService;
-import com.wms.admin.vo.MenuVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
+import static com.wms.admin.commom.WMSConstants.DEL_FLG_N;
 
 /**
  * <p>
@@ -81,14 +78,14 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenuEnt
         LambdaUpdateWrapper<RoleMenuEntity> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
                 .eq(RoleMenuEntity::getRoleId, roleId)
-                .in(RoleMenuEntity::getMenuId, menuIds).set(RoleMenuEntity::getDelFlag, WMSConstants.DEL_FLG_0);
+                .in(RoleMenuEntity::getMenuId, menuIds).set(RoleMenuEntity::getDelFlag, WMSConstants.DEL_FLG_Y);
         update(updateWrapper);
     }
 
     @Override
     public List<String> roleMenuIds(String roleId) {
         LambdaQueryWrapper<RoleMenuEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(RoleMenuEntity::getRoleId, roleId).eq(RoleMenuEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(RoleMenuEntity::getRoleId, roleId).eq(RoleMenuEntity::getDelFlag, DEL_FLG_N);
         List<RoleMenuEntity> roleMenus = list(queryWrapper);
         List<String> menuIds = roleMenus.stream().map(RoleMenuEntity::getMenuId).collect(Collectors.toList());
         return menuIds;
@@ -99,7 +96,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenuEnt
         LambdaUpdateWrapper<RoleMenuEntity> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
                 .eq(RoleMenuEntity::getRoleId, roleId)
-                .set(RoleMenuEntity::getDelFlag, WMSConstants.DEL_FLG_0);
+                .set(RoleMenuEntity::getDelFlag, WMSConstants.DEL_FLG_Y);
         return update(updateWrapper);
     }
 

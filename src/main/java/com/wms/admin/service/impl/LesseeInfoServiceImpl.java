@@ -1,8 +1,6 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -48,6 +46,32 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
     private static final String IS_DEFAULT = "1";
     private static final String IS_NO_DEFAULT = "0";
 
+    @Override
+    public List<LesseeInfoVO> allLessees() {
+        return null;
+    }
+
+    @Override
+    public IPage<LesseeInfoVO> lesseeList(LesseeInfoQueryVO queryVO, PageParam pageParam) {
+        IPage<LesseeInfoEntity> page = Page.of(pageParam.getPage(), pageParam.getLimit());
+        LambdaQueryWrapper<LesseeInfoEntity> queryCond = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(queryVO.getLesseeNo())) {
+            queryCond.like(LesseeInfoEntity::getLesseeNo, queryVO.getLesseeNo());
+        }
+        if (StringUtils.isNotBlank(queryVO.getContact())) {
+            queryCond.like(LesseeInfoEntity::getContact, queryVO.getContact());
+        }
+        if (StringUtils.isNotBlank(queryVO.getLesseeNo())) {
+            queryCond.like(LesseeInfoEntity::getPhone, queryVO.getPhone());
+        }
+        page = page(page, queryCond);
+        IPage<LesseeInfoVO> result = page.convert(item -> {
+            LesseeInfoVO infoVO = new LesseeInfoVO();
+            BeanUtils.copyProperties(item, infoVO);
+            return infoVO;
+        });
+        return result;
+    }
     @Transactional
     @Override
     public void addLessee(LesseeInfoVO infoVO) {
@@ -96,7 +120,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
     private boolean lesseeNoExist(String lesseeNo, Integer excludeId) {
         LambdaQueryWrapper<LesseeInfoEntity> queryCond = new LambdaQueryWrapper<>();
         queryCond.eq(LesseeInfoEntity::getLesseeNo, lesseeNo)
-                .eq(LesseeInfoEntity::getDelFlag, WMSConstants.DEL_FLG_1);
+                .eq(LesseeInfoEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         if (Objects.nonNull(excludeId)) {
             queryCond.ne(LesseeInfoEntity::getId, excludeId.intValue());
         }
@@ -104,6 +128,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
         return Objects.nonNull(lessee);
     }
 
+    @Transactional
     @Override
     public void updateLessee(LesseeInfoVO infoVO) {
         Assert.notNull(infoVO.getId(), "承租人ID不能为空");
@@ -113,28 +138,21 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
         LesseeInfoEntity infoEntity = new LesseeInfoEntity();
         BeanUtils.copyProperties(infoVO, infoEntity);
         updateById(infoEntity);
-
     }
 
+
+
+    @Transactional
     @Override
-    public IPage<LesseeInfoVO> lesseeList(LesseeInfoQueryVO queryVO, PageParam pageParam) {
-        IPage<LesseeInfoEntity> page = Page.of(pageParam.getPage(), pageParam.getLimit());
-        LambdaQueryWrapper<LesseeInfoEntity> queryCond = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(queryVO.getLesseeNo())) {
-            queryCond.like(LesseeInfoEntity::getLesseeNo, queryVO.getLesseeNo());
-        }
-        if (StringUtils.isNotBlank(queryVO.getContact())) {
-            queryCond.like(LesseeInfoEntity::getContact, queryVO.getContact());
-        }
-        if (StringUtils.isNotBlank(queryVO.getLesseeNo())) {
-            queryCond.like(LesseeInfoEntity::getPhone, queryVO.getPhone());
-        }
-        page = page(page, queryCond);
-        IPage<LesseeInfoVO> result = page.convert(item -> {
-            LesseeInfoVO infoVO = new LesseeInfoVO();
-            BeanUtils.copyProperties(item, infoVO);
-            return infoVO;
-        });
-        return result;
+    public void deleteLessee(Integer id) {
+        LesseeInfoEntity lesseeInfo = new LesseeInfoEntity();
+        lesseeInfo.setId(id);
+        lesseeInfo.setDelFlag(WMSConstants.DEL_FLG_Y);
+        updateById(lesseeInfo);
+
+        LambdaUpdateWrapper<LesseeAddressEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(LesseeAddressEntity::getLesseeId,id).set(LesseeAddressEntity::getDelFlag,WMSConstants.DEL_FLG_Y);
+
+        lesseeAddressService.update(updateWrapper);
     }
 }

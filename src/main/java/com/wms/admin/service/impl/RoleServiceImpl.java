@@ -1,21 +1,16 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
-import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.RoleEntity;
-import com.wms.admin.entity.RoleMenuEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.RoleMapper;
-import com.wms.admin.mapper.RoleMenuMapper;
 import com.wms.admin.service.IMenuService;
 import com.wms.admin.service.IRoleMenuService;
 import com.wms.admin.service.IRoleService;
@@ -23,8 +18,6 @@ import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.MenuVO;
 import com.wms.admin.vo.RoleQueryVO;
 import com.wms.admin.vo.RoleVO;
-import com.wms.admin.vo.RouteVO;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +28,8 @@ import org.springframework.util.Assert;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.wms.admin.commom.WMSConstants.DEL_FLG_0;
-import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
+import static com.wms.admin.commom.WMSConstants.DEL_FLG_Y;
+import static com.wms.admin.commom.WMSConstants.DEL_FLG_N;
 
 /**
  * <p>
@@ -87,7 +80,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
 
     private RoleEntity getRoleByCode(String roleCode) {
         QueryWrapper<RoleEntity> cond = new QueryWrapper<>();
-        cond.lambda().eq(RoleEntity::getDelFlag, DEL_FLG_1).eq(RoleEntity::getRoleCode, roleCode);
+        cond.lambda().eq(RoleEntity::getDelFlag, DEL_FLG_N).eq(RoleEntity::getRoleCode, roleCode);
         return getOne(cond);
     }
 
@@ -115,7 +108,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
         checkExistRole(roleVO.getId());
         QueryWrapper<RoleEntity> cond = new QueryWrapper<>();
         cond.lambda()
-                .eq(RoleEntity::getDelFlag, DEL_FLG_1)
+                .eq(RoleEntity::getDelFlag, DEL_FLG_N)
                 .eq(RoleEntity::getRoleCode, roleVO.getRoleCode())
                 .ne(RoleEntity::getId,roleVO.getId());
         RoleEntity roleByCode = getOne(cond);
@@ -128,7 +121,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     public boolean deleteRole(String roleId) {
         checkRoleForDel(roleId);
         LambdaUpdateWrapper<RoleEntity> updateWrapper = new LambdaUpdateWrapper();
-        updateWrapper.eq(RoleEntity::getId, roleId).set(RoleEntity::getDelFlag, DEL_FLG_0);
+        updateWrapper.eq(RoleEntity::getId, roleId).set(RoleEntity::getDelFlag, DEL_FLG_Y);
         update(updateWrapper);
         return roleMenuService.deleteRoleMenu(roleId);
     }
@@ -148,7 +141,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     private RoleEntity getRoleEntity(String roleId) {
         QueryWrapper<RoleEntity> cond = new QueryWrapper<>();
         cond.lambda()
-                .eq(RoleEntity::getDelFlag, DEL_FLG_1)
+                .eq(RoleEntity::getDelFlag, DEL_FLG_N)
                 .eq(RoleEntity::getId, roleId);
         RoleEntity role = getOne(cond);
         return role;
@@ -157,7 +150,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     @Override
     public List<RoleVO> roleList() {
         QueryWrapper<RoleEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(RoleEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.lambda().eq(RoleEntity::getDelFlag, DEL_FLG_N);
         List<RoleEntity> list = list(queryWrapper);
         List<RoleVO> roleList = list.stream().map(item -> {
             RoleVO roleVO = new RoleVO();
@@ -171,7 +164,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     public IPage<RoleVO> rolePage(RoleQueryVO roleQueryVO, PageParam pageParam) {
         IPage<RoleEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<RoleEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(RoleEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(RoleEntity::getDelFlag, DEL_FLG_N);
         if (StringUtils.isNotBlank(roleQueryVO.getRoleName())) {
             queryWrapper.like(RoleEntity::getRoleName, roleQueryVO.getRoleName());
         }

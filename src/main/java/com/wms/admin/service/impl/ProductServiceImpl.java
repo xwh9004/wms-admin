@@ -1,31 +1,22 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.WMSConstants;
-import com.wms.admin.entity.ProdCategoryEntity;
 import com.wms.admin.entity.ProductEntity;
 import com.wms.admin.mapper.ProductMapper;
 import com.wms.admin.service.IProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.UUIDUtil;
-import com.wms.admin.vo.ProdCategoryVO;
 import com.wms.admin.vo.ProductQueryVO;
 import com.wms.admin.vo.ProductVO;
-import com.wms.admin.vo.StoragesRegionVO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-
-import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
 
 /**
  * <p>
@@ -88,7 +79,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
     public void deleteProduct(String id) {
         checkForDelete(id);
         ProductEntity productEntity = baseMapper.selectById(id);
-        productEntity.setDelFlag(WMSConstants.DEL_FLG_0);
+        productEntity.setDelFlag(WMSConstants.DEL_FLG_Y);
         productEntity.setUpdateBy(UserInfoContext.getUsername());
         updateById(productEntity);
     }

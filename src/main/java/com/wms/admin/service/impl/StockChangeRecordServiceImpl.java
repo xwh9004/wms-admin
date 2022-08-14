@@ -12,7 +12,6 @@ import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.StockChangeRecordMapper;
 import com.wms.admin.service.IStockChangeRecordService;
 import com.wms.admin.service.IStockService;
-import com.wms.admin.vo.ReceiptRecordVO;
 import com.wms.admin.vo.StockChangeRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class StockChangeRecordServiceImpl extends ServiceImpl<StockChangeRecordM
 
     private Optional<StockEntity> getStock(String prodId, String regionId) {
         QueryWrapper<StockEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(StockEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+        queryWrapper.lambda().eq(StockEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(StockEntity::getProdId, prodId).eq(StockEntity::getRegionId, regionId);
         StockEntity stock = stockService.getOne(queryWrapper);
         return Optional.ofNullable(stock);
@@ -109,7 +108,7 @@ public class StockChangeRecordServiceImpl extends ServiceImpl<StockChangeRecordM
             changeRecordVO.setUpdateBy(UserInfoContext.getUsername());
             changeRecordVO.setCreateTime(now);
             changeRecordVO.setUpdateTime(now);
-            changeRecordVO.setDelFlag(WMSConstants.DEL_FLG_1);
+            changeRecordVO.setDelFlag(WMSConstants.DEL_FLG_N);
             consumer.accept(changeRecordVO, t);
             changeRecordVOList.add(changeRecordVO);
         });

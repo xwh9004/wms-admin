@@ -1,11 +1,8 @@
---导入t_wms_menu;
---导入t_wms_menu;
-
 INSERT INTO T_WMS_USER (id,user_name,user_pwd,create_by,update_by) values('574a612414b3464fb8e135bfc18ee777','super','MTIzNDU2','sys' ,'sys');
 INSERT INTO `t_wms_role` VALUES ('5e9066572ab8463392c3b418edd3b914','超级管理员','superAdmin','1','1','sys','2022-01-27 06:33:22','super','2022-01-27 06:33:22')
 INSERT INTO `T_WMS_USER_ROLE` VALUES(1,'574a612414b3464fb8e135bfc18ee777','5e9066572ab8463392c3b418edd3b914','1','sys',now(),'sys',now());
 
-INSERT INTO `t_wms_role_menu` VALUES
+INSERT INTO T_WMS_ROLE_MENU VALUES
 ('5e9066572ab8463392c3b418edd3b914','0e4e797b0f1345ea95235c33451f56d1','1','sys','2022-08-07 13:35:48','sys','2022-08-07 13:35:48'),
 ('5e9066572ab8463392c3b418edd3b914','f58a2de7b3474ec785c911eb6a266ec2','1','sys','2022-08-07 13:35:48','sys','2022-08-07 13:35:48'),
 ('5e9066572ab8463392c3b418edd3b914','9c53c57d053a4bb789fc1c186e758ed4','1','super','2022-08-07 13:37:10','super','2022-08-07 13:37:10'),

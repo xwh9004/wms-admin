@@ -6,13 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.WMSConstants;
-import com.wms.admin.entity.RegionRacksEntity;
 import com.wms.admin.entity.VendorEntity;
 import com.wms.admin.mapper.VendorMapper;
 import com.wms.admin.service.IVendorService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.UUIDUtil;
-import com.wms.admin.vo.StoragesRegionVO;
 import com.wms.admin.vo.VendorQueryVO;
 import com.wms.admin.vo.VendorVO;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
+import static com.wms.admin.commom.WMSConstants.DEL_FLG_N;
 
 /**
  * <p>
@@ -38,7 +36,7 @@ public class VendorServiceImpl extends ServiceImpl<VendorMapper, VendorEntity> i
     @Override
     public List<VendorVO> vendorList() {
         LambdaQueryWrapper<VendorEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(VendorEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(VendorEntity::getDelFlag, DEL_FLG_N);
         queryWrapper.orderByDesc(VendorEntity::getCreateTime);
         queryWrapper.orderByAsc(VendorEntity::getId);
         List<VendorEntity> list = list(queryWrapper);
@@ -58,7 +56,7 @@ public class VendorServiceImpl extends ServiceImpl<VendorMapper, VendorEntity> i
     public IPage<VendorVO> vendorPages(VendorQueryVO queryVO, PageParam pageParam) {
         IPage<VendorEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<VendorEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(VendorEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(VendorEntity::getDelFlag, DEL_FLG_N);
 
         if(StringUtils.isNotBlank(queryVO.getName())){
             queryWrapper.like(VendorEntity::getName,queryVO.getName());
@@ -108,7 +106,7 @@ public class VendorServiceImpl extends ServiceImpl<VendorMapper, VendorEntity> i
     public void deleteVendor(String vendorId) {
         checkForDelete(vendorId);
         VendorEntity entity = baseMapper.selectById(vendorId);
-        entity.setDelFlag(WMSConstants.DEL_FLG_0);
+        entity.setDelFlag(WMSConstants.DEL_FLG_Y);
         entity.setUpdateBy(UserInfoContext.getUsername());
         updateById(entity);
     }

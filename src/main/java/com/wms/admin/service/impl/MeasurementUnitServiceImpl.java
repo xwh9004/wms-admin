@@ -87,7 +87,7 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
         if (Objects.isNull(entity)) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "数据");
         }
-        if (StringUtils.equals(WMSConstants.DEL_FLG_0, entity.getDelFlag())) {
+        if (StringUtils.equals(WMSConstants.DEL_FLG_Y, entity.getDelFlag())) {
             throw new BusinessException(ResultCode.PARAM_ERROR, "数据已删除");
         }
         QueryWrapper<MeasurementUnitEntity> queryWrapper = new QueryWrapper<>();
@@ -113,7 +113,7 @@ public class MeasurementUnitServiceImpl extends ServiceImpl<MeasurementUnitMappe
     @Override
     public List<MeasurementUnitVO> selectAll() {
         QueryWrapper<MeasurementUnitEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(MeasurementUnitEntity::getDelFlag, WMSConstants.DEL_FLG_1);
+        queryWrapper.lambda().eq(MeasurementUnitEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         List<MeasurementUnitEntity> entities = list(queryWrapper);
         List<MeasurementUnitVO> list = entities.stream().map(e -> {
             MeasurementUnitVO vo = new MeasurementUnitVO();

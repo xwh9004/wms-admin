@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.admin.vo.LesseeInfoQueryVO;
 import com.wms.admin.vo.LesseeInfoVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 承租单位表 服务类
@@ -22,4 +24,8 @@ public interface ILesseeInfoService extends IService<LesseeInfoEntity> {
     void updateLessee(LesseeInfoVO infoVO);
 
     IPage<LesseeInfoVO> lesseeList(LesseeInfoQueryVO queryVO, PageParam pageParam);
+
+    List<LesseeInfoVO> allLessees();
+
+    void deleteLessee(Integer id);
 }

@@ -1,6 +1,5 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,7 +15,6 @@ import com.wms.admin.mapper.StockMaintainMapper;
 import com.wms.admin.service.IProductService;
 import com.wms.admin.service.IStockMaintainService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wms.admin.vo.ProductVO;
 import com.wms.admin.vo.StockMaintainQueryVO;
 import com.wms.admin.vo.StockMaintainVO;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +60,7 @@ public class StockMaintainServiceImpl extends ServiceImpl<StockMaintainMapper, S
         checkProdId(prodId);
         LambdaQueryWrapper<StockMaintainEntity> queryCond = new LambdaQueryWrapper<>();
         queryCond
-                .eq(StockMaintainEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(StockMaintainEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(StockMaintainEntity::getProdId, prodId);
         StockMaintainEntity maintainEntity = stockMaintainMapper.selectOne(queryCond);
         if (maintainEntity != null) {
@@ -86,7 +84,7 @@ public class StockMaintainServiceImpl extends ServiceImpl<StockMaintainMapper, S
 
     private void checkExist(Integer id) {
         final StockMaintainEntity maintainEntity = getById(id);
-        if (maintainEntity == null || WMSConstants.DEL_FLG_0.equals(maintainEntity.getDelFlag())) {
+        if (maintainEntity == null || WMSConstants.DEL_FLG_Y.equals(maintainEntity.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "维护记录" + id);
         }
     }
@@ -119,7 +117,7 @@ public class StockMaintainServiceImpl extends ServiceImpl<StockMaintainMapper, S
         checkExist(id);
         LambdaUpdateWrapper<StockMaintainEntity> updateQuery = new LambdaUpdateWrapper<>();
         updateQuery.eq(StockMaintainEntity::getId,id)
-        .set(StockMaintainEntity::getDelFlag,WMSConstants.DEL_FLG_0)
+        .set(StockMaintainEntity::getDelFlag,WMSConstants.DEL_FLG_Y)
         .set(StockMaintainEntity::getUpdateBy,UserInfoContext.getUsername());
         update(updateQuery);
     }

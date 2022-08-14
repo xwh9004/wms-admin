@@ -106,7 +106,7 @@ public class StorageInRecordServiceImpl extends ServiceImpl<StorageInDetailRecor
     public List<RegionRackVO> regionRacks(String regionId) {
         LambdaQueryWrapper<RegionRacksEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
-                .eq(RegionRacksEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(RegionRacksEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(RegionRacksEntity::getRegionId, regionId)
                 .select(RegionRacksEntity::getId, RegionRacksEntity::getRackNo);
         List<RegionRacksEntity> list = regionRacksService.list(queryWrapper);

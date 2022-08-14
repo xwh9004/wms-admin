@@ -1,6 +1,5 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,14 +7,12 @@ import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
-import com.wms.admin.entity.RoleEntity;
 import com.wms.admin.entity.StoragesRegionEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.StoragesRegionMapper;
 import com.wms.admin.service.IStoragesRegionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.UUIDUtil;
-import com.wms.admin.vo.RoleVO;
 import com.wms.admin.vo.StoragesRegionQueryVO;
 import com.wms.admin.vo.StoragesRegionVO;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +25,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
+import static com.wms.admin.commom.WMSConstants.DEL_FLG_N;
 
 /**
  * <p>
@@ -47,7 +44,7 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
     @Override
     public List<StoragesRegionVO> regionList() {
         LambdaQueryWrapper<StoragesRegionEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StoragesRegionEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(StoragesRegionEntity::getDelFlag, DEL_FLG_N);
         queryWrapper.orderByAsc(StoragesRegionEntity::getRegionType);
         queryWrapper.orderByDesc(StoragesRegionEntity::getCreateTime);
         List<StoragesRegionEntity> list = list(queryWrapper);
@@ -64,7 +61,7 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
     public IPage<StoragesRegionVO> regionPages(StoragesRegionQueryVO storagesRegionQueryVO, PageParam pageParam) {
         IPage<StoragesRegionEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<StoragesRegionEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StoragesRegionEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(StoragesRegionEntity::getDelFlag, DEL_FLG_N);
         if (StringUtils.isNotBlank(storagesRegionQueryVO.getRegionName())) {
             queryWrapper.like(StoragesRegionEntity::getRegionName, storagesRegionQueryVO.getRegionName());
         }
@@ -104,7 +101,7 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
     private void checkForUpdate(StoragesRegionVO storagesRegionVO) {
         LambdaQueryWrapper<StoragesRegionEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StoragesRegionEntity::getRegionNo, storagesRegionVO.getRegionNo())
-                .eq(StoragesRegionEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(StoragesRegionEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .ne(StoragesRegionEntity::getId, storagesRegionVO.getId());
         List<StoragesRegionEntity> list = storagesRegionMapper.selectList(queryWrapper);
         if (!list.isEmpty()) {
@@ -115,14 +112,14 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
     @Override
     public void deleteRegion(String id) {
         StoragesRegionEntity regionEntity = findExistRegion(id);
-        regionEntity.setDelFlag(WMSConstants.DEL_FLG_0);
+        regionEntity.setDelFlag(WMSConstants.DEL_FLG_Y);
         regionEntity.setUpdateBy(UserInfoContext.getUsername());
         storagesRegionMapper.updateById(regionEntity);
     }
 
     private StoragesRegionEntity findExistRegion(String id) {
         StoragesRegionEntity regionEntity = findById(id);
-        if (WMSConstants.DEL_FLG_0.equals(regionEntity.getDelFlag())) {
+        if (WMSConstants.DEL_FLG_Y.equals(regionEntity.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "库区");
         }
         return regionEntity;
@@ -135,7 +132,7 @@ public class StoragesRegionServiceImpl extends ServiceImpl<StoragesRegionMapper,
     private void checkForAdd(StoragesRegionVO storagesRegionVO) {
         LambdaQueryWrapper<StoragesRegionEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StoragesRegionEntity::getRegionNo, storagesRegionVO.getRegionNo())
-                .eq(StoragesRegionEntity::getDelFlag, WMSConstants.DEL_FLG_1);
+                .eq(StoragesRegionEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         if (!CollectionUtils.isEmpty(storagesRegionMapper.selectList(queryWrapper))) {
             throw new BusinessException(ResultCode.RESOURCE_EXISTS, "库区" + storagesRegionVO.getRegionNo());
         }

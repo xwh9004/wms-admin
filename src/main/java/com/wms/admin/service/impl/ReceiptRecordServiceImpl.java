@@ -1,7 +1,5 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.interfaces.Func;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,7 +23,6 @@ import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.Money;
 import com.wms.admin.vo.ReceiptRecordQueryVO;
 import com.wms.admin.vo.ReceiptRecordVO;
-import com.wms.admin.vo.StorageInDetailRecordVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +30,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * <p>
@@ -108,7 +103,7 @@ public class ReceiptRecordServiceImpl extends ServiceImpl<ReceiptRecordMapper, R
         boolean exists;
         QueryWrapper<UserEntity> applyCond = new QueryWrapper<>();
         applyCond.lambda()
-                .eq(UserEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(UserEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(UserEntity::getUserName, applyId);
         exists = userMapper.exists(applyCond);
         if (!exists) {
@@ -122,7 +117,7 @@ public class ReceiptRecordServiceImpl extends ServiceImpl<ReceiptRecordMapper, R
         }
         QueryWrapper<StoragesRegionEntity> regionCond = new QueryWrapper<>();
         regionCond.lambda()
-                .eq(StoragesRegionEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(StoragesRegionEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(StoragesRegionEntity::getId, regionId);
         final boolean exists = regionMapper.exists(regionCond);
         if (!exists) {

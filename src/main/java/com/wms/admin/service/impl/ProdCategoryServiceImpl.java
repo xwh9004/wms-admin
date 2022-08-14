@@ -1,27 +1,22 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.MeasurementUnitEntity;
 import com.wms.admin.entity.ProdCategoryEntity;
-import com.wms.admin.entity.StoragesRegionEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.MeasurementUnitMapper;
 import com.wms.admin.mapper.ProdCategoryMapper;
-import com.wms.admin.service.IMeasurementUnitService;
 import com.wms.admin.service.IProdCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.ProdCategoryQueryVO;
 import com.wms.admin.vo.ProdCategoryVO;
-import com.wms.admin.vo.StoragesRegionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -33,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.wms.admin.commom.WMSConstants.DEL_FLG_1;
+import static com.wms.admin.commom.WMSConstants.DEL_FLG_N;
 
 /**
  * <p>
@@ -56,7 +51,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
     @Override
     public List<ProdCategoryVO> categoryAll() {
         LambdaQueryWrapper<ProdCategoryEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ProdCategoryEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(ProdCategoryEntity::getDelFlag, DEL_FLG_N);
 
         queryWrapper.orderByDesc(ProdCategoryEntity::getCreateTime);
         List<ProdCategoryVO> list = new ArrayList<>();
@@ -72,7 +67,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
     public IPage<ProdCategoryVO> categoryPages(ProdCategoryQueryVO queryVO, PageParam pageParam) {
         IPage<ProdCategoryEntity> page = new Page<>(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<ProdCategoryEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ProdCategoryEntity::getDelFlag, DEL_FLG_1);
+        queryWrapper.eq(ProdCategoryEntity::getDelFlag, DEL_FLG_N);
         if (StringUtils.isNotBlank(queryVO.getName())) {
             queryWrapper.like(ProdCategoryEntity::getName, queryVO.getName());
         }
@@ -109,14 +104,14 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         if(Objects.isNull(unit)){
             throw new BusinessException(ResultCode.RESOURCE_EXISTS, "单位" + vo.getCode());
         }
-        if(StringUtils.equals(unit.getDelFlag(),WMSConstants.DEL_FLG_0)){
+        if(StringUtils.equals(unit.getDelFlag(),WMSConstants.DEL_FLG_Y)){
             throw new BusinessException(ResultCode.COMMON_ERROR, "单位不可以");
         }
     }
 
     private List<ProdCategoryEntity> queryByCode(String code) {
         QueryWrapper<ProdCategoryEntity> cond = new QueryWrapper<>();
-        cond.lambda().eq(ProdCategoryEntity::getDelFlag, DEL_FLG_1).eq(ProdCategoryEntity::getCode, code);
+        cond.lambda().eq(ProdCategoryEntity::getDelFlag, DEL_FLG_N).eq(ProdCategoryEntity::getCode, code);
         return prodCategoryMapper.selectList(cond);
     }
 
@@ -124,7 +119,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
     public boolean updateCategory(ProdCategoryVO categoryVO) {
         checkForUpdate(categoryVO);
         ProdCategoryEntity entity = prodCategoryMapper.selectById(categoryVO.getId());
-        if (entity == null || WMSConstants.DEL_FLG_0.equals(entity.getDelFlag())) {
+        if (entity == null || WMSConstants.DEL_FLG_Y.equals(entity.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, categoryVO.getId());
         }
         BeanUtils.copyProperties(categoryVO, entity);
@@ -158,7 +153,7 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         Assert.notNull(id, "ID不能为空");
         ProdCategoryEntity entity = prodCategoryMapper.selectById(id);
 
-        if (entity == null || WMSConstants.DEL_FLG_0.equals(entity.getDelFlag())) {
+        if (entity == null || WMSConstants.DEL_FLG_Y.equals(entity.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "大类");
         }
 //        entity.setDelFlag(WMSConstants.DEL_FLG_0);

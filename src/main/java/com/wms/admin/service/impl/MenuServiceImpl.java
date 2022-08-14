@@ -13,7 +13,6 @@ import com.wms.admin.service.IMenuService;
 import com.wms.admin.service.IRoleMenuService;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.MenuVO;
-import com.wms.admin.vo.RouteMeta;
 import com.wms.admin.vo.RouteVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <p>
@@ -56,7 +53,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     @Override
     public List<MenuVO> queryList() {
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1);
+        queryWrapper.lambda().eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         List<MenuEntity> list = list(queryWrapper);
         return toMenuTree(list);
     }
@@ -70,7 +67,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     public List<RouteVO> queryRoutes() {
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .in(MenuEntity::getType, WMSConstants.MENU_TYPE_DIR, WMSConstants.MENU_TYPE_MENU);
         List<MenuEntity> list = list(queryWrapper);
         List menuList = toMenuTree(list);
@@ -122,7 +119,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         menu.setId(UUIDUtil.uuid());
         menu.setLevelPath(parentMenu.getLevelPath() + SLASH + menu.getId());
         menu.setLevelNo(parentMenu.getLevelNo() + 1);
-        menu.setDelFlag(WMSConstants.DEL_FLG_1);
+        menu.setDelFlag(WMSConstants.DEL_FLG_N);
         menu.setParentId(parentMenu.getId());
         menu.setCreateBy(UserInfoContext.getUsername());
         menu.setUpdateBy(UserInfoContext.getUsername());
@@ -139,7 +136,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
     private void checkMenuSeq(String parentId, String menuId, int level, int seq) {
         LambdaQueryWrapper<MenuEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
-                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(MenuEntity::getLevelNo, level)
                 .eq(MenuEntity::getParentId, parentId)
                 .eq(MenuEntity::getSeq, seq);
@@ -158,7 +155,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
      */
     private void checkParentMenu(MenuEntity parentMenu) {
 
-        if (!WMSConstants.DEL_FLG_1.equals(parentMenu.getDelFlag())) {
+        if (!WMSConstants.DEL_FLG_N.equals(parentMenu.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, parentMenu.getMenuCode());
         }
         if (!WMSConstants.STATUS_1.equals(parentMenu.getStatus())) {
@@ -185,7 +182,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
             throw new BusinessException(ResultCode.PARAM_NOT_NULL, "菜单ID");
         }
         MenuEntity oldMenu = getById(menuId);
-        if (!WMSConstants.DEL_FLG_1.equals(oldMenu.getDelFlag())) {
+        if (!WMSConstants.DEL_FLG_N.equals(oldMenu.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "菜单");
         }
         if (!oldMenu.getParentId().equals(menuVO.getParentId())) {
@@ -239,7 +236,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
 
         LambdaQueryWrapper<MenuEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
-                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(MenuEntity::getMenuCode, menuCode);
         if (StringUtils.isNotBlank(menuId)) {
             queryWrapper.ne(MenuEntity::getId, menuId);

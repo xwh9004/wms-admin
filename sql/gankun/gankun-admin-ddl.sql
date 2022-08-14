@@ -2,7 +2,7 @@ create table  if not exists T_WMS_USER(
      id VARCHAR(40) comment '主键ID',
      user_name VARCHAR(40) NOT NULL comment '用户名称',
      user_pwd VARCHAR(500) NOT NULL comment '用户密码',
-     dept_name VARCHAR(100)  comment '部门名称',,
+     dept_name VARCHAR(100)  comment '部门名称',
      del_flag VARCHAR(1) default '1' comment '是否删除',
      create_by VARCHAR(200) comment '创建人',
      create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
@@ -45,6 +45,20 @@ create table  if not exists T_WMS_MENU(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
   PRIMARY KEY ( id )
  )comment='菜单表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ create table  if not exists T_WMS_ROLE(
+   id VARCHAR(40) comment '主键ID',
+   role_name VARCHAR(40) NOT NULL comment '角色名称',
+   role_code VARCHAR(40) NOT NULL comment '角色代码',
+   type VARCHAR(2)  NOT NULL comment '角色类型',
+   del_flag VARCHAR(1) default '1' comment '是否删除',
+   create_by VARCHAR(200) comment '创建人',
+   create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+   update_by VARCHAR(200)   comment '最后更新人',
+   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
+   PRIMARY KEY ( id )
+  )comment='角色表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
   create table  if not exists T_WMS_ROLE_MENU(
     role_id VARCHAR(40) NOT NULL comment '角色ID',

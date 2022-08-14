@@ -1,12 +1,10 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.auth.UserInfoContext;
-import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.dto.BulletinInfoDto;
@@ -17,14 +15,9 @@ import com.wms.admin.mapper.BulletinInfoMapper;
 import com.wms.admin.service.IBulletinInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.vo.BulletinInfoVO;
-import com.wms.admin.vo.BulletinQueryVO;
-import com.wms.admin.vo.ProdCategoryVO;
-import io.swagger.models.auth.In;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Objects;
 
@@ -46,7 +39,7 @@ public class BulletinInfoServiceImpl extends ServiceImpl<BulletinInfoMapper, Bul
     public IPage<BulletinInfoDto> bulletinPages(BulletinQueryDto queryCond) {
         IPage<BulletinInfoEntity> page = new Page<>(queryCond.getPage(), queryCond.getLimit());
         LambdaQueryWrapper<BulletinInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(BulletinInfoEntity::getDelFlag, WMSConstants.DEL_FLG_1);
+        queryWrapper.eq(BulletinInfoEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         if (queryCond.getStartTime() != null) {
             queryWrapper.gt(BulletinInfoEntity::getCreateTime, queryCond.getStartTime());
         }
@@ -96,7 +89,7 @@ public class BulletinInfoServiceImpl extends ServiceImpl<BulletinInfoMapper, Bul
     @Override
     public void deleteBulletin(Integer id) {
         BulletinInfoEntity bulletinInfoEntity = getBulletinInfoEntity(id);
-        bulletinInfoEntity.setDelFlag(WMSConstants.DEL_FLG_0);
+        bulletinInfoEntity.setDelFlag(WMSConstants.DEL_FLG_Y);
         bulletinInfoEntity.setUpdateBy(UserInfoContext.getUsername());
         updateById(bulletinInfoEntity);
     }
@@ -115,7 +108,7 @@ public class BulletinInfoServiceImpl extends ServiceImpl<BulletinInfoMapper, Bul
     public BulletinInfoDto findPublished() {
         LambdaQueryWrapper<BulletinInfoEntity> publishedCond = new LambdaQueryWrapper<>();
         publishedCond
-                .eq(BulletinInfoEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+                .eq(BulletinInfoEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(BulletinInfoEntity::getIsPublish, PUBLISH_Y);
         BulletinInfoEntity entity = getOne(publishedCond);
         BulletinInfoDto bulletinInfo = new BulletinInfoDto();
@@ -128,7 +121,7 @@ public class BulletinInfoServiceImpl extends ServiceImpl<BulletinInfoMapper, Bul
 
     public void resetAll() {
         LambdaUpdateWrapper<BulletinInfoEntity> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(BulletinInfoEntity::getDelFlag, WMSConstants.DEL_FLG_1)
+        updateWrapper.eq(BulletinInfoEntity::getDelFlag, WMSConstants.DEL_FLG_N)
                 .eq(BulletinInfoEntity::getIsPublish, PUBLISH_Y)
                 .set(BulletinInfoEntity::getIsPublish, PUBLISH_N)
                 .set(BulletinInfoEntity::getUpdateBy, UserInfoContext.getUsername());

@@ -12,11 +12,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -27,13 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-08-01 16:53:12
  */
 @RestController
-@RequestMapping("/lessee-info")
+@RequestMapping("/lessee")
 public class LesseeInfoController {
 
     @Autowired
     private ILesseeInfoService lesseeInfoService;
 
+
     @ApiOperation("修改承租单位")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/all")
+    public Result all() {
+        List<LesseeInfoVO> result = lesseeInfoService.allLessees();
+        return Result.success().data(result);
+    }
+    @ApiOperation("承租单位列表")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
     @PostMapping("/list")
     public Result list(@Validated @RequestBody LesseeInfoQueryVO queryVO, PageParam pageParam) {
@@ -54,6 +60,14 @@ public class LesseeInfoController {
     @PostMapping("/update")
     public Result update(@Validated @RequestBody LesseeInfoVO infoVO) {
         lesseeInfoService.updateLessee(infoVO);
+        return Result.success();
+    }
+
+    @ApiOperation("删除承租单位")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/delete/{id}")
+    public Result delete(@PathVariable("id") Integer id) {
+        lesseeInfoService.deleteLessee(id);
         return Result.success();
     }
 }
