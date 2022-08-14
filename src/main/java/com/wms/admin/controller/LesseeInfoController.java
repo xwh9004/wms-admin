@@ -7,7 +7,6 @@ import com.wms.admin.commom.Result;
 import com.wms.admin.service.ILesseeInfoService;
 import com.wms.admin.vo.LesseeInfoQueryVO;
 import com.wms.admin.vo.LesseeInfoVO;
-import com.wms.admin.vo.OrgVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,14 @@ public class LesseeInfoController {
     public Result list(@Validated @RequestBody LesseeInfoQueryVO queryVO, PageParam pageParam) {
         IPage<LesseeInfoVO> result = lesseeInfoService.lesseeList(queryVO, pageParam);
         return Result.success().data(result);
+    }
+
+    @ApiOperation("删除承租单位")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/detail/{id}")
+    public Result detail(@PathVariable("id") Integer id) {
+        LesseeInfoVO lesseeInfoVO =lesseeInfoService.detail(id);
+        return Result.success().data(lesseeInfoVO);
     }
 
     @ApiOperation("添加承租单位")

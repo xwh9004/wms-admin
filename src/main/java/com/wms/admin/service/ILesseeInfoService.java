@@ -19,13 +19,15 @@ import java.util.List;
  */
 public interface ILesseeInfoService extends IService<LesseeInfoEntity> {
 
-    void addLessee(LesseeInfoVO infoVO);
-
-    void updateLessee(LesseeInfoVO infoVO);
+    List<LesseeInfoVO> allLessees();
 
     IPage<LesseeInfoVO> lesseeList(LesseeInfoQueryVO queryVO, PageParam pageParam);
 
-    List<LesseeInfoVO> allLessees();
+    LesseeInfoVO detail(Integer id);
+
+    void addLessee(LesseeInfoVO infoVO);
+
+    void updateLessee(LesseeInfoVO infoVO);
 
     void deleteLessee(Integer id);
 }
