@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.wms.admin.commom.WMSConstants;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -38,6 +40,10 @@ public class BaseEntity {
      */
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    public boolean isDelete(){
+        return WMSConstants.DEL_FLG_Y.equals(this.delFlag);
+    }
 
     public String getDelFlag() {
         return delFlag;
