@@ -19,12 +19,17 @@ public class GlobalExceptionHandler {
         String msg = exception.getMessage();
         return Result.error(ResultCode.SYS_ERROR.getCode(),msg);
     }
-
+    @ResponseBody
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public Result illegalArgumentExceptionHandler(IllegalArgumentException exception) {
+        return Result.error(ResultCode.PARAM_ERROR.getCode(), exception.getMessage());
+    }
     @ResponseBody
     @ExceptionHandler(value = BusinessException.class)
     public Result businessExceptionHandler(BusinessException exception) {
         return Result.error(exception.getCode(), exception.getMessage());
     }
+
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
