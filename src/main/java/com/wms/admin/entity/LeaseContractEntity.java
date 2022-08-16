@@ -96,8 +96,8 @@ public class LeaseContractEntity extends BaseEntity {
     /**
      * 默认地址
      */
-    @TableField("is_default")
-    private String isDefault;
+    @TableField("effective")
+    private String effective;
 
     public Integer getId() {
         return id;
@@ -190,12 +190,12 @@ public class LeaseContractEntity extends BaseEntity {
     public void setBillMethod(String billMethod) {
         this.billMethod = billMethod;
     }
-    public String getIsDefault() {
-        return isDefault;
+    public String getEffective() {
+        return effective;
     }
 
-    public void setIsDefault(String isDefault) {
-        this.isDefault = isDefault;
+    public void setEffective(String effective) {
+        this.effective = effective;
     }
 
     @Override
@@ -214,7 +214,7 @@ public class LeaseContractEntity extends BaseEntity {
             ", expireDate=" + expireDate +
             ", deposit=" + deposit +
             ", billMethod=" + billMethod +
-            ", isDefault=" + isDefault +
+            ", effective=" + effective +
         "}";
     }
 }
