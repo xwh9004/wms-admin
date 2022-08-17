@@ -54,10 +54,10 @@ public class LeaseContractController {
     }
 
 
-    @ApiOperation(value = "删除合同")
+    @ApiOperation(value = "合同失效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/delete/{id}")
-    public Result delete(@PathVariable("id") Integer id) {
+    @PostMapping("/ineffective/{id}")
+    public Result ineffective(@PathVariable("id") Integer id) {
         contractService.deleteContract(id);
         return Result.success();
     }
