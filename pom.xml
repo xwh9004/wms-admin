@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.wms.admin</groupId>
     <artifactId>wms-admin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>wms-admin</name>
 
     <description>仓库管理系统</description>
