@@ -2,7 +2,11 @@ package com.wms.admin.commom;
 
 import java.math.BigDecimal;
 
-public class WMSConstants {
+public interface WMSConstants {
+
+    public static String REQUEST_NO = "requestNo";
+
+
     /**
      * 不删除
      */
