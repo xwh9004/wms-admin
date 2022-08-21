@@ -1,10 +1,10 @@
 package com.wms.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
@@ -15,9 +15,8 @@ import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.LesseeInfoMapper;
 import com.wms.admin.service.ILesseeAddressService;
 import com.wms.admin.service.ILesseeInfoService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wms.admin.util.VOUtil;
 import com.wms.admin.vo.AddressVO;
+import com.wms.admin.vo.LesseeInfoAndAddressesVO;
 import com.wms.admin.vo.LesseeInfoQueryVO;
 import com.wms.admin.vo.LesseeInfoVO;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +31,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +58,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
     public IPage<LesseeInfoVO> lesseeList(LesseeInfoQueryVO queryVO, PageParam pageParam) {
         IPage<LesseeInfoEntity> page = Page.of(pageParam.getPage(), pageParam.getLimit());
         LambdaQueryWrapper<LesseeInfoEntity> queryCond = new LambdaQueryWrapper<>();
-        queryCond.eq(LesseeInfoEntity::getDelFlag,WMSConstants.DEL_FLG_N);
+        queryCond.eq(LesseeInfoEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         if (StringUtils.isNotBlank(queryVO.getLesseeNo())) {
             queryCond.like(LesseeInfoEntity::getLesseeNo, queryVO.getLesseeNo());
         }
@@ -80,6 +78,13 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
             return infoVO;
         });
         return result;
+    }
+
+
+    @Override
+    public IPage<LesseeInfoAndAddressesVO> lesseeInfoAndAddressesList(LesseeInfoQueryVO queryVO, PageParam pageParam) {
+        Page page = Page.of(pageParam.getPage(), pageParam.getLimit());
+        return baseMapper.lesseeAndAddressesPage(queryVO, page);
     }
 
     @Override
@@ -162,7 +167,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
         }
         List<AddressVO> addressList = infoVO.getList();
         LesseeInfoEntity infoEntity = new LesseeInfoEntity();
-        BeanUtils.copyProperties(infoVO,infoEntity);
+        BeanUtils.copyProperties(infoVO, infoEntity);
         if (!CollectionUtils.isEmpty(addressList)) {
             final AddressVO defaultAddress = setAndGetDefaultAddress(addressList);
             infoEntity.setContact(defaultAddress.getContact());
@@ -177,7 +182,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
     }
 
 
-    private void removeAllAddress(Integer lesseeId){
+    private void removeAllAddress(Integer lesseeId) {
         LesseeAddressEntity addressEntity = new LesseeAddressEntity();
         addressEntity.setLesseeId(lesseeId);
         LambdaUpdateWrapper<LesseeAddressEntity> updateWrapper = new LambdaUpdateWrapper<>();
@@ -186,7 +191,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
                 .set(LesseeAddressEntity::getDelFlag, WMSConstants.DEL_FLG_Y)
                 .set(LesseeAddressEntity::getUpdateBy, UserInfoContext.getUsername())
                 .set(LesseeAddressEntity::getUpdateTime, LocalDateTime.now());
-        lesseeAddressService.update(addressEntity,updateWrapper);
+        lesseeAddressService.update(addressEntity, updateWrapper);
     }
 
 
@@ -199,4 +204,5 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
         updateById(infoEntity);
         removeAllAddress(infoEntity.getId());
     }
+
 }

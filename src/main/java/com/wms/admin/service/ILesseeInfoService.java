@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.LesseeInfoEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.vo.LesseeInfoAndAddressesVO;
 import com.wms.admin.vo.LesseeInfoQueryVO;
 import com.wms.admin.vo.LesseeInfoVO;
 
@@ -30,4 +31,6 @@ public interface ILesseeInfoService extends IService<LesseeInfoEntity> {
     void updateLessee(LesseeInfoVO infoVO);
 
     void deleteLessee(Integer id);
+
+    IPage<LesseeInfoAndAddressesVO> lesseeInfoAndAddressesList(LesseeInfoQueryVO queryVO, PageParam pageParam);
 }

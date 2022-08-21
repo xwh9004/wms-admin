@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
 import com.wms.admin.service.ILesseeInfoService;
+import com.wms.admin.vo.LesseeInfoAndAddressesVO;
 import com.wms.admin.vo.LesseeInfoQueryVO;
 import com.wms.admin.vo.LesseeInfoVO;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,6 +44,14 @@ public class LesseeInfoController {
     @PostMapping("/list")
     public Result list(@Validated @RequestBody LesseeInfoQueryVO queryVO, PageParam pageParam) {
         IPage<LesseeInfoVO> result = lesseeInfoService.lesseeList(queryVO, pageParam);
+        return Result.success().data(result);
+    }
+
+    @ApiOperation("承租单位和地址列表")
+    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+    @PostMapping("/list")
+    public Result lesseeAndAddressesList(@Validated @RequestBody LesseeInfoQueryVO queryVO, PageParam pageParam) {
+        IPage<LesseeInfoAndAddressesVO> result = lesseeInfoService.lesseeInfoAndAddressesList(queryVO, pageParam);
         return Result.success().data(result);
     }
 
