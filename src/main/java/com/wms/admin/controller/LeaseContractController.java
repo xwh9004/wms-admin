@@ -1,9 +1,11 @@
 package com.wms.admin.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
 import com.wms.admin.service.ILeaseContractService;
+import com.wms.admin.vo.ContractQueryVO;
 import com.wms.admin.vo.ContractVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -11,6 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -32,17 +36,17 @@ public class LeaseContractController {
     @ApiOperation(value = "所有合同编号")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/all")
-    public Result all(@RequestBody ContractVO contractVO, PageParam pageParam) {
-        contractService.contractAll(contractVO,pageParam);
-        return Result.success();
+    public Result all() {
+        List<ContractVO> list = contractService.contractAll();
+        return Result.success().data(list);
     }
 
     @ApiOperation(value = "合同列表查询")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/list")
-    public Result list(@RequestBody ContractVO contractVO, PageParam pageParam) {
-        contractService.contractList(contractVO,pageParam);
-        return Result.success();
+    public Result list(@RequestBody ContractQueryVO queryVO, PageParam pageParam) {
+        IPage<ContractVO> page = contractService.contractList(queryVO, pageParam);
+        return Result.success().data(page);
     }
 
     @ApiOperation(value = "新增合同")
@@ -58,6 +62,15 @@ public class LeaseContractController {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/ineffective/{id}")
     public Result ineffective(@PathVariable("id") Integer id) {
+        contractService.deleteContract(id);
+        return Result.success();
+    }
+
+
+    @ApiOperation(value = "合同删除")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/delete/{id}")
+    public Result delete(@PathVariable("id") Integer id) {
         contractService.deleteContract(id);
         return Result.success();
     }

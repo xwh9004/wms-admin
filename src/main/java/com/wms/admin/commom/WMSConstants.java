@@ -22,5 +22,13 @@ public interface WMSConstants {
     public static final String MENU_TYPE_RESOURCE ="2";
     public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
+    /**
+     * 生效
+     */
+    public static final String EFFECTIVE ="1";
+    /**
+     * 失效
+     */
+    public static final String INEFFECTIVE ="0";
 
 }

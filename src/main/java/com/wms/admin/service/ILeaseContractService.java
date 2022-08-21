@@ -1,9 +1,13 @@
 package com.wms.admin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.LeaseContractEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.vo.ContractQueryVO;
 import com.wms.admin.vo.ContractVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,11 +19,13 @@ import com.wms.admin.vo.ContractVO;
  */
 public interface ILeaseContractService extends IService<LeaseContractEntity> {
 
-    void contractAll(ContractVO contractVO, PageParam pageParam);
+    List<ContractVO> contractAll();
 
-    void contractList(ContractVO contractVO, PageParam pageParam);
+    IPage<ContractVO> contractList(ContractQueryVO queryVO, PageParam pageParam);
 
     void addContract(ContractVO contractVO);
+
+    void ineffectiveContract(Integer id);
 
     void deleteContract(Integer id);
 }
