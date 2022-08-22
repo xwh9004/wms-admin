@@ -36,10 +36,10 @@ public class Money {
         return this.longValue;
     }
     private Money(BigDecimal value) {
-        BigDecimal val = new BigDecimal(value.longValue());
-        val.setScale(2,BigDecimal.ROUND_FLOOR);
-        this.value =val;
-        this.longValue = TEN_THOUSAND.multiply(value).toBigInteger().longValue();
+        value = value.setScale(4,BigDecimal.ROUND_FLOOR);
+        //厘 小数点4位
+        this.value =value;
+        this.longValue = TEN_THOUSAND.multiply(value).longValue();
     }
 
     @Override
