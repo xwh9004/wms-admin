@@ -49,7 +49,7 @@ public class LesseeInfoController {
 
     @ApiOperation("承租单位和地址列表")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
-    @PostMapping("/list")
+    @PostMapping("/lessees")
     public Result lesseeAndAddressesList(@Validated @RequestBody LesseeInfoQueryVO queryVO, PageParam pageParam) {
         IPage<LesseeInfoAndAddressesVO> result = lesseeInfoService.lesseeInfoAndAddressesList(queryVO, pageParam);
         return Result.success().data(result);
