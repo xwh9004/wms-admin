@@ -15,7 +15,6 @@ import java.util.List;
 @Data
 public class LesseeInfoAndAddressesVO implements Serializable {
 
-    private Integer id;
     /**
      * 承租单位编号
      */

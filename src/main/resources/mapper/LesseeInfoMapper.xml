@@ -26,4 +26,20 @@
         and l.id = #{id}
     </select>
 
+    <select id="lesseeAndAddressesPage" resultType="com.wms.admin.vo.LesseeInfoAndAddressesVO">
+        select  l.lessee_no,l.lessee_company,a.company_address address ,a.contact,a.phone phone
+        from t_wms_lessee_info l
+        left join t_wms_lessee_address a on l.id = a.lessee_id and a.del_flag ='1'
+        where l.del_flag ='1'
+        <if test="param.contact!=null and param.contact!=''">
+            and   a.contact like concat('%',#{param.contact},'%')
+        </if>
+        <if test="param.phone!=null and param.phone!=''">
+            and   a.phone like concat('%',#{param.phone},'%')
+        </if>
+        <if test="param.lesseeNo!=null and param.lesseeNo!=''">
+            and   a.lesseeNo like concat('%',#{param.lesseeNo},'%')
+        </if>
+    </select>
+
 </mapper>

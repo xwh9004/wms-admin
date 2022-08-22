@@ -174,3 +174,92 @@ create table  if not exists T_WMS_BULLETIN_INFO(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='布告信息表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+  create table  if not exists T_WMS_CONTRACT_PROD_REL(
+    id int(20) primary key not null auto_increment,
+    contract_id int(20) NOT NULL comment '合同id',
+    prod_id VARCHAR(40) NOT NULL comment '产品ID',
+    lease_unit_price int(20) NOT NULL comment '单价/天',
+    del_flag VARCHAR(1) default '1' comment '是否删除',
+    create_by VARCHAR(200) comment '创建人',
+    create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+    update_by VARCHAR(200)   comment '最后更新人',
+    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+   )comment='合同货物关系表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  create table  if not exists T_WMS_TAKE_IN_RECORD(
+    id int(20) primary key not null auto_increment,
+    take_in_no VARCHAR(40) NOT NULL comment '收货单号',
+	take_in_type VARCHAR(2)  comment '收货类型',
+    business_user VARCHAR(40) NOT NULL comment '业务人员',
+    contract_no VARCHAR(40) NOT NULL comment '合同编号',
+    contract_company VARCHAR(40) NOT NULL comment '合同单位',
+	total_amount int(20)  comment '收货数量',
+	total_weight int(20)  comment '收货总重量',
+	prod_types   int(20)  comment '货品种类数',
+	unload_fee   int(20)  comment '卸车费',
+	pile_fee     int(20)    comment '堆码费',
+	others_fee   int(20)  comment '其他杂费',
+    take_in_time TIMESTAMP   comment '收货时间',
+	description VARCHAR(2000) comment '描述',
+    del_flag VARCHAR(1) default '1' comment '是否删除',
+    create_by VARCHAR(200) comment '创建人',
+    create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+    update_by VARCHAR(200)   comment '最后更新人',
+    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+   )comment='收货记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  create table  if not exists T_WMS_TAKE_IN_DETAIL(
+    id int(20) primary key not null auto_increment,
+    take_in_no VARCHAR(40) NOT NULL comment '收货单号',
+    prod_no VARCHAR(40) NOT NULL comment '货物ID',
+    prod_name VARCHAR(200) comment '货物名称',
+    prod_unit VARCHAR(40)  comment '货物单位',
+    prod_amount int(20)  comment '货物数量',
+	unit_price int(20)  comment '货物单价',
+    del_flag VARCHAR(1) default '1' comment '是否删除',
+    create_by VARCHAR(200) comment '创建人',
+    create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+    update_by VARCHAR(200)   comment '最后更新人',
+    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+   )comment='收货记录详情表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  create table  if not exists T_WMS_TAKE_OUT_RECORD(
+    id int(20) primary key not null auto_increment,
+    take_out_no VARCHAR(40) NOT NULL comment '发货单号',
+	take_out_type VARCHAR(2)  comment '发货类型',
+    business_user VARCHAR(40) NOT NULL comment '业务人员',
+    contract_no VARCHAR(40) NOT NULL comment '合同编号',
+    contract_company VARCHAR(40) NOT NULL comment '合同单位',
+	total_amount int(20)  comment '发货数量',
+	total_weight int(20)  comment '发货总重量',
+	prod_types   int(20)  comment '货品种类数',
+	package_num   int(20)  comment '包裹数',
+	ship_fee   int(20)  comment '运费',
+	load_fee   int(20)  comment '上车费',
+	pile_fee   int(20)    comment '堆码费',
+	others_fee   int(20)  comment '其他杂费',
+    take_out_time TIMESTAMP   comment '发货时间',
+	description VARCHAR(2000) comment '描述',
+    del_flag VARCHAR(1) default '1' comment '是否删除',
+    create_by VARCHAR(200) comment '创建人',
+    create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+    update_by VARCHAR(200)   comment '最后更新人',
+    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+   )comment='发货记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+  create table  if not exists T_WMS_TAKE_OUT_DETAIL(
+    id int(20) primary key not null auto_increment,
+    take_out_no VARCHAR(40) NOT NULL comment '发货单号',
+    prod_no VARCHAR(40) NOT NULL comment '货物ID',
+    prod_name VARCHAR(200) comment '货物名称',
+    prod_unit VARCHAR(40)  comment '货物单位',
+	prod_amount int(20)  comment '货物数量',
+	unit_price int(20)  comment '货物单价',
+    del_flag VARCHAR(1) default '1' comment '是否删除',
+    create_by VARCHAR(200) comment '创建人',
+    create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+    update_by VARCHAR(200)   comment '最后更新人',
+    update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
+   )comment='发货记录详情表' ENGINE=InnoDB DEFAULT CHARSET=utf8;

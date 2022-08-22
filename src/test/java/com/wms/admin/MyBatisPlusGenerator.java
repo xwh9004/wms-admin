@@ -13,17 +13,18 @@ public class MyBatisPlusGenerator {
 
     public static void main(String[] args) {
         String author = "Jesse";
-        String url = "jdbc:mysql://localhost:3306/wms_db";
+        String url = "jdbc:mysql://localhost:3306/gankun_wms_db";
         String username = "root";
         String password = "";
         String path = "D:/我的项目/wms/";
         String xmlPath="D:/我的项目/wms/mapper";
 
         String[] tableNames ={};
-//        String[] tableNames = {"T_WMS_LEASE_CONTRACT",
-//                "T_WMS_LESSEE_ADDRESS",
-//                "T_WMS_LESSEE_INFO",
-//        "T_WMS_MEASUREMENT_UNIT"};
+//        String[] tableNames = {"T_WMS_TAKE_OUT_DETAIL",
+//                "T_WMS_TAKE_OUT_RECORD",
+//                "T_WMS_TAKE_IN_DETAIL",
+//                "T_WMS_CONTRACT_PROD_REL",
+//        "T_WMS_TAKE_IN_RECORD"};
         if(tableNames.length==0){
             return;
         }
