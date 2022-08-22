@@ -46,7 +46,7 @@ public class ContractVO implements Serializable {
     /**
      * 承租方单位地址
      */
-    private String lesseeAddr;
+    private String lesseeAddress;
 
     /**
      * 承租方联系人

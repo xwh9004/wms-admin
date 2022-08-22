@@ -48,8 +48,8 @@ public class LeaseContractEntity extends BaseEntity {
     /**
      * 承租方单位地址
      */
-    @TableField("lessee_addr")
-    private String lesseeAddr;
+    @TableField("lessee_address")
+    private String lesseeAddress;
 
     /**
      * 承租方电话
@@ -134,13 +134,19 @@ public class LeaseContractEntity extends BaseEntity {
     public void setLesseeCompany(String lesseeCompany) {
         this.lesseeCompany = lesseeCompany;
     }
-    public String getLesseeAddr() {
-        return lesseeAddr;
+
+    public String getLesseeAddress() {
+        return lesseeAddress;
     }
 
-    public void setLesseeAddr(String lesseeAddr) {
-        this.lesseeAddr = lesseeAddr;
+    public void setLesseeAddress(String lesseeAddress) {
+        this.lesseeAddress = lesseeAddress;
     }
+
+    public void setBillMethod(String billMethod) {
+        this.billMethod = billMethod;
+    }
+
     public String getLesseeContact() {
         return lesseeContact;
     }
@@ -203,7 +209,7 @@ public class LeaseContractEntity extends BaseEntity {
             ", businessUser=" + businessUser +
             ", lesseeNo=" + lesseeNo +
             ", lesseeCompany=" + lesseeCompany +
-            ", lesseeAddr=" + lesseeAddr +
+            ", lesseeAddress=" + lesseeAddress +
             ", lesseeContact=" + lesseeContact +
             ", lesseePhone=" + lesseePhone +
             ", signDate=" + signDate +

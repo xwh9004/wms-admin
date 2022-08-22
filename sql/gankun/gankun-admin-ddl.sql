@@ -147,7 +147,7 @@ create table  if not exists T_WMS_LEASE_CONTRACT (
   business_user varChar(40) comment '业务人员',
   lessee_no varChar(40) NOT NULL comment '承租方编号',
   lessee_company varChar(200) NOT NULL comment '承租方单位',
-  lessee_addr varChar(200)  comment '承租方单位地址',
+  lessee_address varChar(200)  comment '承租方单位地址',
   lessee_contact varChar(40)  comment '承租方电话',
   lessee_phone varChar(20) comment '承租方单位',
   sign_date   datetime comment '签约日期',
