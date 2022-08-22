@@ -1,7 +1,12 @@
 package com.wms.admin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.TakeOutRecordEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.vo.TakeInVO;
+import com.wms.admin.vo.TakeOutQueryVO;
+import com.wms.admin.vo.TakeOutVO;
 
 /**
  * <p>
@@ -13,4 +18,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITakeOutRecordService extends IService<TakeOutRecordEntity> {
 
+    IPage<TakeInVO> takeOutList(TakeOutQueryVO queryVO, PageParam pageParam);
+
+    void takeOutAdd(TakeOutVO takeOutVO);
 }
