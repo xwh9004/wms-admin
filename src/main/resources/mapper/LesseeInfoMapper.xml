@@ -38,7 +38,7 @@
             and   a.phone like concat('%',#{param.phone},'%')
         </if>
         <if test="param.lesseeNo!=null and param.lesseeNo!=''">
-            and   a.lesseeNo like concat('%',#{param.lesseeNo},'%')
+            and   l.lessee_no like concat('%',#{param.lesseeNo},'%')
         </if>
     </select>
 
