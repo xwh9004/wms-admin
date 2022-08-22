@@ -11,8 +11,8 @@ import java.sql.SQLException;
 
 public class MoneyTypeHandler  extends BaseTypeHandler<Money> {
     @Override
-    public void setNonNullParameter(PreparedStatement preparedStatement, int i, Money o, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setLong(i,o.longValue());
+    public void setNonNullParameter(PreparedStatement preparedStatement, int i, Money money, JdbcType jdbcType) throws SQLException {
+        preparedStatement.setLong(i,money.longValue());
     }
 
     @Override

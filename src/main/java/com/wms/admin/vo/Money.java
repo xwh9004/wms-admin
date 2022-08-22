@@ -11,7 +11,9 @@ import java.math.BigDecimal;
 @JsonSerialize(converter = MoneySerializerConvertor.class)
 public class Money {
 
-    public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
+//    public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
+//    public static final BigDecimal ONE_THOUSAND = BigDecimal.valueOf(1000);
+    public static final BigDecimal TEN_THOUSAND = BigDecimal.valueOf(10000);
 
     private Long longValue;
     private BigDecimal value;
@@ -27,7 +29,7 @@ public class Money {
         return new Money(value);
     }
     public static Money longValueOf(Long value) {
-       return new Money(BigDecimal.valueOf(value).divide(ONE_HUNDRED));
+       return new Money(BigDecimal.valueOf(value).divide(TEN_THOUSAND));
     }
 
     public Long longValue(){
@@ -37,7 +39,7 @@ public class Money {
         BigDecimal val = new BigDecimal(value.longValue());
         val.setScale(2,BigDecimal.ROUND_FLOOR);
         this.value =val;
-        this.longValue = ONE_HUNDRED.multiply(value).toBigInteger().longValue();
+        this.longValue = TEN_THOUSAND.multiply(value).toBigInteger().longValue();
     }
 
     @Override
