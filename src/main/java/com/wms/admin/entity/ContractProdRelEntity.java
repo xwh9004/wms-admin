@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
 
 /**
  * <p>
@@ -36,7 +37,7 @@ public class ContractProdRelEntity extends BaseEntity {
      * 单价/天
      */
     @TableField("lease_unit_price")
-    private Integer leaseUnitPrice;
+    private Money leaseUnitPrice;
 
     public Integer getId() {
         return id;
@@ -59,11 +60,11 @@ public class ContractProdRelEntity extends BaseEntity {
     public void setProdId(String prodId) {
         this.prodId = prodId;
     }
-    public Integer getLeaseUnitPrice() {
+    public Money getLeaseUnitPrice() {
         return leaseUnitPrice;
     }
 
-    public void setLeaseUnitPrice(Integer leaseUnitPrice) {
+    public void setLeaseUnitPrice(Money leaseUnitPrice) {
         this.leaseUnitPrice = leaseUnitPrice;
     }
 

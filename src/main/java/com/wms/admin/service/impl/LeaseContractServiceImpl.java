@@ -2,19 +2,25 @@ package com.wms.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.entity.ContractProdRelEntity;
 import com.wms.admin.entity.LeaseContractEntity;
 import com.wms.admin.entity.LesseeInfoEntity;
+import com.wms.admin.mapper.ContractProdRelMapper;
 import com.wms.admin.mapper.LeaseContractMapper;
 import com.wms.admin.mapper.LesseeInfoMapper;
+import com.wms.admin.service.IContractProdRelService;
 import com.wms.admin.service.ILeaseContractService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.VOUtil;
+import com.wms.admin.vo.ContractProdVO;
 import com.wms.admin.vo.ContractQueryVO;
 import com.wms.admin.vo.ContractVO;
+import com.wms.admin.vo.ProductVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +32,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +48,9 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
 
     @Autowired
     private LesseeInfoMapper lesseeInfoMapper;
+
+    @Autowired
+    private IContractProdRelService contractProdRelService;
 
     @Override
     public List<ContractVO> contractAll() {
@@ -107,6 +113,22 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
             return entity;
         });
         save(contractEntity);
+        Integer contractId = contractEntity.getId();
+
+        if (CollectionUtils.isEmpty(contractVO.getList())) {
+            saveContractProdInfo(contractId, contractVO.getList());
+        }
+    }
+
+    private void saveContractProdInfo(final Integer contractId, List<ContractProdVO> list) {
+        List<ContractProdRelEntity> entityList = list.stream().map(vo -> {
+            ContractProdRelEntity contractProdRelEntity = new ContractProdRelEntity();
+            contractProdRelEntity.setContractId(contractId);
+            contractProdRelEntity.setProdId(vo.getProdId());
+            contractProdRelEntity.setLeaseUnitPrice(vo.getUnitPrice());
+            return contractProdRelEntity;
+        }).collect(Collectors.toList());
+        contractProdRelService.saveBatch(entityList);
     }
 
 
@@ -142,11 +164,18 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         updateById(entity);
     }
 
+    @Transactional
     @Override
     public void deleteContract(Integer id) {
         LeaseContractEntity entity = new LeaseContractEntity();
         entity.setId(id);
         entity.setDelFlag(WMSConstants.DEL_FLG_Y);
         updateById(entity);
+        LambdaUpdateWrapper<ContractProdRelEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper
+                .eq(ContractProdRelEntity::getDelFlag,WMSConstants.DEL_FLG_N)
+                .eq(ContractProdRelEntity::getContractId,id)
+                .set(ContractProdRelEntity::getDelFlag,WMSConstants.DEL_FLG_Y);
+        contractProdRelService.update(updateWrapper);
     }
 }

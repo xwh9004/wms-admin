@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author: xwh90
@@ -92,5 +93,7 @@ public class ContractVO implements Serializable {
      */
     @NotNull(message = "是否有不能为空")
     private String isEffective;
+
+    private List<ContractProdVO> list;
 
 }
