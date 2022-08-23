@@ -100,22 +100,39 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         return null;
     }
 
+    @Transactional
     @Override
     public void takeInUpdate(TakeInVO takeInVO) {
         Assert.notNull(takeInVO.getId(),"收货单ID不能为空");
-        checkForUpdate(takeInVO.getId());
+        TakeInRecordEntity takeInRecordEntity = new TakeInRecordEntity();
+        BeanUtils.copyProperties(takeInVO, takeInRecordEntity);
+        checkForUpdate(takeInVO);
+        updateById(takeInRecordEntity);
+        deleteDetails(takeInVO.getTakeInNo());
+        saveDetails(takeInVO);
     }
 
-    private void checkForUpdate(Integer id) {
-        final TakeInRecordEntity takeInRecordEntity = getById(id);
+    private void deleteDetails(String takeInNo) {
+        LambdaUpdateWrapper<TakeInDetailEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper
+                .eq(TakeInDetailEntity::getTakeInNo,takeInNo)
+                .set(TakeInDetailEntity::getDelFlag,WMSConstants.DEL_FLG_Y);
+        takeInDetailService.remove(updateWrapper);
+    }
+
+    private void checkForUpdate(TakeInVO takeInVO) {
+        final TakeInRecordEntity takeInRecordEntity = getById(takeInVO.getId());
         if(takeInRecordEntity == null){
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"收货单");
         }
         if(StringUtils.equals(takeInRecordEntity.getDelFlag(), WMSConstants.DEL_FLG_Y)){
             throw new BusinessException(ResultCode.RESOURCE_DELETED,"收货单");
         }
-        if(StringUtils.equals(takeInRecordEntity.getDelFlag(), WMSConstants.DEL_FLG_Y)){
-            throw new BusinessException(ResultCode.RESOURCE_DELETED,"收货单");
+        if(StringUtils.equals(takeInRecordEntity.getStatus(), WMSConstants.TAKEN_IN)){
+            throw new BusinessException(ResultCode.DATA_NO_MODIFY,"收货单已入库");
+        }
+        if(!StringUtils.equals(takeInRecordEntity.getTakeInNo(), takeInVO.getTakeInNo())){
+            throw new BusinessException(ResultCode.DATA_NO_MODIFY,"收货单号");
         }
     }
 

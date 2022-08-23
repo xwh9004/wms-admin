@@ -18,6 +18,9 @@ public interface WMSConstants {
     public static final String STATUS_1 = "1";
     public static final String STATUS_0= "0";
 
+    public static final String TAKE_IN_INIT = "0";
+    public static final String TAKEN_IN= "1";
+
     /**
      * 合同未生效
      */
