@@ -11,6 +11,7 @@ import com.wms.admin.vo.TakeInQueryVO;
 import com.wms.admin.vo.TakeInVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,12 +53,21 @@ public class TakeInRecordController {
         takeInRecordService.takeInUpdate(takeInVO);
         return Result.success();
     }
+
     @ApiOperation(value = "删除收货单")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @GetMapping("/detail/{id}")
     public Result detail(@PathVariable("id") Integer id){
         TakeInVO result = takeInRecordService.detail(id);
         return Result.success().data(result);
+    }
+
+    @ApiOperation(value = "修改收货单")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/taken-in/{id}")
+    public Result update(@PathVariable("id") Integer id){
+        takeInRecordService.takenIn(id);
+        return Result.success();
     }
 
 }

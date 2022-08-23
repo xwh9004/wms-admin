@@ -24,4 +24,6 @@ public interface ITakeInRecordService extends IService<TakeInRecordEntity> {
     TakeInVO detail(Integer id);
 
     void takeInUpdate(TakeInVO takeInVO);
+
+    void takenIn(Integer id);
 }
