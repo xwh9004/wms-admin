@@ -20,4 +20,8 @@ public interface ITakeInRecordService extends IService<TakeInRecordEntity> {
     IPage<TakeInVO> takeInList(TakeInQueryVO queryVO, PageParam pageParam);
 
     void takeInAdd(TakeInVO takeInVO);
+
+    TakeInVO detail(Integer id);
+
+    void takeInUpdate(TakeInVO takeInVO);
 }

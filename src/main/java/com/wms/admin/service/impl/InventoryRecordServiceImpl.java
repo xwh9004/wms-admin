@@ -7,24 +7,17 @@ import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.InventoryDetailRecordEntity;
-import com.wms.admin.entity.ReceiptRecordEntity;
-import com.wms.admin.entity.StorageInDetailRecordEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.InventoryDetailRecordMapper;
 import com.wms.admin.service.IInventoryRecordService;
 import com.wms.admin.service.IReceiptRecordService;
-import com.wms.admin.util.ReceiptUtil;
-import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * <p>

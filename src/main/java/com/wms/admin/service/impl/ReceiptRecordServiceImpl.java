@@ -18,7 +18,7 @@ import com.wms.admin.mapper.StoragesRegionMapper;
 import com.wms.admin.mapper.UserMapper;
 import com.wms.admin.service.IReceiptRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wms.admin.util.ReceiptUtil;
+import com.wms.admin.util.SequenceUtil;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.Money;
 import com.wms.admin.vo.ReceiptRecordQueryVO;
@@ -67,7 +67,7 @@ public class ReceiptRecordServiceImpl extends ServiceImpl<ReceiptRecordMapper, R
         checkRecord(receiptRecordDto);
         final ReceiptRecordEntity recordEntity = new ReceiptRecordEntity();
         receiptRecordDto.setId(UUIDUtil.uuid());
-        receiptRecordDto.setReceiptNo(ReceiptUtil.generateNo(receiptRecordDto.getReceiptType()));
+        receiptRecordDto.setReceiptNo(SequenceUtil.generateNoByDate(receiptRecordDto.getReceiptType()));
         BeanUtils.copyProperties(receiptRecordDto, recordEntity);
         recordEntity.setCreateBy(UserInfoContext.getUsername());
         recordEntity.setUpdateBy(UserInfoContext.getUsername());

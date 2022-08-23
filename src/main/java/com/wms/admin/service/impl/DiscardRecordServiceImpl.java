@@ -1,33 +1,24 @@
 package com.wms.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
-import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.dto.ReceiptRecordDto;
 import com.wms.admin.entity.DiscardDetailRecordEntity;
-import com.wms.admin.entity.ReceiptRecordEntity;
-import com.wms.admin.entity.StorageInDetailRecordEntity;
 import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.DiscardDetailRecordMapper;
 import com.wms.admin.service.IDiscardRecordService;
 import com.wms.admin.service.IReceiptRecordService;
 import com.wms.admin.service.IStockChangeRecordService;
-import com.wms.admin.util.ReceiptUtil;
-import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class DiscardRecordServiceImpl extends ServiceImpl<DiscardDetailRecordMapper, DiscardDetailRecordEntity> implements IDiscardRecordService {
