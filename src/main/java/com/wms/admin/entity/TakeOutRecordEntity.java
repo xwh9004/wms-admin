@@ -111,6 +111,9 @@ public class TakeOutRecordEntity extends BaseEntity {
     @TableField("description")
     private String description;
 
+    @TableField("status")
+    private String status;
+
     public Integer getId() {
         return id;
     }
@@ -224,6 +227,14 @@ public class TakeOutRecordEntity extends BaseEntity {
         this.description = description;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "TakeOutRecordEntity{" +
@@ -243,6 +254,7 @@ public class TakeOutRecordEntity extends BaseEntity {
             ", othersFee=" + othersFee +
             ", takeOutTime=" + takeOutTime +
             ", description=" + description +
+            ", status=" + status +
         "}";
     }
 }

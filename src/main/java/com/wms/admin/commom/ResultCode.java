@@ -4,6 +4,7 @@ public enum ResultCode {
     SUCCESS("000000", "成功"),
     RESOURCE_EXISTS("400001", "%s已存在"),
     RESOURCE_NOT_EXISTS("400002", "%s不存在"),
+    RESOURCE_DELETED("400003", "%s已删除"),
     RESOURCE_NOT_AVAILABLE("400003", "%s不可用"),
     PARAM_NOT_NULL("400044", "参数%s,不能为空"),
     PARAM_ERROR("400045", "参数错误,%s"),

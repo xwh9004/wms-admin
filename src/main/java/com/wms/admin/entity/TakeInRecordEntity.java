@@ -94,7 +94,11 @@ public class TakeInRecordEntity extends BaseEntity {
      */
     @TableField("take_in_time")
     private LocalDateTime takeInTime;
-
+    /**
+     * 0 未入库 1 已签收
+     */
+    @TableField("status")
+    private String status;
     /**
      * 描述
      */
@@ -189,6 +193,14 @@ public class TakeInRecordEntity extends BaseEntity {
         this.othersFee = othersFee;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public LocalDateTime getTakeInTime() {
         return takeInTime;
     }
@@ -221,6 +233,7 @@ public class TakeInRecordEntity extends BaseEntity {
             ", othersFee=" + othersFee +
             ", takeInTime=" + takeInTime +
             ", description=" + description +
+            ", status=" + status +
         "}";
     }
 }

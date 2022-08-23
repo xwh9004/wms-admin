@@ -102,7 +102,21 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
 
     @Override
     public void takeInUpdate(TakeInVO takeInVO) {
+        Assert.notNull(takeInVO.getId(),"收货单ID不能为空");
+        checkForUpdate(takeInVO.getId());
+    }
 
+    private void checkForUpdate(Integer id) {
+        final TakeInRecordEntity takeInRecordEntity = getById(id);
+        if(takeInRecordEntity == null){
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"收货单");
+        }
+        if(StringUtils.equals(takeInRecordEntity.getDelFlag(), WMSConstants.DEL_FLG_Y)){
+            throw new BusinessException(ResultCode.RESOURCE_DELETED,"收货单");
+        }
+        if(StringUtils.equals(takeInRecordEntity.getDelFlag(), WMSConstants.DEL_FLG_Y)){
+            throw new BusinessException(ResultCode.RESOURCE_DELETED,"收货单");
+        }
     }
 
     @Override
