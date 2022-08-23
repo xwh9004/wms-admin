@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
+
 import java.time.LocalDateTime;
 
 /**
@@ -73,19 +75,19 @@ public class TakeInRecordEntity extends BaseEntity {
      * 卸车费
      */
     @TableField("unload_fee")
-    private Integer unloadFee;
+    private Money unloadFee;
 
     /**
      * 堆码费
      */
     @TableField("pile_fee")
-    private Integer pileFee;
+    private Money pileFee;
 
     /**
      * 其他杂费
      */
     @TableField("others_fee")
-    private Integer othersFee;
+    private Money othersFee;
 
     /**
      * 收货时间
@@ -162,27 +164,31 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setProdTypes(Integer prodTypes) {
         this.prodTypes = prodTypes;
     }
-    public Integer getUnloadFee() {
+
+    public Money getUnloadFee() {
         return unloadFee;
     }
 
-    public void setUnloadFee(Integer unloadFee) {
+    public void setUnloadFee(Money unloadFee) {
         this.unloadFee = unloadFee;
     }
-    public Integer getPileFee() {
+
+    public Money getPileFee() {
         return pileFee;
     }
 
-    public void setPileFee(Integer pileFee) {
+    public void setPileFee(Money pileFee) {
         this.pileFee = pileFee;
     }
-    public Integer getOthersFee() {
+
+    public Money getOthersFee() {
         return othersFee;
     }
 
-    public void setOthersFee(Integer othersFee) {
+    public void setOthersFee(Money othersFee) {
         this.othersFee = othersFee;
     }
+
     public LocalDateTime getTakeInTime() {
         return takeInTime;
     }
