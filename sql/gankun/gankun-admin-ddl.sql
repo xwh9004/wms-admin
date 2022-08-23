@@ -155,7 +155,7 @@ create table  if not exists T_WMS_LEASE_CONTRACT (
   expire_date   datetime comment '到期日期',
   deposit   int(11) comment '合同押金',
   bill_method   VARCHAR(1) comment '1 算头又算尾 2 算头不算尾',
-  is_effective VARCHAR(1) comment '是否有效',
+  status VARCHAR(1) comment '0 未生效 1 已生效 2 已失效',
   del_flag VARCHAR(1) default '1' comment '是否删除',
   create_by VARCHAR(200) comment '创建人',
   create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '创建时间',

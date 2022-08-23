@@ -46,8 +46,8 @@ public class ContractQueryVO implements Serializable {
     private String billMethod;
 
     /**
-     * 是否有效
+     * 状态
      */
-    private String isEffective;
+    private String status;
 
 }

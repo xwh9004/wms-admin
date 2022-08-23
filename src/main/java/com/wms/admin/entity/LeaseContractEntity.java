@@ -94,10 +94,10 @@ public class LeaseContractEntity extends BaseEntity {
     private String billMethod;
 
     /**
-     * 默认地址
+     * 0 未生效 1 已生效 2 已失效
      */
-    @TableField("is_effective")
-    private String isEffective;
+    @TableField("status")
+    private String status;
 
     public Integer getId() {
         return id;
@@ -193,12 +193,12 @@ public class LeaseContractEntity extends BaseEntity {
         return billMethod;
     }
 
-    public String getIsEffective() {
-        return isEffective;
+    public String getStatus() {
+        return status;
     }
 
-    public void setIsEffective(String isEffective) {
-        this.isEffective = isEffective;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -217,7 +217,7 @@ public class LeaseContractEntity extends BaseEntity {
             ", expireDate=" + expireDate +
             ", deposit=" + deposit +
             ", billMethod=" + billMethod +
-            ", isEffective=" + isEffective +
+            ", status=" + status +
         "}";
     }
 }

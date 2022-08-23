@@ -89,8 +89,8 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         if (StringUtils.isNotBlank(queryVO.getBillMethod())) {
             queryCond.eq(LeaseContractEntity::getBillMethod, queryVO.getBillMethod());
         }
-        if (StringUtils.isNotBlank(queryVO.getIsEffective())) {
-            queryCond.eq(LeaseContractEntity::getIsEffective, queryVO.getIsEffective());
+        if (StringUtils.isNotBlank(queryVO.getStatus())) {
+            queryCond.eq(LeaseContractEntity::getStatus, queryVO.getStatus());
         }
         queryCond.eq(LeaseContractEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         page = page(page, queryCond);
@@ -109,6 +109,7 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
 
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
+            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             BeanUtils.copyProperties(vo, entity);
             return entity;
         });
@@ -160,7 +161,7 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     public void ineffectiveContract(Integer id) {
         LeaseContractEntity entity = new LeaseContractEntity();
         entity.setId(id);
-        entity.setIsEffective(WMSConstants.INEFFECTIVE);
+        entity.setStatus(WMSConstants.CONTRACT_INEFFECTIVE);
         updateById(entity);
     }
 
