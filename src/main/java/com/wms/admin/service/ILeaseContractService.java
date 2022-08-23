@@ -28,4 +28,6 @@ public interface ILeaseContractService extends IService<LeaseContractEntity> {
     void ineffectiveContract(Integer id);
 
     void deleteContract(Integer id);
+
+    void updateContract(ContractVO contractVO);
 }
