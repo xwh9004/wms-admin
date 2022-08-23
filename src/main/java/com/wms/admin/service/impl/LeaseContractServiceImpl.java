@@ -179,4 +179,13 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
                 .set(ContractProdRelEntity::getDelFlag,WMSConstants.DEL_FLG_Y);
         contractProdRelService.update(updateWrapper);
     }
+
+    @Override
+    public void updateContract(ContractVO contractVO) {
+        checkForUpdate(contractVO.getId());
+    }
+
+    private void checkForUpdate(Integer id) {
+
+    }
 }

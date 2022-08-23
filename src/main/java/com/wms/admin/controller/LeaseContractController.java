@@ -57,6 +57,14 @@ public class LeaseContractController {
         return Result.success();
     }
 
+    @ApiOperation(value = "新增合同")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/update")
+    public Result update(@RequestBody @Validated ContractVO contractVO) {
+        contractService.updateContract(contractVO);
+        return Result.success();
+    }
+
 
     @ApiOperation(value = "合同失效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
