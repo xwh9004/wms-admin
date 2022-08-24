@@ -91,9 +91,9 @@ public class ContractVO implements Serializable {
     /**
      * 是否有效
      */
-    @NotNull(message = "是否有不能为空")
+    @NotNull(message = "是否有效不能为空")
     private String isEffective;
-
+    @NotNull(message = "合同明细不能为空")
     private List<ContractProdVO> list;
 
 }

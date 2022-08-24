@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.commom.PageParam;
+import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.ContractProdRelEntity;
 import com.wms.admin.entity.LeaseContractEntity;
 import com.wms.admin.entity.LesseeInfoEntity;
+import com.wms.admin.exception.BusinessException;
 import com.wms.admin.mapper.ContractProdRelMapper;
 import com.wms.admin.mapper.LeaseContractMapper;
 import com.wms.admin.mapper.LesseeInfoMapper;
@@ -21,6 +23,7 @@ import com.wms.admin.vo.ContractProdVO;
 import com.wms.admin.vo.ContractQueryVO;
 import com.wms.admin.vo.ContractVO;
 import com.wms.admin.vo.ProductVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,7 @@ import java.util.stream.Collectors;
  * @author Jesse
  * @since 2022-08-01 16:53:12
  */
+@Slf4j
 @Service
 public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, LeaseContractEntity> implements ILeaseContractService {
 
@@ -106,19 +110,16 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     @Override
     public void addContract(ContractVO contractVO) {
         checkForAdd(contractVO);
-
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
             entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             BeanUtils.copyProperties(vo, entity);
             return entity;
         });
-        save(contractEntity);
-        Integer contractId = contractEntity.getId();
 
-        if (CollectionUtils.isEmpty(contractVO.getList())) {
-            saveContractProdInfo(contractId, contractVO.getList());
-        }
+        save(contractEntity);
+
+        saveContractProdInfo(contractEntity.getId(), contractVO.getList());
     }
 
     private void saveContractProdInfo(final Integer contractId, List<ContractProdVO> list) {
@@ -132,6 +133,23 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         contractProdRelService.saveBatch(entityList);
     }
 
+    private void checkDuplicateProd(List<ContractProdVO> list) {
+
+        //判断是否有相同的货物
+        List<String> duplicateProds = list.stream()
+                .collect(
+                        Collectors.groupingBy(prod -> prod.getProdId(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().longValue() > 1)
+                .map(entry -> entry.getKey())
+                .collect(Collectors.toList());
+
+        if (!CollectionUtils.isEmpty(duplicateProds)) {
+            throw new BusinessException(ResultCode.PARAM_ERROR, String.format("货物%s重复添加", duplicateProds.toString()));
+        }
+    }
+
 
     private void checkForAdd(ContractVO contractVO) {
         Assert.isTrue(!existContractNo(contractVO.getLesseeNo()), "合同编号已经存在");
@@ -141,6 +159,7 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         LocalDateTime expireDate = contractVO.getExpireDate();
         Assert.isTrue(!effectiveDate.isAfter(expireDate), "生效时间不能晚于过期时间");
         Assert.isTrue(!signDate.isAfter(effectiveDate), "签约时间不能晚于生效时时间");
+        checkDuplicateProd(contractVO.getList());
     }
 
     private boolean existContractNo(String contractNo) {
@@ -174,18 +193,55 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         updateById(entity);
         LambdaUpdateWrapper<ContractProdRelEntity> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
-                .eq(ContractProdRelEntity::getDelFlag,WMSConstants.DEL_FLG_N)
-                .eq(ContractProdRelEntity::getContractId,id)
-                .set(ContractProdRelEntity::getDelFlag,WMSConstants.DEL_FLG_Y);
+                .eq(ContractProdRelEntity::getDelFlag, WMSConstants.DEL_FLG_N)
+                .eq(ContractProdRelEntity::getContractId, id)
+                .set(ContractProdRelEntity::getDelFlag, WMSConstants.DEL_FLG_Y);
         contractProdRelService.update(updateWrapper);
     }
 
     @Override
     public void updateContract(ContractVO contractVO) {
         checkForUpdate(contractVO.getId());
+        LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
+            LeaseContractEntity entity = new LeaseContractEntity();
+            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
+            BeanUtils.copyProperties(vo, entity);
+            return entity;
+        });
+        contractEntity.setId(contractVO.getId());
+
+        updateById(contractEntity);
+
+        deleteContractProdInfo(contractEntity.getId());
+
+        saveContractProdInfo(contractEntity.getId(), contractVO.getList());
+    }
+
+    @Override
+    public void effectContract(Integer id) {
+        LeaseContractEntity entity = new LeaseContractEntity();
+        entity.setId(id);
+        entity.setStatus(WMSConstants.CONTRACT_EFFECT);
+        updateById(entity);
+    }
+
+    private void deleteContractProdInfo(Integer id) {
+        LambdaQueryWrapper<ContractProdRelEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ContractProdRelEntity::getContractId,id);
+        contractProdRelService.remove(queryWrapper);
     }
 
     private void checkForUpdate(Integer id) {
+        Assert.notNull(id, "合同ID不能为空");
+
+        final LeaseContractEntity contractEntity = getById(id);
+
+        Assert.notNull(contractEntity, "合同不存在");
+        Assert.isTrue(StringUtils.equals(contractEntity.getDelFlag(), WMSConstants.DEL_FLG_N),
+                "合同已删除");
+        Assert.isTrue(!StringUtils.equals(contractEntity.getStatus(), WMSConstants.CONTRACT_EFFECT),
+                "合同已生效，不能修改");
 
     }
+
 }

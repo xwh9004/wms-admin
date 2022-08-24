@@ -70,10 +70,16 @@ public class LeaseContractController {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/ineffective/{id}")
     public Result ineffective(@PathVariable("id") Integer id) {
-        contractService.deleteContract(id);
+        contractService.ineffectiveContract(id);
         return Result.success();
     }
-
+    @ApiOperation(value = "合同失效")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/effect/{id}")
+    public Result effect(@PathVariable("id") Integer id) {
+        contractService.effectContract(id);
+        return Result.success();
+    }
 
     @ApiOperation(value = "合同删除")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
