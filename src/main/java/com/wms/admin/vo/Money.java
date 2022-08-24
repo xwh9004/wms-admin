@@ -17,6 +17,7 @@ public class Money {
 
     private Long longValue;
     private BigDecimal value;
+    public  final Money ZERO = Money.valueOf("0");
 
     public Money() {
     }
