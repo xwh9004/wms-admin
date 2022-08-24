@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
@@ -17,23 +18,22 @@ import com.wms.admin.service.ITakeInDetailService;
 import com.wms.admin.service.ITakeInRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.SequenceUtil;
+import com.wms.admin.util.WmsUtils;
+import com.wms.admin.vo.Money;
 import com.wms.admin.vo.TakeInProdVO;
 import com.wms.admin.vo.TakeInQueryVO;
 import com.wms.admin.vo.TakeInVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -55,9 +55,36 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
 
     @Override
     public IPage<TakeInVO> takeInList(TakeInQueryVO queryVO, PageParam pageParam) {
+        WmsUtils.checkDateRange(queryVO.getTakeInStartTime(),queryVO.getTakeInEndTime());
 
-        return null;
+        Page page = Page.of(pageParam.getPage(),pageParam.getLimit());
+
+        LambdaQueryWrapper<TakeInRecordEntity> queryWrapper = new LambdaQueryWrapper<>();
+        if(StringUtils.isNotBlank(queryVO.getTakeInNo())){
+            queryWrapper.like(TakeInRecordEntity::getTakeInNo,queryVO.getTakeInNo());
+        }
+        if(StringUtils.isNotBlank(queryVO.getContractNo())){
+            queryWrapper.like(TakeInRecordEntity::getContractNo,queryVO.getContractNo());
+        }
+        if(StringUtils.isNotBlank(queryVO.getContractCompany())){
+            queryWrapper.like(TakeInRecordEntity::getContractCompany,queryVO.getContractCompany());
+        }
+        if(Objects.nonNull(queryVO.getTakeInStartTime())){
+            queryWrapper.ge(TakeInRecordEntity::getTakeInTime,queryVO.getTakeInStartTime());
+        }
+        if(Objects.nonNull(queryVO.getTakeInEndTime())){
+            queryWrapper.le(TakeInRecordEntity::getTakeInTime,queryVO.getTakeInEndTime());
+        }
+        page =page(page,queryWrapper);
+        IPage result = page.convert(e -> {
+            TakeInVO record = new TakeInVO();
+            BeanUtils.copyProperties(e, record);
+            return record;
+        });
+        return result;
     }
+
+
 
     @Transactional
     @Override
@@ -68,23 +95,64 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         takeInVO.setTakeInNo(takeInNo);
         TakeInRecordEntity takeInRecordEntity = new TakeInRecordEntity();
         BeanUtils.copyProperties(takeInVO, takeInRecordEntity);
-        //计算prodTypes ,totalAmount
+        List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getProdList());
+        //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
+        takeInRecordEntity.setProdTypes(prodList.size());
+        takeInRecordEntity.setProdTypes(totalNumbs(prodList));
+        takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
+        takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(),takeInVO));
 
         save(takeInRecordEntity);
+
+
         saveDetails(takeInVO);
+    }
+
+    private Money totalFee(Money totalPrices,TakeInVO takeInVO){
+      return   totalPrices.add(takeInVO.getPileFee()).add(takeInVO.getUnloadFee());
+    }
+
+    private Money prodTotalPrices(List<TakeInDetailEntity> prodList) {
+        Money prodTotalPrices = prodList
+                .stream()
+                .reduce(Money.valueOf(BigDecimal.ZERO),
+                        (totalPrice, e) -> totalPrice.add(e.getUnitPrice().multiply(e.getProdAmount())), Money::add);
+        return prodTotalPrices;
+    }
+
+    private Integer totalNumbs(List<TakeInDetailEntity> prodList ){
+        return prodList
+                .stream()
+                .reduce(0, (total, e) -> total + e.getProdAmount(), Integer::sum);
+    }
+
+    private List<TakeInDetailEntity> trim2ProdDetailList( List<TakeInProdVO> prodList) {
+        //货物整理，按货物编号分类
+        Map<String, TakeInDetailEntity> detailMap = new HashMap<>();
+        prodList.stream().forEach(prodVO -> {
+            if (detailMap.containsKey(prodVO.getProdId())) {
+                TakeInDetailEntity takeInDetailEntity = detailMap.get(prodVO.getProdId());
+                takeInDetailEntity.setProdAmount(takeInDetailEntity.getProdAmount() + prodVO.getProdAmount());
+            } else {
+                TakeInDetailEntity takeInDetailEntity = new TakeInDetailEntity();
+                BeanUtils.copyProperties(prodVO, takeInDetailEntity);
+                detailMap.put(prodVO.getProdId(), takeInDetailEntity);
+            }
+        });
+        return detailMap.values().stream().collect(Collectors.toList());
     }
 
     private void checkForAdd(TakeInVO takeInVO) {
         LambdaQueryWrapper<LeaseContractEntity> queryCond = new LambdaQueryWrapper<>();
-        queryCond.eq(LeaseContractEntity::getContractNo,takeInVO.getContractNo())
-        .eq(LeaseContractEntity::getDelFlag, WMSConstants.DEL_FLG_N);
+        queryCond.eq(LeaseContractEntity::getContractNo, takeInVO.getContractNo())
+                .eq(LeaseContractEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         LeaseContractEntity contract = leaseContractMapper.selectOne(queryCond);
 
-        if(contract == null){
-            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"合同"+takeInVO.getContractNo());
+        if (contract == null) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "合同" + takeInVO.getContractNo());
         }
-        if(!StringUtils.equals(contract.getStatus(),WMSConstants.CONTRACT_EFFECT)){
-            throw new BusinessException(ResultCode.PARAM_ERROR,"不是有效合同");
+        if (!StringUtils.equals(contract.getStatus(), WMSConstants.CONTRACT_EFFECT)) {
+            throw new BusinessException(ResultCode.PARAM_ERROR, "不是有效合同");
         }
     }
 
@@ -104,16 +172,16 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
     @Override
     public TakeInVO detail(Integer id) {
         TakeInRecordEntity takeInRecord = getById(id);
-        Assert.notNull(takeInRecord,"收货单不存在");
-        Assert.isTrue(StringUtils.equals(takeInRecord.getDelFlag(),WMSConstants.DEL_FLG_N),"收货单已删除");
+        Assert.notNull(takeInRecord, "收货单不存在");
+        Assert.isTrue(StringUtils.equals(takeInRecord.getDelFlag(), WMSConstants.DEL_FLG_N), "收货单已删除");
 
         LambdaQueryWrapper<TakeInDetailEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TakeInDetailEntity::getTakeInNo,takeInRecord.getTakeInNo())
-                .eq(TakeInDetailEntity::getDelFlag,WMSConstants.DEL_FLG_N);
+        queryWrapper.eq(TakeInDetailEntity::getTakeInNo, takeInRecord.getTakeInNo())
+                .eq(TakeInDetailEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         List<TakeInDetailEntity> detailList = takeInDetailService.list(queryWrapper);
         TakeInVO result = new TakeInVO();
-        BeanUtils.copyProperties(takeInRecord,result);
-        if(!CollectionUtils.isEmpty(detailList)){
+        BeanUtils.copyProperties(takeInRecord, result);
+        if (!CollectionUtils.isEmpty(detailList)) {
             List<TakeInProdVO> prodList = detailList.stream().map(e -> {
                 TakeInProdVO prodVO = new TakeInProdVO();
                 BeanUtils.copyProperties(e, prodVO);
@@ -127,45 +195,56 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
     @Transactional
     @Override
     public void takeInUpdate(TakeInVO takeInVO) {
-        Assert.notNull(takeInVO.getId(),"收货单ID不能为空");
+        Assert.notNull(takeInVO.getId(), "收货单ID不能为空");
+
+        checkForUpdate(takeInVO);
+
         TakeInRecordEntity takeInRecordEntity = new TakeInRecordEntity();
         BeanUtils.copyProperties(takeInVO, takeInRecordEntity);
-        checkForUpdate(takeInVO);
+        List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getProdList());
+        //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
+        takeInRecordEntity.setProdTypes(prodList.size());
+        takeInRecordEntity.setProdTypes(totalNumbs(prodList));
+        takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
+        takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(),takeInVO));
+
         updateById(takeInRecordEntity);
+
         deleteDetails(takeInVO.getTakeInNo());
+
         saveDetails(takeInVO);
     }
 
     private void deleteDetails(String takeInNo) {
         LambdaUpdateWrapper<TakeInDetailEntity> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
-                .eq(TakeInDetailEntity::getTakeInNo,takeInNo)
-                .set(TakeInDetailEntity::getDelFlag,WMSConstants.DEL_FLG_Y);
+                .eq(TakeInDetailEntity::getTakeInNo, takeInNo)
+                .set(TakeInDetailEntity::getDelFlag, WMSConstants.DEL_FLG_Y);
         takeInDetailService.remove(updateWrapper);
     }
 
     private void checkForUpdate(TakeInVO takeInVO) {
         final TakeInRecordEntity takeInRecordEntity = getById(takeInVO.getId());
-        if(takeInRecordEntity == null){
-            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS,"收货单");
+        if (takeInRecordEntity == null) {
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "收货单");
         }
-        if(StringUtils.equals(takeInRecordEntity.getDelFlag(), WMSConstants.DEL_FLG_Y)){
-            throw new BusinessException(ResultCode.RESOURCE_DELETED,"收货单");
+        if (StringUtils.equals(takeInRecordEntity.getDelFlag(), WMSConstants.DEL_FLG_Y)) {
+            throw new BusinessException(ResultCode.RESOURCE_DELETED, "收货单");
         }
-        if(StringUtils.equals(takeInRecordEntity.getStatus(), WMSConstants.TAKEN_IN)){
-            throw new BusinessException(ResultCode.DATA_NO_MODIFY,"收货单已入库");
+        if (StringUtils.equals(takeInRecordEntity.getStatus(), WMSConstants.TAKEN_IN)) {
+            throw new BusinessException(ResultCode.DATA_NO_MODIFY, "收货单已入库");
         }
-        if(!StringUtils.equals(takeInRecordEntity.getTakeInNo(), takeInVO.getTakeInNo())){
-            throw new BusinessException(ResultCode.DATA_NO_MODIFY,"收货单号");
+        if (!StringUtils.equals(takeInRecordEntity.getTakeInNo(), takeInVO.getTakeInNo())) {
+            throw new BusinessException(ResultCode.DATA_NO_MODIFY, "收货单号");
         }
     }
 
     @Override
     public void takenIn(Integer id) {
         TakeInRecordEntity takeInRecord = getById(id);
-        Assert.notNull(takeInRecord,"收货单不存在");
-        Assert.isTrue(StringUtils.equals(takeInRecord.getDelFlag(),WMSConstants.DEL_FLG_N),"收货单已删除");
-        Assert.isTrue(StringUtils.equals(takeInRecord.getStatus(),WMSConstants.TAKE_IN_INIT),"收货单不能重复签收");
+        Assert.notNull(takeInRecord, "收货单不存在");
+        Assert.isTrue(StringUtils.equals(takeInRecord.getDelFlag(), WMSConstants.DEL_FLG_N), "收货单已删除");
+        Assert.isTrue(StringUtils.equals(takeInRecord.getStatus(), WMSConstants.TAKE_IN_INIT), "收货单不能重复签收");
 
         takeInRecord.setStatus(WMSConstants.TAKEN_IN);
         updateById(takeInRecord);
