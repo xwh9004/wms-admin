@@ -17,11 +17,14 @@ import com.wms.admin.service.ITakeInDetailService;
 import com.wms.admin.service.ITakeInRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.SequenceUtil;
+import com.wms.admin.vo.TakeInProdVO;
 import com.wms.admin.vo.TakeInQueryVO;
 import com.wms.admin.vo.TakeInVO;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -52,6 +55,7 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
 
     @Override
     public IPage<TakeInVO> takeInList(TakeInQueryVO queryVO, PageParam pageParam) {
+
         return null;
     }
 
@@ -64,6 +68,8 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         takeInVO.setTakeInNo(takeInNo);
         TakeInRecordEntity takeInRecordEntity = new TakeInRecordEntity();
         BeanUtils.copyProperties(takeInVO, takeInRecordEntity);
+        //计算prodTypes ,totalAmount
+
         save(takeInRecordEntity);
         saveDetails(takeInVO);
     }
@@ -97,7 +103,25 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
 
     @Override
     public TakeInVO detail(Integer id) {
-        return null;
+        TakeInRecordEntity takeInRecord = getById(id);
+        Assert.notNull(takeInRecord,"收货单不存在");
+        Assert.isTrue(StringUtils.equals(takeInRecord.getDelFlag(),WMSConstants.DEL_FLG_N),"收货单已删除");
+
+        LambdaQueryWrapper<TakeInDetailEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TakeInDetailEntity::getTakeInNo,takeInRecord.getTakeInNo())
+                .eq(TakeInDetailEntity::getDelFlag,WMSConstants.DEL_FLG_N);
+        List<TakeInDetailEntity> detailList = takeInDetailService.list(queryWrapper);
+        TakeInVO result = new TakeInVO();
+        BeanUtils.copyProperties(takeInRecord,result);
+        if(!CollectionUtils.isEmpty(detailList)){
+            List<TakeInProdVO> prodList = detailList.stream().map(e -> {
+                TakeInProdVO prodVO = new TakeInProdVO();
+                BeanUtils.copyProperties(e, prodVO);
+                return prodVO;
+            }).collect(Collectors.toList());
+            result.setProdList(prodList);
+        }
+        return result;
     }
 
     @Transactional
@@ -138,6 +162,13 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
 
     @Override
     public void takenIn(Integer id) {
+        TakeInRecordEntity takeInRecord = getById(id);
+        Assert.notNull(takeInRecord,"收货单不存在");
+        Assert.isTrue(StringUtils.equals(takeInRecord.getDelFlag(),WMSConstants.DEL_FLG_N),"收货单已删除");
+        Assert.isTrue(StringUtils.equals(takeInRecord.getStatus(),WMSConstants.TAKE_IN_INIT),"收货单不能重复签收");
+
+        takeInRecord.setStatus(WMSConstants.TAKEN_IN);
+        updateById(takeInRecord);
 
     }
 }

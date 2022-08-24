@@ -49,7 +49,6 @@ public class TakeInVO implements Serializable {
     /**
      * 收货数量
      */
-    @NotNull(message = "收货数量不能为空")
     private Integer totalAmount;
 
     /**
@@ -60,7 +59,6 @@ public class TakeInVO implements Serializable {
     /**
      * 货品种类数
      */
-    @NotNull(message = "收货种数不能为空")
     private Integer prodTypes;
 
     /**

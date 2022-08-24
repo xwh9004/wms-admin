@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.wms.admin.entity.BaseEntity;
 import com.wms.admin.vo.Money;
 
 import java.time.LocalDateTime;
@@ -54,22 +53,34 @@ public class TakeInRecordEntity extends BaseEntity {
     private String contractCompany;
 
     /**
-     * 收货数量
+     * 收货单总费用
      */
-    @TableField("total_amount")
-    private Integer totalAmount;
+    @TableField("total_fee")
+    private Money totalFee;
 
     /**
      * 收货总重量
      */
-    @TableField("total_weight")
-    private Integer totalWeight;
+    @TableField("prod_total_weight")
+    private Integer prodTotalWeight;
 
     /**
      * 货品种类数
      */
     @TableField("prod_types")
     private Integer prodTypes;
+
+    /**
+     * 货品数量
+     */
+    @TableField("prod_numbs")
+    private Integer prodNumbs;
+
+    /**
+     * 货品总价
+     */
+    @TableField("prod_total_prices")
+    private Money prodTotalPrices;
 
     /**
      * 卸车费
@@ -112,6 +123,7 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getTakeInNo() {
         return takeInNo;
     }
@@ -119,6 +131,7 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setTakeInNo(String takeInNo) {
         this.takeInNo = takeInNo;
     }
+
     public String getTakeInType() {
         return takeInType;
     }
@@ -126,6 +139,7 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setTakeInType(String takeInType) {
         this.takeInType = takeInType;
     }
+
     public String getBusinessUser() {
         return businessUser;
     }
@@ -133,6 +147,7 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setBusinessUser(String businessUser) {
         this.businessUser = businessUser;
     }
+
     public String getContractNo() {
         return contractNo;
     }
@@ -140,6 +155,7 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setContractNo(String contractNo) {
         this.contractNo = contractNo;
     }
+
     public String getContractCompany() {
         return contractCompany;
     }
@@ -147,20 +163,32 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setContractCompany(String contractCompany) {
         this.contractCompany = contractCompany;
     }
-    public Integer getTotalAmount() {
-        return totalAmount;
+
+    public Money getTotalFee() {
+        return totalFee;
     }
 
-    public void setTotalAmount(Integer totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-    public Integer getTotalWeight() {
-        return totalWeight;
+    public void setTotalFee(Money totalFee) {
+        this.totalFee = totalFee;
     }
 
-    public void setTotalWeight(Integer totalWeight) {
-        this.totalWeight = totalWeight;
+
+    public Integer getProdTotalWeight() {
+        return prodTotalWeight;
     }
+
+    public void setProdTotalWeight(Integer prodTotalWeight) {
+        this.prodTotalWeight = prodTotalWeight;
+    }
+
+    public Money getProdTotalPrices() {
+        return prodTotalPrices;
+    }
+
+    public void setProdTotalPrices(Money prodTotalPrices) {
+        this.prodTotalPrices = prodTotalPrices;
+    }
+
     public Integer getProdTypes() {
         return prodTypes;
     }
@@ -208,6 +236,7 @@ public class TakeInRecordEntity extends BaseEntity {
     public void setTakeInTime(LocalDateTime takeInTime) {
         this.takeInTime = takeInTime;
     }
+
     public String getDescription() {
         return description;
     }
@@ -216,24 +245,33 @@ public class TakeInRecordEntity extends BaseEntity {
         this.description = description;
     }
 
+    public Integer getProdNumbs() {
+        return prodNumbs;
+    }
+
+    public void setProdNumbs(Integer prodNumbs) {
+        this.prodNumbs = prodNumbs;
+    }
+
     @Override
     public String toString() {
         return "TakeInRecordEntity{" +
-            "id=" + id +
-            ", takeInNo=" + takeInNo +
-            ", takeInType=" + takeInType +
-            ", businessUser=" + businessUser +
-            ", contractNo=" + contractNo +
-            ", contractCompany=" + contractCompany +
-            ", totalAmount=" + totalAmount +
-            ", totalWeight=" + totalWeight +
-            ", prodTypes=" + prodTypes +
-            ", unloadFee=" + unloadFee +
-            ", pileFee=" + pileFee +
-            ", othersFee=" + othersFee +
-            ", takeInTime=" + takeInTime +
-            ", description=" + description +
-            ", status=" + status +
-        "}";
+                "id=" + id +
+                ", takeInNo=" + takeInNo +
+                ", takeInType=" + takeInType +
+                ", businessUser=" + businessUser +
+                ", contractNo=" + contractNo +
+                ", contractCompany=" + contractCompany +
+                ", prodTotalPrices=" + prodTotalPrices +
+                ", prodTotalWeight=" + prodTotalWeight +
+                ", prodTypes=" + prodTypes +
+                ", unloadFee=" + unloadFee +
+                ", pileFee=" + pileFee +
+                ", othersFee=" + othersFee +
+                ", totalFee=" + totalFee +
+                ", takeInTime=" + takeInTime +
+                ", description=" + description +
+                ", status=" + status +
+                "}";
     }
 }

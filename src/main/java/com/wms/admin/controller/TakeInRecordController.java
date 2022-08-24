@@ -62,10 +62,10 @@ public class TakeInRecordController {
         return Result.success().data(result);
     }
 
-    @ApiOperation(value = "修改收货单")
+    @ApiOperation(value = "收货单确认入库")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/taken-in/{id}")
-    public Result update(@PathVariable("id") Integer id){
+    public Result takenIn(@PathVariable("id") Integer id){
         takeInRecordService.takenIn(id);
         return Result.success();
     }

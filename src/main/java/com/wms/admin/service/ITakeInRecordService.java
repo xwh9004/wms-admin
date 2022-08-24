@@ -25,5 +25,9 @@ public interface ITakeInRecordService extends IService<TakeInRecordEntity> {
 
     void takeInUpdate(TakeInVO takeInVO);
 
+    /**
+     * 收货单单签收入库
+     * @param id
+     */
     void takenIn(Integer id);
 }
