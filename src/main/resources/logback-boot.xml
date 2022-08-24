@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
     <property name="LOG_HOME" value="/home/app/gankun-wms-admin/logs"/>
+    <Property name="APP_NAME" value="gankun-wms-admin"/>
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+
+    <Property name="LOG_PATTERN" value="[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>
+         <!--   <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>-->
+            <pattern>[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n</pattern>
         </encoder>
     </appender>
 
@@ -29,7 +34,8 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>
+        <!--    <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>-->
+            <pattern>[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n</pattern>
             <!--设置日志编码为utf-8-->
             <charset>UTF-8</charset>
         </encoder>
@@ -55,7 +61,8 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>
+           <!-- <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>-->
+            <pattern>[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n</pattern>
             <!--设置日志编码为utf-8-->
             <charset>UTF-8</charset>
         </encoder>
@@ -82,7 +89,8 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>
+           <!-- <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>-->
+            <pattern>[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n</pattern>
             <!--设置日志编码为utf-8-->
             <charset>UTF-8</charset>
         </encoder>
@@ -108,7 +116,8 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>
+           <!-- <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>-->
+            <pattern>[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n</pattern>
             <!--设置日志编码为utf-8-->
             <charset>UTF-8</charset>
         </encoder>
@@ -134,7 +143,8 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>
+         <!--   <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>-->
+            <pattern>[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n</pattern>
             <!--设置日志编码为utf-8-->
             <charset>UTF-8</charset>
         </encoder>
@@ -155,7 +165,8 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>
+            <!--<pattern>[%d{HH:mm:ss:SSS}] - [%t] [%p] - %logger{36} - %m%n</pattern>-->
+            <pattern>[%d{HH:mm:ss:SSS}][%X{requestNo}] - [%t] [%p] %logger{36}#%M:%L - %m%n</pattern>
             <!--设置日志编码为utf-8-->
             <charset>UTF-8</charset>
         </encoder>

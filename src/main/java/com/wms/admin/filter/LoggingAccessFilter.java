@@ -23,6 +23,7 @@ public class LoggingAccessFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         MDC.put(WMSConstants.REQUEST_NO, UUIDUtil.uuid());
         try {
+            httpServletResponse.addHeader(WMSConstants.REQUEST_NO,MDC.get(WMSConstants.REQUEST_NO));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         } finally {
             MDC.remove(WMSConstants.REQUEST_NO);
