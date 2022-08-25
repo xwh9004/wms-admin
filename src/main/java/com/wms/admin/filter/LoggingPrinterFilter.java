@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 
 /**
  * @author: xwh90
@@ -27,7 +28,6 @@ public class LoggingPrinterFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String clientId = WmsUtils.getIpAddress(request);
         log.info("request clientIp :{},method={},uri={}", clientId, request.getMethod(), request.getRequestURI());
-        log.info("request content-type :{}", request.getContentType());
         if (HttpMethod.GET.matches(request.getMethod())) {
             log.info("request queryString :{}", request.getQueryString());
         } else {
@@ -39,7 +39,7 @@ public class LoggingPrinterFilter implements Filter {
         filterChain.doFilter(request, servletResponse);
         if (servletResponse instanceof ResponseWrapper) {
             ResponseWrapper responseWrapper = (ResponseWrapper) servletResponse;
-//            log.info("response body :{}", responseWrapper.getResponseBody());
+            log.info("response body :{}",new String(responseWrapper.getResponseBody()));
         }
     }
 

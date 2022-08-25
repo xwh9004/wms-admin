@@ -8,6 +8,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -18,12 +19,10 @@ import java.io.PrintWriter;
  * @description:
  */
 public class ResponseWrapper extends HttpServletResponseWrapper {
-    private String responseBody;
-    private  ByteOutputStream outputStream = new ByteOutputStream();
+    private ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
     public ResponseWrapper(HttpServletResponse response) {
         super(response);
-
     }
 
     @Override
@@ -42,18 +41,54 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
             @Override
             public void write(int b) throws IOException {
-                outputStream.write(b);
+                bytes.write(b);
             }
         };
         return servletOutputStream;
     }
 
-    @Override
-    public PrintWriter getWriter() throws IOException {
-        return new PrintWriter(new OutputStreamWriter(outputStream, CharEncoding.UTF_8));
+    public byte[] toByteArray() {
+        return bytes.toByteArray();
     }
 
     public String getResponseBody() {
-        return responseBody;
+        return new String(bytes.toByteArray());
     }
+
+//    public ResponseWrapper(HttpServletResponse response) {
+//        super(response);
+//        output = new ByteArrayOutputStream();
+//    }
+//    private ByteArrayOutputStream output;
+//    private ServletOutputStream filterOutput;
+//    /**
+//     * 巧妙将ServletOutputStream放到公共变量，解决不能多次读写问题
+//     * @return
+//     * @throws IOException
+//     */
+//    @Override
+//    public ServletOutputStream getOutputStream() throws IOException {
+//        if (filterOutput == null) {
+//            filterOutput = new ServletOutputStream() {
+//                @Override
+//                public void write(int b) throws IOException {
+//                    output.write(b);
+//                }
+//
+//                @Override
+//                public boolean isReady() {
+//                    return false;
+//                }
+//
+//                @Override
+//                public void setWriteListener(WriteListener writeListener) {
+//                }
+//            };
+//        }
+//        return filterOutput;
+//    }
+//
+//    public byte[] toByteArray() {
+//        return output.toByteArray();
+//    }
 }

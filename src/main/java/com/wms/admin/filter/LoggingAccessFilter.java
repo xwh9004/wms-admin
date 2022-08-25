@@ -1,5 +1,6 @@
 package com.wms.admin.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.servlet.RequestWrapper;
 import com.wms.admin.servlet.ResponseWrapper;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 
 /**
  * 设置请求唯一标识，用于链路跟踪
@@ -33,7 +35,12 @@ public class LoggingAccessFilter extends OncePerRequestFilter {
             response.addHeader(WMSConstants.REQUEST_NO, MDC.get(WMSConstants.REQUEST_NO));
             RequestWrapper requestWrapper = new RequestWrapper(request);
             ResponseWrapper responseWrapper = new ResponseWrapper(response);
-            filterChain.doFilter(requestWrapper, response);
+            filterChain.doFilter(requestWrapper, responseWrapper);
+            //必须设置ContentLength
+            response.setContentLength(responseWrapper.toByteArray().length);
+            //根据http accept来设置，我这里为了简便直接写json了
+            response.setContentType("application/json;charset=utf-8");
+            response.getOutputStream().write(responseWrapper.toByteArray());
         } finally {
             MDC.remove(WMSConstants.REQUEST_NO);
             MDC.clear();
