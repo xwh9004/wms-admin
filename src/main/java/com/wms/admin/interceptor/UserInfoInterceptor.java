@@ -38,7 +38,6 @@ public class UserInfoInterceptor implements HandlerInterceptor {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }
-        log.info("###请求路径: " +request.getRequestURI());
         // 获取请求头信息authorization信息
         final String authHeader = request.getHeader(JwtTokenUtil.AUTH_HEADER_KEY);
         if (StringUtils.isBlank(authHeader) || !authHeader.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
