@@ -11,15 +11,15 @@ import java.math.BigDecimal;
 @JsonSerialize(converter = MoneySerializerConvertor.class)
 public class Money {
 
-//    public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
+    //    public static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 //    public static final BigDecimal ONE_THOUSAND = BigDecimal.valueOf(1000);
     public static final BigDecimal TEN_THOUSAND = BigDecimal.valueOf(10000);
 
     private Long longValue;
     private BigDecimal value;
-    public  final Money ZERO = Money.valueOf("0");
+    public static final Money ZERO = Money.valueOf(BigDecimal.ZERO);
 
-    public Money() {
+    private Money() {
     }
 
     public static Money valueOf(String value) {
@@ -29,17 +29,19 @@ public class Money {
     public static Money valueOf(BigDecimal value) {
         return new Money(value);
     }
+
     public static Money longValueOf(Long value) {
-       return new Money(BigDecimal.valueOf(value).divide(TEN_THOUSAND));
+        return new Money(BigDecimal.valueOf(value).divide(TEN_THOUSAND));
     }
 
-    public Long longValue(){
+    public Long longValue() {
         return this.longValue;
     }
+
     private Money(BigDecimal value) {
-        value = value.setScale(4,BigDecimal.ROUND_FLOOR);
+        value = value.setScale(4, BigDecimal.ROUND_FLOOR);
         //厘 小数点4位
-        this.value =value;
+        this.value = value;
         this.longValue = TEN_THOUSAND.multiply(value).longValue();
     }
 
@@ -49,13 +51,12 @@ public class Money {
     }
 
 
-
     public Money multiply(BigDecimal multiplier) {
-         return new Money(this.value.multiply(multiplier)) ;
+        return new Money(this.value.multiply(multiplier));
     }
 
     public Money multiply(Integer multiplier) {
-        return new Money(this.value.multiply(BigDecimal.valueOf(multiplier.longValue()))) ;
+        return new Money(this.value.multiply(BigDecimal.valueOf(multiplier.longValue())));
     }
 
     public Money add(Money adder) {
