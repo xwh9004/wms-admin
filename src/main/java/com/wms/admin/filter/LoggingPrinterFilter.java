@@ -39,7 +39,9 @@ public class LoggingPrinterFilter implements Filter {
         filterChain.doFilter(request, servletResponse);
         if (servletResponse instanceof ResponseWrapper) {
             ResponseWrapper responseWrapper = (ResponseWrapper) servletResponse;
-            log.info("response body :{}",new String(responseWrapper.getResponseBody()));
+            if(responseWrapper.getContentType().equals("application/json")){
+                log.info("response body :{}",new String(responseWrapper.getResponseBody()));
+            }
         }
     }
 
