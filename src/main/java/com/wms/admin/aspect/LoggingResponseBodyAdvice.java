@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @description:
  */
 @Slf4j
-@ControllerAdvice
+//@ControllerAdvice
 public class LoggingResponseBodyAdvice implements ResponseBodyAdvice {
     @Autowired
     private ObjectMapper mapper;

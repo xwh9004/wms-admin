@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  * @date: 2022/8/26 8:36
  * @description:
  */
-@ControllerAdvice
+//@ControllerAdvice
 @Slf4j
 public class LoggingRequestBodyAdvice extends RequestBodyAdviceAdapter {
     @Autowired
