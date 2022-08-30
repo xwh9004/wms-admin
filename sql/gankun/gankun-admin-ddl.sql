@@ -91,6 +91,7 @@ create table  if not exists T_WMS_PRODUCT(
   prod_name VARCHAR(100) NOT NULL comment '产品名称',
   vendor_id varChar(40) comment '供应商',
   type  varChar(100)   comment '产品型号',
+  unit_id int(20)  comment '单位ID',
   unit_price int(20)  comment '价格',
   category_id  varChar(40)  NOT NULL comment '产品类目',
   description VARCHAR(200)  comment '描述',
@@ -101,6 +102,8 @@ create table  if not exists T_WMS_PRODUCT(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
   PRIMARY KEY ( id )
 )comment='货物表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ alter table T_WMS_PRODUCT add unit_id int(20) comment '单位ID' after type;
 
 
 create table  if not exists T_WMS_MEASUREMENT_UNIT (
