@@ -45,9 +45,13 @@ public class ProductEntity extends BaseEntity {
      */
     @TableField("type")
     private String type;
-
     /**
-     * 产品型号
+     * 产品单位
+     */
+    @TableField(value = "unit_id")
+    private Money unitId;
+    /**
+     * 产品单价
      */
     @TableField(value = "unit_price",typeHandler = MoneyTypeHandler.class)
     private Money unitPrice;

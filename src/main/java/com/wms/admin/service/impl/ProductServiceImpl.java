@@ -1,11 +1,18 @@
 package com.wms.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.WMSConstants;
+import com.wms.admin.entity.MeasurementUnitEntity;
+import com.wms.admin.entity.ProdCategoryEntity;
 import com.wms.admin.entity.ProductEntity;
+import com.wms.admin.exception.BusinessException;
+import com.wms.admin.mapper.MeasurementUnitMapper;
+import com.wms.admin.mapper.ProdCategoryMapper;
 import com.wms.admin.mapper.ProductMapper;
 import com.wms.admin.service.IProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +22,7 @@ import com.wms.admin.vo.ProductVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 
@@ -31,6 +39,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private MeasurementUnitMapper unitMapper;
+    @Autowired
+    private ProdCategoryMapper categoryMapper;
 
     private static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
@@ -53,14 +66,32 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
         ProductEntity productEntity = new ProductEntity();
         BeanUtils.copyProperties(vo, productEntity);
         productEntity.setId(UUIDUtil.uuid());
-
         productEntity.setCreateBy(UserInfoContext.getUsername());
         productEntity.setUpdateBy(UserInfoContext.getUsername());
         save(productEntity);
     }
 
     private void checkForAdd(ProductVO vo) {
+        final String unitId = vo.getUnitId();
+        final String categoryId = vo.getCategoryId();
+        Assert.isTrue(checkUnitIdExist(unitId),"计量单位不存在");
+        Assert.isTrue(checkCategoryExist(categoryId),"货物大类不存在");
     }
+
+    private boolean checkCategoryExist(final String categoryId) {
+        LambdaQueryWrapper<ProdCategoryEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProdCategoryEntity::getId,categoryId)
+                .eq(ProdCategoryEntity::getDelFlag,WMSConstants.DEL_FLG_N);
+        return categoryMapper.exists(queryWrapper);
+    }
+
+    private boolean checkUnitIdExist(final String unitId) {
+        LambdaQueryWrapper<MeasurementUnitEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MeasurementUnitEntity::getId,unitId)
+                .eq(MeasurementUnitEntity::getDelFlag,WMSConstants.DEL_FLG_N);
+        return unitMapper.exists(queryWrapper);
+    }
+
 
     @Override
     public void updateProduct(ProductVO productVO) {

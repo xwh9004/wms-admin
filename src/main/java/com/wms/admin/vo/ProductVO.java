@@ -41,7 +41,20 @@ public class ProductVO {
      */
     private String categoryId;
     private String categoryName;
+    /**
+     * 大类单位
+     */
+    private String categoryUnitId;
+    private String categoryUnitName;
+    /**
+     * 货物单位ID
+     */
+    private String unitId;
 
+    /**
+     * 货物单位名称
+     */
+    private String unitName;
     /**
      * 描述
      */
