@@ -24,12 +24,14 @@
 
     <select id="productPage" parameterType="com.wms.admin.vo.ProductQueryVO" resultMap="productVO">
         select p.id,p.prod_no,p.prod_name,p.unit_price,p.type,v.id vendor_id,v.name vendor_name,
-        c.id category_id,c.name category_name,p.description,p.update_by,p.update_time,u.id category_unit_id,
-        u.unit_name category_unit_name
+        c.id category_id,c.name category_name,p.description,p.update_by,p.update_time,
+        u.id category_unit_id,u.unit_name category_unit_name,
+        p.unit_id unit_id,u1.unit_name
         from t_wms_product p
         left join t_wms_prod_category c on p.category_id = c.id and c.del_flag='1'
         left join t_wms_vendor v on p.vendor_id = v.id and v.del_flag='1'
         left join t_wms_measurement_unit u on u.id = c.unit_id and u.del_flag ='1'
+        left join t_wms_measurement_unit u1 on u1.id = p.unit_id and u1.del_flag ='1'
         where p.del_flag ='1'
         <if test="param.prodNo!=null and param.prodNo!=''">
             and   p.prod_no like concat('%',#{param.prodNo},'%')

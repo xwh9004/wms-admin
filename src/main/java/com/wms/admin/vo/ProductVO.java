@@ -3,27 +3,29 @@ package com.wms.admin.vo;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Validated
 @Data
 public class ProductVO {
     private String id;
-
-    private String prodId;
     /**
      * prod_no
      */
+    @NotBlank(message = "货物编号不能为空")
     private String prodNo;
 
     /**
      * 产品名称
      */
+    @NotBlank(message = "货物名称不能为空")
     private String prodName;
 
     /**
      * 价格
      */
+    @NotNull(message = "货物租金不能为空")
     private Money unitPrice;
     /**
      * 供应商
@@ -39,6 +41,7 @@ public class ProductVO {
     /**
      * 产品类目
      */
+    @NotBlank(message = "货物大类不能为空")
     private String categoryId;
     private String categoryName;
     /**
@@ -49,6 +52,7 @@ public class ProductVO {
     /**
      * 货物单位ID
      */
+    @NotBlank(message = "货物计量单位不能为空")
     private String unitId;
 
     /**

@@ -76,8 +76,23 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
         final String categoryId = vo.getCategoryId();
         Assert.isTrue(checkUnitIdExist(unitId),"计量单位不存在");
         Assert.isTrue(checkCategoryExist(categoryId),"货物大类不存在");
+        Assert.isTrue(!checkProdNoExist(vo.getProdNo()),"货物编号已存在");
+
     }
 
+    private boolean checkProdNoExist(String prodNo) {
+        LambdaQueryWrapper<ProductEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductEntity::getProdNo,prodNo)
+                .eq(ProductEntity::getDelFlag,WMSConstants.DEL_FLG_N);
+        return productMapper.exists(queryWrapper);
+    }
+    private boolean checkProdNoExist(String prodNo,String excludeId) {
+        LambdaQueryWrapper<ProductEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductEntity::getProdNo,prodNo)
+                .ne(ProductEntity::getId,excludeId)
+                .eq(ProductEntity::getDelFlag,WMSConstants.DEL_FLG_N);
+        return productMapper.exists(queryWrapper);
+    }
     private boolean checkCategoryExist(final String categoryId) {
         LambdaQueryWrapper<ProdCategoryEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProdCategoryEntity::getId,categoryId)
@@ -102,8 +117,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
         updateById(productEntity);
     }
 
-    private void checkForUpdate(ProductVO productVO) {
-
+    private void checkForUpdate(ProductVO vo) {
+        Assert.isTrue(checkUnitIdExist(vo.getUnitId()),"计量单位不存在");
+        Assert.isTrue(checkCategoryExist(vo.getCategoryId()),"货物大类不存在");
+        Assert.isTrue(!checkProdNoExist(vo.getProdNo(),vo.getId()),"货物编号已存在");
     }
 
     @Override
@@ -116,6 +133,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
     }
 
     private void checkForDelete(String prodId) {
-
+        //TODO 是否有有效合同
     }
 }
