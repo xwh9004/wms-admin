@@ -28,6 +28,10 @@ public class ContractProdVO {
      */
     private Money unitPrice;
     /**
+     * 计价单位
+     */
+    private String unitName;
+    /**
      * 产品型号
      */
     private String type;

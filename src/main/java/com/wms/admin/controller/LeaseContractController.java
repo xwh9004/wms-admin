@@ -67,31 +67,31 @@ public class LeaseContractController {
     @ApiOperation(value = "合同失效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/detail/{id}")
-    public Result detail(@PathVariable("id") Integer id) {
-        contractService.contractDetail(id);
-        return Result.success();
+    public Result detail(@PathVariable("id") String id) {
+        ContractVO detail = contractService.contractDetail(Integer.valueOf(id));
+        return Result.success().data(detail);
     }
 
     @ApiOperation(value = "合同失效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/ineffective/{id}")
-    public Result ineffective(@PathVariable("id") Integer id) {
-        contractService.ineffectiveContract(id);
+    public Result ineffective(@PathVariable("id") String id) {
+        contractService.ineffectiveContract(Integer.valueOf(id));
         return Result.success();
     }
     @ApiOperation(value = "合同有效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/effect/{id}")
-    public Result effect(@PathVariable("id") Integer id) {
-        contractService.effectContract(id);
+    public Result effect(@PathVariable("id") String id) {
+        contractService.effectContract(Integer.valueOf(id));
         return Result.success();
     }
 
     @ApiOperation(value = "合同删除")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/delete/{id}")
-    public Result delete(@PathVariable("id") Integer id) {
-        contractService.deleteContract(id);
+    public Result delete(@PathVariable("id") String id) {
+        contractService.deleteContract(Integer.valueOf(id));
         return Result.success();
     }
 }

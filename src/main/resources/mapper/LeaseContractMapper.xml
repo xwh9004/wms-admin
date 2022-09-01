@@ -4,24 +4,25 @@
 
     <resultMap id="contractDetail" type="com.wms.admin.vo.ContractVO">
         <id column="id" property="id"></id>
-        <result column="contractNo" property="contractNo"></result>
-        <result column="businessUser" property="businessUser"></result>
-        <result column="lesseeNo" property="lesseeNo"></result>
-        <result column="lesseeCompany" property="lesseeCompany"></result>
-        <result column="lesseeAddress" property="lesseeAddress"></result>
-        <result column="lesseeContact" property="lesseeContact"></result>
-        <result column="lesseePhone" property="lesseePhone"></result>
-        <result column="signDate" property="signDate"></result>
-        <result column="effectiveDate" property="effectiveDate"></result>
-        <result column="expireDate" property="expireDate"></result>
+        <result column="contract_no" property="contractNo"></result>
+        <result column="business_user" property="businessUser"></result>
+        <result column="lessee_no" property="lesseeNo"></result>
+        <result column="lessee_company" property="lesseeCompany"></result>
+        <result column="lessee_address" property="lesseeAddress"></result>
+        <result column="lessee_contact" property="lesseeContact"></result>
+        <result column="lessee_phone" property="lesseePhone"></result>
+        <result column="sign_date" property="signDate"></result>
+        <result column="effective_date" property="effectiveDate"></result>
+        <result column="expire_date" property="expireDate"></result>
         <result column="deposit" property="deposit" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
-        <result column="billMethod" property="billMethod"></result>
+        <result column="bill_method" property="billMethod"></result>
         <collection property="list" ofType="com.wms.admin.vo.ContractProdVO">
-            <id column="prodId" property="prodId"></id>
-            <result column="prodNo" property="prodNo"></result>
-            <result column="prodName" property="prodName"></result>
-            <result column="unitPrice" property="unitPrice" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
+            <id column="prod_id" property="prodId"></id>
+            <result column="prod_no" property="prodNo"></result>
+            <result column="prod_name" property="prodName"></result>
+            <result column="unit_price" property="unitPrice" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
             <result column="type" property="type"></result>
+            <result column="unit_name" property="unitName"></result>
         </collection>
 
 
@@ -47,11 +48,13 @@
         p.prod_no,
         p.prod_name,
         p.type,
-        r.lease_unit_price
+        r.lease_unit_price unit_price,
+        u.unit_name
         from t_wms_lease_contract c
         inner join t_wms_contract_prod_rel r on c.id = r.contract_id and r.del_flag='1'
         inner join t_wms_product p on p.id = r.prod_id and p.del_flag ='1'
-        where s.id =#{id}
+        inner join t_wms_measurement_unit u on u.id = p.unit_id and u.del_flag ='1'
+        where c.id =#{id}
 
     </select>
 
