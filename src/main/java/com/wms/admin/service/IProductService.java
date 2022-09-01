@@ -17,7 +17,9 @@ import com.wms.admin.vo.ProductVO;
  */
 public interface IProductService extends IService<ProductEntity> {
     IPage<ProductVO> productPages(ProductQueryVO queryVO, PageParam pageParam);
+
     ProductVO findByProdNo(String prodNo);
+
     void addProduct(ProductVO vo);
 
     void updateProduct(ProductVO categoryVO);

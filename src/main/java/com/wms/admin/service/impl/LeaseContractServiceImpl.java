@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.commom.WMSConstants;
@@ -18,6 +19,7 @@ import com.wms.admin.mapper.LesseeInfoMapper;
 import com.wms.admin.service.IContractProdRelService;
 import com.wms.admin.service.ILeaseContractService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wms.admin.util.SequenceUtil;
 import com.wms.admin.util.VOUtil;
 import com.wms.admin.vo.ContractProdVO;
 import com.wms.admin.vo.ContractQueryVO;
@@ -34,6 +36,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,6 +55,9 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
 
     @Autowired
     private LesseeInfoMapper lesseeInfoMapper;
+
+    @Autowired
+    private LeaseContractMapper leaseContractMapper;
 
     @Autowired
     private IContractProdRelService contractProdRelService;
@@ -90,11 +96,20 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         if (StringUtils.isNotBlank(queryVO.getBusinessUser())) {
             queryCond.like(LeaseContractEntity::getBusinessUser, queryVO.getBusinessUser());
         }
+        if (StringUtils.isNotBlank(queryVO.getLesseeCompany())) {
+            queryCond.like(LeaseContractEntity::getLesseeCompany, queryVO.getLesseeCompany());
+        }
         if (StringUtils.isNotBlank(queryVO.getBillMethod())) {
             queryCond.eq(LeaseContractEntity::getBillMethod, queryVO.getBillMethod());
         }
         if (StringUtils.isNotBlank(queryVO.getStatus())) {
             queryCond.eq(LeaseContractEntity::getStatus, queryVO.getStatus());
+        }
+        if (Objects.nonNull(queryVO.getEffectiveStartDate())) {
+            queryCond.gt(LeaseContractEntity::getEffectiveDate, queryVO.getEffectiveStartDate());
+        }
+        if (Objects.nonNull(queryVO.getEffectiveEndDate())) {
+            queryCond.lt(LeaseContractEntity::getEffectiveDate, queryVO.getEffectiveEndDate());
         }
         queryCond.eq(LeaseContractEntity::getDelFlag, WMSConstants.DEL_FLG_N);
         page = page(page, queryCond);
@@ -109,7 +124,12 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     @Transactional
     @Override
     public void addContract(ContractVO contractVO) {
+        if (StringUtils.isBlank(contractVO.getContractNo())) {
+            contractVO.setContractNo(SequenceUtil.generateNoByDate("HT"));
+        }
         checkForAdd(contractVO);
+        contractVO.setIsEffective(WMSConstants.CONTRACT_EDITABLE);
+        contractVO.setBusinessUser(UserInfoContext.getUsername());
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
             entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
@@ -154,11 +174,13 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     private void checkForAdd(ContractVO contractVO) {
         Assert.isTrue(!existContractNo(contractVO.getLesseeNo()), "合同编号已经存在");
         Assert.isTrue(existLesseeNo(contractVO.getLesseeNo()), "承租单位编号不存在");
-        LocalDateTime signDate = contractVO.getSignDate();
-        LocalDateTime effectiveDate = contractVO.getEffectiveDate();
-        LocalDateTime expireDate = contractVO.getExpireDate();
-        Assert.isTrue(!effectiveDate.isAfter(expireDate), "生效时间不能晚于过期时间");
-        Assert.isTrue(!signDate.isAfter(effectiveDate), "签约时间不能晚于生效时时间");
+        LocalDate signDate = contractVO.getSignDate();
+        LocalDate effectiveDate = contractVO.getEffectiveDate();
+        LocalDate expireDate = contractVO.getExpireDate();
+        if (Objects.nonNull(expireDate)) {
+            Assert.isTrue(!effectiveDate.isAfter(expireDate), "生效日期不能晚于过期日期");
+        }
+        Assert.isTrue(!signDate.isAfter(effectiveDate), "签约日期不能晚于生效时日期");
         checkDuplicateProd(contractVO.getList());
     }
 
@@ -225,9 +247,15 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         updateById(entity);
     }
 
+    @Override
+    public ContractVO contractDetail(Integer id) {
+        ContractVO contractVO =leaseContractMapper.contractDetail(id);
+        return contractVO;
+    }
+
     private void deleteContractProdInfo(Integer id) {
         LambdaQueryWrapper<ContractProdRelEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ContractProdRelEntity::getContractId,id);
+        queryWrapper.eq(ContractProdRelEntity::getContractId, id);
         contractProdRelService.remove(queryWrapper);
     }
 

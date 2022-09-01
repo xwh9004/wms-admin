@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.ProductQueryVO;
 import com.wms.admin.vo.ProductVO;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,10 +73,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
     }
 
     private void checkForAdd(ProductVO vo) {
-        final String unitId = vo.getUnitId();
-        final String categoryId = vo.getCategoryId();
-        Assert.isTrue(checkUnitIdExist(unitId),"计量单位不存在");
-        Assert.isTrue(checkCategoryExist(categoryId),"货物大类不存在");
+        Assert.isTrue(checkUnitIdExist(vo.getUnitId()),"计量单位不存在");
+        Assert.isTrue(checkCategoryExist(vo.getCategoryId()),"货物大类不存在");
         Assert.isTrue(!checkProdNoExist(vo.getProdNo()),"货物编号已存在");
 
     }
@@ -100,7 +99,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
         return categoryMapper.exists(queryWrapper);
     }
 
-    private boolean checkUnitIdExist(final String unitId) {
+    private boolean checkUnitIdExist(final Integer unitId) {
         LambdaQueryWrapper<MeasurementUnitEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(MeasurementUnitEntity::getId,unitId)
                 .eq(MeasurementUnitEntity::getDelFlag,WMSConstants.DEL_FLG_N);

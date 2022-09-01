@@ -52,8 +52,8 @@ public class ProductVO {
     /**
      * 货物单位ID
      */
-    @NotBlank(message = "货物计量单位不能为空")
-    private String unitId;
+    @NotNull(message = "货物计量单位不能为空")
+    private Integer unitId;
 
     /**
      * 货物单位名称

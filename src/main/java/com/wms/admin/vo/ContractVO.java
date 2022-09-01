@@ -8,6 +8,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,13 +23,11 @@ public class ContractVO implements Serializable {
     /**
      * 合同编号
      */
-    @NotBlank(message = "合同编号不能为空")
     private String contractNo;
 
     /**
      * 业务人员
      */
-    @NotBlank(message = "业务人员不能为空")
     private String businessUser;
 
     /**
@@ -63,18 +62,18 @@ public class ContractVO implements Serializable {
      * 签约日期
      */
     @NotNull(message = "签约不能为空")
-    private LocalDateTime signDate;
+    private LocalDate signDate;
 
     /**
      * 生效日期
      */
     @NotNull(message = "生效日期不能为空")
-    private LocalDateTime effectiveDate;
+    private LocalDate effectiveDate;
 
     /**
      * 到期日期
      */
-    private LocalDateTime expireDate;
+    private LocalDate expireDate;
 
     /**
      * 合同押金
@@ -91,7 +90,6 @@ public class ContractVO implements Serializable {
     /**
      * 是否有效
      */
-    @NotNull(message = "是否有效不能为空")
     private String isEffective;
     @NotNull(message = "合同明细不能为空")
     private List<ContractProdVO> list;

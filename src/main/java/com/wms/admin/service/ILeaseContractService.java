@@ -32,4 +32,6 @@ public interface ILeaseContractService extends IService<LeaseContractEntity> {
     void updateContract(ContractVO contractVO);
 
     void effectContract(Integer id);
+
+    ContractVO contractDetail(Integer id);
 }

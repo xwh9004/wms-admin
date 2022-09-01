@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -33,18 +34,21 @@ public class ContractQueryVO implements Serializable {
      * 承租方联系人
      */
     private String lesseeContact;
-
+    /**
+     * 承租方联系电话
+     */
+    private String lesseeCompany;
     /**
      * 承租方联系电话
      */
     private String lesseePhone;
-
-
     /**
      * 1 算头又算尾 2 算头不算尾
      */
     private String billMethod;
 
+    private LocalDate effectiveStartDate;
+    private LocalDate effectiveEndDate;
     /**
      * 状态
      */

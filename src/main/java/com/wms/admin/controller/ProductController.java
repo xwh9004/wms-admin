@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -46,7 +47,7 @@ public class ProductController {
     @ApiOperation(value = "新增货物")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")
-    public Result add(@RequestBody ProductVO vo) {
+    public Result add(@RequestBody @Validated ProductVO vo) {
         productService.addProduct(vo);
         return Result.success();
     }
@@ -54,7 +55,7 @@ public class ProductController {
     @ApiOperation(value = "修改货物")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/update")
-    public Result update(@RequestBody ProductVO productVO) {
+    public Result update(@RequestBody @Validated ProductVO productVO) {
         productService.updateProduct(productVO);
         return Result.success();
     }

@@ -57,14 +57,20 @@ public class LeaseContractController {
         return Result.success();
     }
 
-    @ApiOperation(value = "新增合同")
+    @ApiOperation(value = "修改合同")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/update")
     public Result update(@RequestBody @Validated ContractVO contractVO) {
         contractService.updateContract(contractVO);
         return Result.success();
     }
-
+    @ApiOperation(value = "合同失效")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/detail/{id}")
+    public Result detail(@PathVariable("id") Integer id) {
+        contractService.contractDetail(id);
+        return Result.success();
+    }
 
     @ApiOperation(value = "合同失效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
@@ -73,7 +79,7 @@ public class LeaseContractController {
         contractService.ineffectiveContract(id);
         return Result.success();
     }
-    @ApiOperation(value = "合同失效")
+    @ApiOperation(value = "合同有效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/effect/{id}")
     public Result effect(@PathVariable("id") Integer id) {

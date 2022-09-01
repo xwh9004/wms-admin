@@ -2,6 +2,8 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.LeaseContractEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.admin.vo.ContractVO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface LeaseContractMapper extends BaseMapper<LeaseContractEntity> {
 
+    ContractVO contractDetail(@Param("id") Integer id);
 }
