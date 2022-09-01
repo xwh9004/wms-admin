@@ -2,4 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wms.admin.mapper.LeaseContractMapper">
 
+    <resultMap id="contractDetail" type="com.wms.admin.vo.ContractVO">
+        <id column="id" property="id"></id>
+        <result column="contractNo" property="contractNo"></result>
+        <result column="businessUser" property="businessUser"></result>
+        <result column="lesseeNo" property="lesseeNo"></result>
+        <result column="lesseeCompany" property="lesseeCompany"></result>
+        <result column="lesseeAddress" property="lesseeAddress"></result>
+        <result column="lesseeContact" property="lesseeContact"></result>
+        <result column="lesseePhone" property="lesseePhone"></result>
+        <result column="signDate" property="signDate"></result>
+        <result column="effectiveDate" property="effectiveDate"></result>
+        <result column="expireDate" property="expireDate"></result>
+        <result column="deposit" property="deposit" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
+        <result column="billMethod" property="billMethod"></result>
+        <collection property="list" ofType="com.wms.admin.vo.ContractProdVO">
+            <id column="prodId" property="prodId"></id>
+            <result column="prodNo" property="prodNo"></result>
+            <result column="prodName" property="prodName"></result>
+            <result column="unitPrice" property="unitPrice" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
+            <result column="type" property="type"></result>
+        </collection>
+
+
+    </resultMap>
+
+    <select id="contractDetail" resultMap="contractDetail">
+        select
+        c.id,
+        c.contract_no,
+        c.business_user ,
+        c.lessee_no ,
+        c.lessee_company ,
+        c.lessee_address ,
+        c.lessee_contact ,
+        c.lessee_phone ,
+        c.sign_date ,
+        c.effective_date,
+        c.expire_date,
+        c.deposit,
+        c.bill_method,
+        c.status,
+        p.id prod_id,
+        p.prod_no,
+        p.prod_name,
+        p.type,
+        r.lease_unit_price
+        from t_wms_lease_contract c
+        inner join t_wms_contract_prod_rel r on c.id = r.contract_id and r.del_flag='1'
+        inner join t_wms_product p on p.id = r.prod_id and p.del_flag ='1'
+        where s.id =#{id}
+
+    </select>
+
 </mapper>

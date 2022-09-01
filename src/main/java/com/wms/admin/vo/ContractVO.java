@@ -79,7 +79,7 @@ public class ContractVO implements Serializable {
      * 合同押金
      */
     @NotNull(message = "押金不能为空")
-    private Integer deposit;
+    private Money deposit;
 
     /**
      * 1 算头又算尾 2 算头不算尾
