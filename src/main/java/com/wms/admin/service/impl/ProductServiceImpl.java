@@ -76,7 +76,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
         Assert.isTrue(checkUnitIdExist(vo.getUnitId()),"计量单位不存在");
         Assert.isTrue(checkCategoryExist(vo.getCategoryId()),"货物大类不存在");
         Assert.isTrue(!checkProdNoExist(vo.getProdNo()),"货物编号已存在");
-
     }
 
     private boolean checkProdNoExist(String prodNo) {

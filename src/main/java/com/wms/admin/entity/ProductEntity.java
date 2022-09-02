@@ -8,6 +8,8 @@ import com.wms.admin.entity.BaseEntity;
 import com.wms.admin.vo.Money;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * <p>
  * 货物表
@@ -57,6 +59,8 @@ public class ProductEntity extends BaseEntity {
      */
     @TableField(value = "unit_price",typeHandler = MoneyTypeHandler.class)
     private Money unitPrice;
+    @TableField(value = "quantity")
+    private BigDecimal quantity;
 
     /**
      * 产品类目

@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -59,6 +60,10 @@ public class ProductVO {
      * 货物单位名称
      */
     private String unitName;
+    /**
+     * 标量
+     */
+    private BigDecimal quantity;
     /**
      * 描述
      */
