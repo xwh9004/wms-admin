@@ -132,8 +132,8 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         contractVO.setBusinessUser(UserInfoContext.getUsername());
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
-            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             BeanUtils.copyProperties(vo, entity);
+            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             return entity;
         });
 

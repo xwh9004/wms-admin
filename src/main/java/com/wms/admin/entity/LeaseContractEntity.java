@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -89,7 +90,7 @@ public class LeaseContractEntity extends BaseEntity {
      * 合同押金
      */
     @TableField("deposit")
-    private Integer deposit;
+    private Money deposit;
 
     /**
      * 1 算头又算尾 2 算头不算尾

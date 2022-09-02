@@ -104,6 +104,9 @@ create table  if not exists T_WMS_PRODUCT(
   PRIMARY KEY ( id )
 )comment='货物表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+alter table T_WMS_PRODUCT add column unit_id int(20)  comment '单位ID' after  type;
+alter table T_WMS_PRODUCT add column unit_price int(20)  comment '价格' after  unit_id;
+alter table T_WMS_PRODUCT add column quantity decimal(10,3)  comment '标量'after  unit_price;
 
 create table  if not exists T_WMS_MEASUREMENT_UNIT (
   id int(20) primary key not null auto_increment,
@@ -164,6 +167,9 @@ create table  if not exists T_WMS_LEASE_CONTRACT (
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='合同表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table T_WMS_LEASE_CONTRACT add column status VARCHAR(1) comment '0 未生效 1 已生效 2 已失效 3 已过期' after  bill_method;
+
 
 create table  if not exists T_WMS_BULLETIN_INFO(
   id int(20) primary key not null auto_increment,

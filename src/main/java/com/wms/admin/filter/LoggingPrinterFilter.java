@@ -33,7 +33,7 @@ public class LoggingPrinterFilter implements Filter {
         } else {
             if (servletRequest instanceof RequestWrapper) {
                 RequestWrapper requestWrapper = (RequestWrapper) servletRequest;
-                log.info("request body :{}", requestWrapper.getBody());
+                log.info("request queryString: {} body :{}", requestWrapper.getQueryString(),requestWrapper.getBody());
             }
         }
         filterChain.doFilter(request, servletResponse);
