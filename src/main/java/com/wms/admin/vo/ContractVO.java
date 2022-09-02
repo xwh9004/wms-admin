@@ -89,6 +89,8 @@ public class ContractVO implements Serializable {
 
     private String status;
 
+    private LocalDateTime updateTime;
+
     /**
      * 是否有效
      */

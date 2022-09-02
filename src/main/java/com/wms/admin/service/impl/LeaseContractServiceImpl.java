@@ -111,7 +111,9 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         if (Objects.nonNull(queryVO.getEffectiveEndDate())) {
             queryCond.lt(LeaseContractEntity::getEffectiveDate, queryVO.getEffectiveEndDate());
         }
-        queryCond.eq(LeaseContractEntity::getDelFlag, WMSConstants.DEL_FLG_N);
+        queryCond
+                .eq(LeaseContractEntity::getDelFlag, WMSConstants.DEL_FLG_N)
+                .orderByDesc(LeaseContractEntity::getUpdateTime);
         page = page(page, queryCond);
         IPage<ContractVO> resultPage = page.convert(entity -> {
             ContractVO vo = new ContractVO();
@@ -226,11 +228,10 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         checkForUpdate(contractVO.getId());
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
-            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             BeanUtils.copyProperties(vo, entity);
+            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             return entity;
         });
-        contractEntity.setId(contractVO.getId());
 
         updateById(contractEntity);
 
