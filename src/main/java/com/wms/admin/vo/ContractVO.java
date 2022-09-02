@@ -87,6 +87,8 @@ public class ContractVO implements Serializable {
     @NotNull(message = "结算方式不能为空")
     private String billMethod;
 
+    private String status;
+
     /**
      * 是否有效
      */
