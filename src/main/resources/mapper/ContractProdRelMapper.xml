@@ -13,10 +13,10 @@
         left join T_WMS_MEASUREMENT_UNIT PU on P.unit_id = PU.id AND CU.DEL_FLAG ='1'
         where R.contract_id =#{ps.contractId}
         <if test="ps.prodNo!=null and ps.prodNo!=''">
-            and p.prod_no like concat('%',#{param.prodNo},'%')
+            and p.prod_no like concat('%',#{ps.prodNo},'%')
         </if>
         <if test="ps.prodName!=null and ps.prodName!=''">
-            and p.prod_name like concat('%',#{param.prodName},'%')
+            and p.prod_name like concat('%',#{ps.prodName},'%')
         </if>
     </select>
 
