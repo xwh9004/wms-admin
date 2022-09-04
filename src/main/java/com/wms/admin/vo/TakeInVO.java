@@ -64,17 +64,17 @@ public class TakeInVO implements Serializable {
     /**
      * 卸车费
      */
-    private Money unloadFee;
+    private Money unloadFee =Money.ZERO;
 
     /**
      * 堆码费
      */
-    private Money pileFee;
+    private Money pileFee =Money.ZERO;
 
     /**
      * 其他杂费
      */
-    private Money othersFee;
+    private Money othersFee=Money.ZERO;
 
     /**
      * 状态
