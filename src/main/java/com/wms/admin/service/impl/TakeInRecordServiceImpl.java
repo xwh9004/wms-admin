@@ -55,27 +55,27 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
 
     @Override
     public IPage<TakeInVO> takeInList(TakeInQueryVO queryVO, PageParam pageParam) {
-        WmsUtils.checkDateRange(queryVO.getTakeInStartTime(),queryVO.getTakeInEndTime());
+        WmsUtils.checkDateRange(queryVO.getTakeInStartTime(), queryVO.getTakeInEndTime());
 
-        Page page = Page.of(pageParam.getPage(),pageParam.getLimit());
+        Page page = Page.of(pageParam.getPage(), pageParam.getLimit());
 
         LambdaQueryWrapper<TakeInRecordEntity> queryWrapper = new LambdaQueryWrapper<>();
-        if(StringUtils.isNotBlank(queryVO.getTakeInNo())){
-            queryWrapper.like(TakeInRecordEntity::getTakeInNo,queryVO.getTakeInNo());
+        if (StringUtils.isNotBlank(queryVO.getTakeInNo())) {
+            queryWrapper.like(TakeInRecordEntity::getTakeInNo, queryVO.getTakeInNo());
         }
-        if(StringUtils.isNotBlank(queryVO.getContractNo())){
-            queryWrapper.like(TakeInRecordEntity::getContractNo,queryVO.getContractNo());
+        if (StringUtils.isNotBlank(queryVO.getContractNo())) {
+            queryWrapper.like(TakeInRecordEntity::getContractNo, queryVO.getContractNo());
         }
-        if(StringUtils.isNotBlank(queryVO.getContractCompany())){
-            queryWrapper.like(TakeInRecordEntity::getContractCompany,queryVO.getContractCompany());
+        if (StringUtils.isNotBlank(queryVO.getContractCompany())) {
+            queryWrapper.like(TakeInRecordEntity::getContractCompany, queryVO.getContractCompany());
         }
-        if(Objects.nonNull(queryVO.getTakeInStartTime())){
-            queryWrapper.ge(TakeInRecordEntity::getTakeInTime,queryVO.getTakeInStartTime());
+        if (Objects.nonNull(queryVO.getTakeInStartTime())) {
+            queryWrapper.ge(TakeInRecordEntity::getTakeInTime, queryVO.getTakeInStartTime());
         }
-        if(Objects.nonNull(queryVO.getTakeInEndTime())){
-            queryWrapper.le(TakeInRecordEntity::getTakeInTime,queryVO.getTakeInEndTime());
+        if (Objects.nonNull(queryVO.getTakeInEndTime())) {
+            queryWrapper.le(TakeInRecordEntity::getTakeInTime, queryVO.getTakeInEndTime());
         }
-        page =page(page,queryWrapper);
+        page = page(page, queryWrapper);
         IPage result = page.convert(e -> {
             TakeInVO record = new TakeInVO();
             BeanUtils.copyProperties(e, record);
@@ -85,29 +85,56 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
     }
 
 
-
     @Transactional
     @Override
     public void takeInAdd(TakeInVO takeInVO) {
         checkForAdd(takeInVO);
+        if (WMSConstants.TAKE_IN_INIT.equals(takeInVO.getStatus())) {
+            doSaveTakeIn(takeInVO);
+        } else if (WMSConstants.TAKEN_IN.equals(takeInVO.getStatus())) {
+            doSubmitTakeIn(takeInVO);
+        } else {
+            throw new BusinessException(ResultCode.PARAM_ERROR, "收货单状态错误");
+        }
+    }
+
+    private void doSaveTakeIn(TakeInVO takeInVO) {
+        if (Objects.isNull(takeInVO.getId())) {
+            takeInSave(takeInVO);
+        } else {
+            takeInUpdate(takeInVO);
+        }
+    }
+
+    private void takeInSave(TakeInVO takeInVO) {
+        //do save
         //goods receive
+        TakeInRecordEntity takeInRecordEntity = new TakeInRecordEntity();
         final String takeInNo = SequenceUtil.generateNoByDate("GR");
         takeInVO.setTakeInNo(takeInNo);
-        TakeInRecordEntity takeInRecordEntity = new TakeInRecordEntity();
         BeanUtils.copyProperties(takeInVO, takeInRecordEntity);
-        List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getProdList());
-        //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
-        takeInRecordEntity.setProdTypes(prodList.size());
-        takeInRecordEntity.setProdTypes(totalNumbs(prodList));
-        takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
-        takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(),takeInVO));
-
+        if (!CollectionUtils.isEmpty(takeInVO.getList())) {
+            List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getList());
+            //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
+            takeInRecordEntity.setProdTypes(prodList.size());
+            takeInRecordEntity.setProdTypes(totalNumbs(prodList));
+            takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
+            takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(), takeInVO));
+        }
         save(takeInRecordEntity);
         saveDetails(takeInVO);
     }
 
-    private Money totalFee(Money totalPrices,TakeInVO takeInVO){
-      return   totalPrices.add(takeInVO.getPileFee()).add(takeInVO.getUnloadFee());
+    private void doSubmitTakeIn(TakeInVO takeInVO) {
+        if (Objects.isNull(takeInVO.getId())) {
+            takeInSave(takeInVO);
+        } else {
+            takeInUpdate(takeInVO);
+        }
+    }
+
+    private Money totalFee(Money totalPrices, TakeInVO takeInVO) {
+        return totalPrices.add(takeInVO.getPileFee()).add(takeInVO.getUnloadFee());
     }
 
     private Money prodTotalPrices(List<TakeInDetailEntity> prodList) {
@@ -118,13 +145,14 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         return prodTotalPrices;
     }
 
-    private Integer totalNumbs(List<TakeInDetailEntity> prodList ){
+    private Integer totalNumbs(List<TakeInDetailEntity> prodList) {
         return prodList
                 .stream()
                 .reduce(0, (total, e) -> total + e.getProdAmount(), Integer::sum);
     }
 
-    private List<TakeInDetailEntity> trim2ProdDetailList( List<TakeInProdVO> prodList) {
+    private List<TakeInDetailEntity> trim2ProdDetailList(List<TakeInProdVO> prodList) {
+
         //货物整理，按货物编号分类
         Map<String, TakeInDetailEntity> detailMap = new HashMap<>();
         prodList.stream().forEach(prodVO -> {
@@ -155,8 +183,8 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
     }
 
     private void saveDetails(TakeInVO takeInVO) {
-        if (!CollectionUtils.isEmpty(takeInVO.getProdList())) {
-            List<TakeInDetailEntity> prodEntityList = takeInVO.getProdList()
+        if (!CollectionUtils.isEmpty(takeInVO.getList())) {
+            List<TakeInDetailEntity> prodEntityList = takeInVO.getList()
                     .stream().map(vo -> {
                         TakeInDetailEntity detailEntity = new TakeInDetailEntity();
                         BeanUtils.copyProperties(vo, detailEntity);
@@ -185,7 +213,7 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
                 BeanUtils.copyProperties(e, prodVO);
                 return prodVO;
             }).collect(Collectors.toList());
-            result.setProdList(prodList);
+            result.setList(prodList);
         }
         return result;
     }
@@ -194,22 +222,20 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
     @Override
     public void takeInUpdate(TakeInVO takeInVO) {
         Assert.notNull(takeInVO.getId(), "收货单ID不能为空");
-
         checkForUpdate(takeInVO);
-
         TakeInRecordEntity takeInRecordEntity = new TakeInRecordEntity();
         BeanUtils.copyProperties(takeInVO, takeInRecordEntity);
-        List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getProdList());
-        //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
-        takeInRecordEntity.setProdTypes(prodList.size());
-        takeInRecordEntity.setProdTypes(totalNumbs(prodList));
-        takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
-        takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(),takeInVO));
-
+        if (!CollectionUtils.isEmpty(takeInVO.getList())) {
+            List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getList());
+            //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
+            takeInRecordEntity.setProdTypes(prodList.size());
+            takeInRecordEntity.setProdTypes(totalNumbs(prodList));
+            takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
+            takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(), takeInVO));
+        }
         updateById(takeInRecordEntity);
 
         deleteDetails(takeInVO.getTakeInNo());
-
         saveDetails(takeInVO);
     }
 

@@ -14,12 +14,19 @@ public interface WMSConstants {
      * 已删除
      */
      String DEL_FLG_Y ="0";
-     String STATUS_1 = "1";
+    /**
+     * 以提交
+     */
+    String STATUS_1 = "1";
+    /**
+     * 以保存
+     */
      String STATUS_0= "0";
 
      String TAKE_IN_INIT = "0";
      String TAKEN_IN= "1";
-
+    String TAKE_OUT_INIT = "0";
+    String TAKEN_OUT= "1";
     /**
      * 合同未生效
      */

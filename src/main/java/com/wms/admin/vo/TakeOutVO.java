@@ -96,4 +96,6 @@ public class TakeOutVO implements Serializable {
     private String description;
 
     private List<TakeOutProdVO> prodList;
+
+    private String status;
 }

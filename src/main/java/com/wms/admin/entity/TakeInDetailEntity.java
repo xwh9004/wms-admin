@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.entity.BaseEntity;
 import com.wms.admin.vo.Money;
+import lombok.Data;
 
 /**
  * <p>
@@ -15,6 +16,7 @@ import com.wms.admin.vo.Money;
  * @author Jesse
  * @since 2022-08-22 15:02:28
  */
+@Data
 @TableName("t_wms_take_in_detail")
 public class TakeInDetailEntity extends BaseEntity {
 
@@ -51,62 +53,14 @@ public class TakeInDetailEntity extends BaseEntity {
     @TableField("prod_amount")
     private Integer prodAmount;
 
+    @TableField("status")
+    private String status;
+
     /**
      * 货物单价
      */
     @TableField("unit_price")
     private Money unitPrice;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getTakeInNo() {
-        return takeInNo;
-    }
-
-    public void setTakeInNo(String takeInNo) {
-        this.takeInNo = takeInNo;
-    }
-    public String getProdNo() {
-        return prodNo;
-    }
-
-    public void setProdNo(String prodNo) {
-        this.prodNo = prodNo;
-    }
-    public String getProdName() {
-        return prodName;
-    }
-
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
-    }
-    public String getProdUnit() {
-        return prodUnit;
-    }
-
-    public void setProdUnit(String prodUnit) {
-        this.prodUnit = prodUnit;
-    }
-    public Integer getProdAmount() {
-        return prodAmount;
-    }
-
-    public void setProdAmount(Integer prodAmount) {
-        this.prodAmount = prodAmount;
-    }
-
-    public Money getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(Money unitPrice) {
-        this.unitPrice = unitPrice;
-    }
 
     @Override
     public String toString() {
@@ -118,6 +72,7 @@ public class TakeInDetailEntity extends BaseEntity {
             ", prodUnit=" + prodUnit +
             ", prodAmount=" + prodAmount +
             ", unitPrice=" + unitPrice +
+            ", status=" + status +
         "}";
     }
 }

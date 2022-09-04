@@ -77,6 +77,10 @@ public class TakeInVO implements Serializable {
     private Money othersFee;
 
     /**
+     * 状态
+     */
+    private String status;
+    /**
      * 收货时间
      */
     @NotNull(message = "收货时间不能为空")
@@ -90,5 +94,5 @@ public class TakeInVO implements Serializable {
      * 货物信息
      */
     @NotNull(message = "货物详情不能为空")
-    private List<TakeInProdVO> prodList;
+    private List<TakeInProdVO> list;
 }

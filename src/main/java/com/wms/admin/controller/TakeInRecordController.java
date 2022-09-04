@@ -4,6 +4,7 @@ package com.wms.admin.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
+import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.service.ITakeInRecordService;
 import com.wms.admin.vo.ContractQueryVO;
 import com.wms.admin.vo.ContractVO;
@@ -40,8 +41,18 @@ public class TakeInRecordController {
 
     @ApiOperation(value = "新增收货单")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/add")
-    public Result add(@RequestBody TakeInVO takeInVO){
+    @PostMapping("/save")
+    public Result save(@RequestBody TakeInVO takeInVO){
+        takeInVO.setStatus(WMSConstants.TAKE_IN_INIT);
+        takeInRecordService.takeInAdd(takeInVO);
+        return Result.success();
+    }
+
+    @ApiOperation(value = "提交收货单")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/submit")
+    public Result submit(@RequestBody TakeInVO takeInVO){
+        takeInVO.setStatus(WMSConstants.TAKEN_IN);
         takeInRecordService.takeInAdd(takeInVO);
         return Result.success();
     }
