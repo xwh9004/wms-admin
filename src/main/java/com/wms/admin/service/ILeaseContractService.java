@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.LeaseContractEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.vo.ContractProductQueryVO;
 import com.wms.admin.vo.ContractQueryVO;
 import com.wms.admin.vo.ContractVO;
+import com.wms.admin.vo.ProductVO;
 
 import java.util.List;
 
@@ -34,4 +36,6 @@ public interface ILeaseContractService extends IService<LeaseContractEntity> {
     void effectContract(Integer id);
 
     ContractVO contractDetail(Integer id);
+
+    IPage<ProductVO> prodList(ContractProductQueryVO queryVO, PageParam pageParam);
 }

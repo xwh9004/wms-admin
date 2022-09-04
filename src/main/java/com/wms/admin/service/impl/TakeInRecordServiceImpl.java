@@ -103,8 +103,6 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(),takeInVO));
 
         save(takeInRecordEntity);
-
-
         saveDetails(takeInVO);
     }
 

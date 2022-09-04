@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
 import com.wms.admin.service.ILeaseContractService;
+import com.wms.admin.vo.ContractProductQueryVO;
 import com.wms.admin.vo.ContractQueryVO;
 import com.wms.admin.vo.ContractVO;
+import com.wms.admin.vo.ProductVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -48,7 +50,13 @@ public class LeaseContractController {
         IPage<ContractVO> page = contractService.contractList(queryVO, pageParam);
         return Result.success().data(page);
     }
-
+    @ApiOperation(value = "合同列表查询")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/prodList")
+    public Result prodList(@RequestBody ContractProductQueryVO queryVO, PageParam pageParam) {
+        IPage<ProductVO> page = contractService.prodList(queryVO, pageParam);
+        return Result.success().data(page);
+    }
     @ApiOperation(value = "新增合同")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/add")

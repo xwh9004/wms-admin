@@ -21,10 +21,7 @@ import com.wms.admin.service.ILeaseContractService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wms.admin.util.SequenceUtil;
 import com.wms.admin.util.VOUtil;
-import com.wms.admin.vo.ContractProdVO;
-import com.wms.admin.vo.ContractQueryVO;
-import com.wms.admin.vo.ContractVO;
-import com.wms.admin.vo.ProductVO;
+import com.wms.admin.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -250,8 +247,13 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
 
     @Override
     public ContractVO contractDetail(Integer id) {
-        ContractVO contractVO =leaseContractMapper.contractDetail(id);
+        ContractVO contractVO = leaseContractMapper.contractDetail(id);
         return contractVO;
+    }
+
+    @Override
+    public IPage<ProductVO> prodList(ContractProductQueryVO queryVO, PageParam pageParam) {
+        return contractProdRelService.queryContractProductList(queryVO, pageParam);
     }
 
     private void deleteContractProdInfo(Integer id) {
