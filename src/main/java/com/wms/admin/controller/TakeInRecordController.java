@@ -67,17 +67,17 @@ public class TakeInRecordController {
 
     @ApiOperation(value = "删除收货单")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @GetMapping("/detail/{id}")
-    public Result detail(@PathVariable("id") Integer id){
-        TakeInVO result = takeInRecordService.detail(id);
+    @PostMapping("/detail/{id}")
+    public Result detail(@PathVariable("id") String id){
+        TakeInVO result = takeInRecordService.detail(Integer.valueOf(id));
         return Result.success().data(result);
     }
 
     @ApiOperation(value = "收货单确认入库")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/taken-in/{id}")
-    public Result takenIn(@PathVariable("id") Integer id){
-        takeInRecordService.takenIn(id);
+    public Result takenIn(@PathVariable("id") String id){
+        takeInRecordService.takenIn(Integer.valueOf(id));
         return Result.success();
     }
 

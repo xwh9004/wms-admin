@@ -52,10 +52,6 @@ public class TakeInDetailEntity extends BaseEntity {
      */
     @TableField("prod_amount")
     private Integer prodAmount;
-
-    @TableField("status")
-    private String status;
-
     /**
      * 货物单价
      */
@@ -72,7 +68,6 @@ public class TakeInDetailEntity extends BaseEntity {
             ", prodUnit=" + prodUnit +
             ", prodAmount=" + prodAmount +
             ", unitPrice=" + unitPrice +
-            ", status=" + status +
         "}";
     }
 }
