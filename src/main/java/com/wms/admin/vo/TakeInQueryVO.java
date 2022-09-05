@@ -26,6 +26,13 @@ public class TakeInQueryVO implements Serializable {
      * 合同单位
      */
     private String contractCompany;
+
+    private String contact;
+
+    /**
+     * 业务人员
+     */
+    private String businessUser;
     /**
      * 收货开始时间
      */

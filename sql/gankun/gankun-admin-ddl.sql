@@ -136,7 +136,7 @@ create table  if not exists T_WMS_LESSEE_ADDRESS (
   id int(20) primary key not null auto_increment,
   lessee_id int(20) NOT NULL comment '承租单位ID',
   company_address VARCHAR(50) NOT NULL comment '承租单位地址',
-  contact   VARCHAR(50) comment '承租联系人电话',
+  contact   VARCHAR(50) comment '承租联系人',
   phone   VARCHAR(20) comment '联系人',
   is_default VARCHAR(1) comment '默认地址',
   del_flag VARCHAR(1) default '1' comment '是否删除',
@@ -153,8 +153,8 @@ create table  if not exists T_WMS_LEASE_CONTRACT (
   lessee_no varChar(40) NOT NULL comment '承租方编号',
   lessee_company varChar(300) NOT NULL comment '承租方单位',
   lessee_address varChar(600)  comment '承租方单位地址',
-  lessee_contact varChar(40)  comment '承租方电话',
-  lessee_phone varChar(20) comment '承租方单位',
+  lessee_contact varChar(40)  comment '承租方联系人',
+  lessee_phone varChar(20) comment '承租方电话',
   sign_date   datetime comment '签约日期',
   effective_date   datetime comment '生效日期',
   expire_date   datetime comment '到期日期',
@@ -200,6 +200,7 @@ create table  if not exists T_WMS_BULLETIN_INFO(
 	take_in_type VARCHAR(2)  comment '收货类型',
     business_user VARCHAR(40) NOT NULL comment '业务人员',
     contract_no VARCHAR(40) NOT NULL comment '合同编号',
+    contact VARCHAR(40) NOT NULL comment '联系人',
     contract_company VARCHAR(40) NOT NULL comment '合同单位',
 	prod_numbs int(20)  comment '货物数量',
 	prod_total_weight int(20)  comment '收货总重量',
@@ -219,6 +220,7 @@ create table  if not exists T_WMS_BULLETIN_INFO(
     update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
    )comment='收货记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+alter table T_WMS_TAKE_IN_RECORD add column contact VARCHAR(40) NOT NULL comment '联系人' after  contract_no;
 
 
   create table  if not exists T_WMS_TAKE_IN_DETAIL(
@@ -242,6 +244,7 @@ create table  if not exists T_WMS_BULLETIN_INFO(
 	take_out_type VARCHAR(2)  comment '发货类型',
     business_user VARCHAR(40) NOT NULL comment '业务人员',
     contract_no VARCHAR(40) NOT NULL comment '合同编号',
+    contact VARCHAR(40) NOT NULL comment '联系人',
     contract_company VARCHAR(40) NOT NULL comment '合同单位',
 	total_amount int(20)  comment '发货数量',
 	total_weight int(20)  comment '发货总重量',

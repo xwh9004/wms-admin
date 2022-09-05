@@ -63,6 +63,12 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         if (StringUtils.isNotBlank(queryVO.getTakeInNo())) {
             queryWrapper.like(TakeInRecordEntity::getTakeInNo, queryVO.getTakeInNo());
         }
+        if (StringUtils.isNotBlank(queryVO.getBusinessUser())) {
+            queryWrapper.like(TakeInRecordEntity::getBusinessUser, queryVO.getBusinessUser());
+        }
+        if (StringUtils.isNotBlank(queryVO.getContact())) {
+            queryWrapper.like(TakeInRecordEntity::getContact, queryVO.getContact());
+        }
         if (StringUtils.isNotBlank(queryVO.getContractNo())) {
             queryWrapper.like(TakeInRecordEntity::getContractNo, queryVO.getContractNo());
         }

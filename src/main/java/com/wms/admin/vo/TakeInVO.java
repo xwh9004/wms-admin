@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,6 +40,8 @@ public class TakeInVO implements Serializable {
      */
     @NotBlank(message = "合同编号不能为空")
     private String contractNo;
+    @NotBlank(message = "联系人不能为空")
+    private String contract;
 
     /**
      * 合同单位
@@ -84,7 +87,7 @@ public class TakeInVO implements Serializable {
      * 收货时间
      */
     @NotNull(message = "收货时间不能为空")
-    private LocalDateTime takeInTime;
+    private LocalDate takeInTime;
 
     /**
      * 描述
