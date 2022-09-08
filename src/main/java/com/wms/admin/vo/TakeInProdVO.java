@@ -37,7 +37,7 @@ public class TakeInProdVO implements Serializable {
     @NotBlank(message = "货物单位不能为空")
     private String prodUnit;
 
-    private String prodUnitName;
+    private String unitName;
 
     /**
      * 货物数量

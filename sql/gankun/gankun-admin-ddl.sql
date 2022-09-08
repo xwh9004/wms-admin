@@ -193,6 +193,7 @@ create table  if not exists T_WMS_BULLETIN_INFO(
     update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
    )comment='合同货物关系表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+drop table T_WMS_TAKE_IN_RECORD;
   create table  if not exists T_WMS_TAKE_IN_RECORD(
     id int(20) primary key not null auto_increment,
     take_in_no VARCHAR(40) NOT NULL comment '收货单号',
@@ -200,7 +201,9 @@ create table  if not exists T_WMS_BULLETIN_INFO(
     business_user VARCHAR(40) NOT NULL comment '业务人员',
     contract_no VARCHAR(40) NOT NULL comment '合同编号',
     contact VARCHAR(40) NOT NULL comment '联系人',
+    phone VARCHAR(40) NOT NULL comment '联系人',
     contract_company VARCHAR(40) NOT NULL comment '合同单位',
+    prod_types int(20) NOT NULL comment '收货类型数量',
 	prod_total_weight int(20)  comment '收货总重量',
 	package_num   int(20)  comment '包裹数',
 	ship_fee   int(20)  comment '运费',

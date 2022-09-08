@@ -79,11 +79,6 @@ public class TakeInRecordEntity extends BaseEntity {
     private Integer prodTypes;
 
     /**
-     * 货品数量
-     */
-    @TableField("prod_numbs")
-    private Integer prodNumbs;
-    /**
      * 上车费
      */
     @TableField("ship_fee")

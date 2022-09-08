@@ -78,6 +78,8 @@ public class TakeInVO implements Serializable {
      */
     private Money loadFee=Money.ZERO;
 
+    private Money totalFee;
+
     /**
      * 状态
      */
@@ -86,12 +88,14 @@ public class TakeInVO implements Serializable {
      * 收货时间
      */
     @NotNull(message = "收货时间不能为空")
-    private LocalDate takeInTime;
+    private LocalDateTime takeInTime;
 
     /**
      * 描述
      */
     private String description;
+
+    private Integer prodTypes;
     /**
      * 货物信息
      */

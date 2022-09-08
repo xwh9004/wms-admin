@@ -98,6 +98,9 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         if (WMSConstants.TAKE_IN_INIT.equals(takeInVO.getStatus())) {
             doSaveTakeIn(takeInVO);
         } else if (WMSConstants.TAKEN_IN.equals(takeInVO.getStatus())) {
+            if(Objects.isNull(takeInVO.getTakeInTime())){
+                takeInVO.setTakeInTime(LocalDateTime.now());
+            }
             doSubmitTakeIn(takeInVO);
         } else {
             throw new BusinessException(ResultCode.PARAM_ERROR, "收货单状态错误");
@@ -123,7 +126,6 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
             List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getList());
             //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
             takeInRecordEntity.setProdTypes(prodList.size());
-            takeInRecordEntity.setProdTypes(totalNumbs(prodList));
         }
         save(takeInRecordEntity);
         saveDetails(takeInVO);
@@ -216,7 +218,6 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
             List<TakeInDetailEntity> prodList = trim2ProdDetailList(takeInVO.getList());
             //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
             takeInRecordEntity.setProdTypes(prodList.size());
-            takeInRecordEntity.setProdTypes(totalNumbs(prodList));
         }
         updateById(takeInRecordEntity);
 
