@@ -50,6 +50,10 @@ public class TakeInRecordEntity extends BaseEntity {
 
     @TableField("contact")
     private String contact;
+
+
+    @TableField("phone")
+    private String phone;
     /**
      * 合同单位
      */
@@ -79,13 +83,16 @@ public class TakeInRecordEntity extends BaseEntity {
      */
     @TableField("prod_numbs")
     private Integer prodNumbs;
-
     /**
-     * 货品总价
+     * 上车费
      */
-    @TableField("prod_total_prices")
-    private Money prodTotalPrices;
-
+    @TableField("ship_fee")
+    private Money shipFee;
+    /**
+     * 上车费
+     */
+    @TableField("load_fee")
+    private Money loadFee;
     /**
      * 卸车费
      */
@@ -130,11 +137,12 @@ public class TakeInRecordEntity extends BaseEntity {
                 ", contractNo=" + contractNo +
                 ", contact=" + contact +
                 ", contractCompany=" + contractCompany +
-                ", prodTotalPrices=" + prodTotalPrices +
                 ", prodTotalWeight=" + prodTotalWeight +
                 ", prodTypes=" + prodTypes +
                 ", unloadFee=" + unloadFee +
                 ", pileFee=" + pileFee +
+                ", loadFee=" + loadFee +
+                ", shipFee=" + shipFee +
                 ", othersFee=" + othersFee +
                 ", totalFee=" + totalFee +
                 ", takeInTime=" + takeInTime +

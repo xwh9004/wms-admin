@@ -8,6 +8,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -86,6 +87,31 @@ public class ContractVO implements Serializable {
      */
     @NotNull(message = "结算方式不能为空")
     private String billMethod;
+
+    /**
+     * 报停收费比例
+     */
+    private BigDecimal stopChargeFeeRatio;
+    /**
+     * 违约金收费比例
+     */
+    private String penaltyFeeRatio;
+    /**
+     * 袋费
+     */
+    private Money packageFee;
+    /**
+     * 每袋扣件个数
+     */
+    private Integer numsPerPackage;
+    /**
+     * 起租吨数
+     */
+    private BigDecimal startRentWeight;
+    /**
+     * 预警欠款标准
+     */
+    private Money arrearsWarring;
 
     private String status;
 

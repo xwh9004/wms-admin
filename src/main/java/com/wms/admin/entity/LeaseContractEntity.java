@@ -8,6 +8,7 @@ import com.wms.admin.entity.BaseEntity;
 import com.wms.admin.vo.Money;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -97,6 +98,37 @@ public class LeaseContractEntity extends BaseEntity {
      */
     @TableField("bill_method")
     private String billMethod;
+    /**
+     * 报停收费比例
+     */
+    @TableField("stop_charge_fee_ratio")
+    private BigDecimal stopChargeFeeRatio;
+    /**
+     * 违约金收费比例
+     */
+    @TableField("penalty_fee_ratio")
+    private String penaltyFeeRatio;
+    /**
+     * 袋费
+     */
+    @TableField("package_fee")
+    private Money packageFee;
+    /**
+     * 每袋扣件个数
+     */
+    @TableField("nums_per_package")
+    private Integer numsPerPackage;
+    /**
+     * 起租吨数
+     */
+    @TableField("start_rent_weight")
+    private BigDecimal startRentWeight;
+    /**
+     * 预警欠款标准
+     */
+    @TableField("arrears_warring")
+    private Money arrearsWarring;
+
 
     /**
      * 0 未生效 1 已生效 2 已失效

@@ -41,8 +41,9 @@ public class TakeInVO implements Serializable {
     @NotBlank(message = "合同编号不能为空")
     private String contractNo;
     @NotBlank(message = "联系人不能为空")
-    private String contract;
+    private String contact;
 
+    private String phone;
     /**
      * 合同单位
      */
@@ -53,16 +54,6 @@ public class TakeInVO implements Serializable {
      * 收货数量
      */
     private Integer totalAmount;
-
-    /**
-     * 收货总重量
-     */
-    private Integer totalWeight;
-
-    /**
-     * 货品种类数
-     */
-    private Integer prodTypes;
 
     /**
      * 卸车费
@@ -78,6 +69,14 @@ public class TakeInVO implements Serializable {
      * 其他杂费
      */
     private Money othersFee=Money.ZERO;
+    /**
+     * 运费
+     */
+    private Money shipFee=Money.ZERO;
+    /**
+     * 上车费
+     */
+    private Money loadFee=Money.ZERO;
 
     /**
      * 状态

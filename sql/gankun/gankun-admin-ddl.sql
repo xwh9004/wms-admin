@@ -104,10 +104,6 @@ create table  if not exists T_WMS_PRODUCT(
   PRIMARY KEY ( id )
 )comment='货物表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table T_WMS_PRODUCT add column unit_id int(20)  comment '单位ID' after  type;
-alter table T_WMS_PRODUCT add column unit_price int(20)  comment '价格' after  unit_id;
-alter table T_WMS_PRODUCT add column quantity decimal(10,3)  comment '标量'after  unit_price;
-
 create table  if not exists T_WMS_MEASUREMENT_UNIT (
   id int(20) primary key not null auto_increment,
   unit_symbol VARCHAR(40) NOT NULL comment '单位编号',
@@ -160,6 +156,12 @@ create table  if not exists T_WMS_LEASE_CONTRACT (
   expire_date   datetime comment '到期日期',
   deposit   int(11) comment '合同押金',
   bill_method   VARCHAR(1) comment '1 算头又算尾 2 算头不算尾',
+  stop_charge_fee_ratio decimal(10,3) comment '报停收费比例' ,
+  penalty_fee_ratio decimal(10,3)  comment '违约金收费比例' ,
+  package_fee int(20)  comment '袋费' ,
+  nums_per_package int(20)  comment '每袋扣件个数',
+  start_rent_weight decimal(10,3)  comment '起租吨数' ,
+  arrears_warring   decimal(10,3)  comment '预警欠款标准' ,
   status VARCHAR(1) comment '0 未生效 1 已生效 2 已失效',
   del_flag VARCHAR(1) default '1' comment '是否删除',
   create_by VARCHAR(200) comment '创建人',
@@ -167,9 +169,6 @@ create table  if not exists T_WMS_LEASE_CONTRACT (
   update_by VARCHAR(200)   comment '最后更新人',
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='合同表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-alter table T_WMS_LEASE_CONTRACT add column status VARCHAR(1) comment '0 未生效 1 已生效 2 已失效 3 已过期' after  bill_method;
-
 
 create table  if not exists T_WMS_BULLETIN_INFO(
   id int(20) primary key not null auto_increment,
@@ -202,10 +201,10 @@ create table  if not exists T_WMS_BULLETIN_INFO(
     contract_no VARCHAR(40) NOT NULL comment '合同编号',
     contact VARCHAR(40) NOT NULL comment '联系人',
     contract_company VARCHAR(40) NOT NULL comment '合同单位',
-	prod_numbs int(20)  comment '货物数量',
 	prod_total_weight int(20)  comment '收货总重量',
-	prod_total_prices int(20)  comment '货物总价',
-	prod_types   int(20)  comment '货品种类数',
+	package_num   int(20)  comment '包裹数',
+	ship_fee   int(20)  comment '运费',
+    load_fee   int(20)  comment '上车费',
 	unload_fee   int(20)  comment '卸车费',
 	pile_fee     int(20)    comment '堆码费',
 	others_fee   int(20)  comment '其他杂费',
@@ -220,7 +219,6 @@ create table  if not exists T_WMS_BULLETIN_INFO(
     update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
    )comment='收货记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table T_WMS_TAKE_IN_RECORD add column contact VARCHAR(40) NOT NULL comment '联系人' after  contract_no;
 
 
   create table  if not exists T_WMS_TAKE_IN_DETAIL(
@@ -246,14 +244,15 @@ alter table T_WMS_TAKE_IN_RECORD add column contact VARCHAR(40) NOT NULL comment
     contract_no VARCHAR(40) NOT NULL comment '合同编号',
     contact VARCHAR(40) NOT NULL comment '联系人',
     contract_company VARCHAR(40) NOT NULL comment '合同单位',
-	total_amount int(20)  comment '发货数量',
 	total_weight int(20)  comment '发货总重量',
 	prod_types   int(20)  comment '货品种类数',
 	package_num   int(20)  comment '包裹数',
 	ship_fee   int(20)  comment '运费',
 	load_fee   int(20)  comment '上车费',
+	unload_fee   int(20)  comment '卸车费',
 	pile_fee   int(20)    comment '堆码费',
 	others_fee   int(20)  comment '其他杂费',
+	total_fee   int(20)  comment '总费用',
     take_out_time TIMESTAMP   comment '发货时间',
 	description VARCHAR(2000) comment '描述',
 	status VARCHAR(1) default '0' comment '0 未发货 1 已发货',
@@ -280,3 +279,17 @@ alter table T_WMS_TAKE_IN_RECORD add column contact VARCHAR(40) NOT NULL comment
     update_by VARCHAR(200)   comment '最后更新人',
     update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
    )comment='发货记录详情表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+   -----需要根棍的表结构---
+alter table T_WMS_TAKE_IN_RECORD add column phone VARCHAR(40) NOT NULL comment '联系电话' after  contact;
+alter table T_WMS_LEASE_CONTRACT add column stop_charge_fee_ratio decimal(10,3) comment '报停收费比例' after  bill_method;
+alter table T_WMS_LEASE_CONTRACT add column penalty_fee_ratio decimal(10,3)  comment '违约金收费比例' after  stop_charge_fee_ratio;
+alter table T_WMS_LEASE_CONTRACT add column package_fee int(20)  comment '袋费' after  penalty_fee_ratio;
+alter table T_WMS_LEASE_CONTRACT add column nums_per_package int(20)  comment '每袋扣件个数' after  package_fee;
+alter table T_WMS_LEASE_CONTRACT add column start_rent_weight decimal(10,3)  comment '起租吨数' after  nums_per_package;
+alter table T_WMS_LEASE_CONTRACT add column arrears_warring   decimal(10,3)  comment '预警欠款标准' after  start_rent_weight;
+
+
+
+

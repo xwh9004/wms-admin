@@ -90,6 +90,16 @@ public class TakeOutRecordEntity extends BaseEntity {
      */
     @TableField("load_fee")
     private Integer loadFee;
+    /**
+     * 总费用
+     */
+    @TableField("total_fee")
+    private Integer totalFee;
+    /**
+     * 卸车费
+     */
+    @TableField("unload_fee")
+    private Integer unLoadFee;
 
     /**
      * 堆码费

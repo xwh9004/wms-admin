@@ -23,6 +23,7 @@ public class TakeInProdVO implements Serializable {
      */
     @NotBlank(message = "货物编号不能为空")
     private String prodNo;
+    private String type;
 
     /**
      * 货物名称
@@ -36,6 +37,8 @@ public class TakeInProdVO implements Serializable {
     @NotBlank(message = "货物单位不能为空")
     private String prodUnit;
 
+    private String prodUnitName;
+
     /**
      * 货物数量
      */
@@ -47,5 +50,13 @@ public class TakeInProdVO implements Serializable {
      */
     @NotNull(message = "货物单价不能为空")
     private Money unitPrice;
+
+    private String categoryId;
+    private String categoryName;
+    /**
+     * 大类单位
+     */
+    private String categoryUnitId;
+    private String categoryUnitName;
 
 }

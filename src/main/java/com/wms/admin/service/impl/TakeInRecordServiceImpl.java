@@ -124,8 +124,6 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
             //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
             takeInRecordEntity.setProdTypes(prodList.size());
             takeInRecordEntity.setProdTypes(totalNumbs(prodList));
-            takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
-            takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(), takeInVO));
         }
         save(takeInRecordEntity);
         saveDetails(takeInVO);
@@ -203,24 +201,7 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
 
     @Override
     public TakeInVO detail(Integer id) {
-        TakeInRecordEntity takeInRecord = getById(id);
-        Assert.notNull(takeInRecord, "收货单不存在");
-        Assert.isTrue(StringUtils.equals(takeInRecord.getDelFlag(), WMSConstants.DEL_FLG_N), "收货单已删除");
-
-        LambdaQueryWrapper<TakeInDetailEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TakeInDetailEntity::getTakeInNo, takeInRecord.getTakeInNo())
-                .eq(TakeInDetailEntity::getDelFlag, WMSConstants.DEL_FLG_N);
-        List<TakeInDetailEntity> detailList = takeInDetailService.list(queryWrapper);
-        TakeInVO result = new TakeInVO();
-        BeanUtils.copyProperties(takeInRecord, result);
-        if (!CollectionUtils.isEmpty(detailList)) {
-            List<TakeInProdVO> prodList = detailList.stream().map(e -> {
-                TakeInProdVO prodVO = new TakeInProdVO();
-                BeanUtils.copyProperties(e, prodVO);
-                return prodVO;
-            }).collect(Collectors.toList());
-            result.setList(prodList);
-        }
+        TakeInVO result = baseMapper.takeInDetail(id);
         return result;
     }
 
@@ -236,8 +217,6 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
             //计算prodTypes ,totalNumbs,prodTotalPrices,totalFee;
             takeInRecordEntity.setProdTypes(prodList.size());
             takeInRecordEntity.setProdTypes(totalNumbs(prodList));
-            takeInRecordEntity.setProdTotalPrices(prodTotalPrices(prodList));
-            takeInRecordEntity.setTotalFee(totalFee(takeInRecordEntity.getProdTotalPrices(), takeInVO));
         }
         updateById(takeInRecordEntity);
 

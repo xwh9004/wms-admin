@@ -74,6 +74,10 @@ public class TakeOutVO implements Serializable {
      * 上车费
      */
     private Money loadFee;
+    /**
+     * 卸车费
+     */
+    private Money unloadFee;
 
     /**
      * 堆码费
@@ -84,6 +88,10 @@ public class TakeOutVO implements Serializable {
      * 其他杂费
      */
     private Money othersFee;
+    /**
+     * 总费用
+     */
+    private Money totalFee;
 
     /**
      * 发货时间

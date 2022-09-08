@@ -2,6 +2,8 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.TakeInRecordEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.admin.vo.TakeInVO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -12,5 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2022-08-22 15:02:28
  */
 public interface TakeInRecordMapper extends BaseMapper<TakeInRecordEntity> {
+
+    TakeInVO takeInDetail(@Param("id") Integer id);
 
 }
