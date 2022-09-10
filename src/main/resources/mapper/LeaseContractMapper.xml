@@ -16,6 +16,12 @@
         <result column="expire_date" property="expireDate"></result>
         <result column="deposit" property="deposit" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
         <result column="bill_method" property="billMethod"></result>
+        <result column="stop_charge_fee_ratio" property="stopChargeFeeRatio"></result>
+        <result column="penalty_fee_ratio" property="penaltyFeeRatio"></result>
+        <result column="package_fee" property="packageFee" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
+        <result column="nums_per_package" property="numsPerPackage"></result>
+        <result column="start_rent_weight" property="startRentWeight"></result>
+        <result column="arrears_warring" property="arrearsWarring"></result>
         <collection property="list" ofType="com.wms.admin.vo.ContractProdVO">
             <id column="prod_id" property="prodId"></id>
             <result column="prod_no" property="prodNo"></result>
@@ -24,8 +30,6 @@
             <result column="type" property="type"></result>
             <result column="unit_name" property="unitName"></result>
         </collection>
-
-
     </resultMap>
 
     <select id="contractDetail" resultMap="contractDetail">
@@ -44,6 +48,12 @@
         c.deposit,
         c.bill_method,
         c.status,
+        c.stop_charge_fee_ratio,
+        c.penalty_fee_ratio,
+        c.package_fee,
+        c.nums_per_package,
+        c.start_rent_weight,
+        c.arrears_warring,
         p.id prod_id,
         p.prod_no,
         p.prod_name,

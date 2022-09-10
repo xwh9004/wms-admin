@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,6 +55,10 @@ public class TakeInVO implements Serializable {
      * 收货数量
      */
     private Integer totalAmount;
+    /**
+     * 总重量
+     */
+    private BigDecimal totalWeight;
 
     /**
      * 卸车费

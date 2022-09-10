@@ -6,13 +6,10 @@ import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
 import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.service.ITakeInRecordService;
-import com.wms.admin.vo.ContractQueryVO;
-import com.wms.admin.vo.ContractVO;
 import com.wms.admin.vo.TakeInQueryVO;
 import com.wms.admin.vo.TakeInVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

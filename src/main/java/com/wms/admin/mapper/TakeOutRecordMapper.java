@@ -2,6 +2,8 @@ package com.wms.admin.mapper;
 
 import com.wms.admin.entity.TakeOutRecordEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wms.admin.vo.TakeOutVO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TakeOutRecordMapper extends BaseMapper<TakeOutRecordEntity> {
 
+    TakeOutVO takeOutDetail(@Param("id") Integer id);
 }

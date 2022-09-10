@@ -18,7 +18,13 @@ import com.wms.admin.vo.TakeOutVO;
  */
 public interface ITakeOutRecordService extends IService<TakeOutRecordEntity> {
 
-    IPage<TakeInVO> takeOutList(TakeOutQueryVO queryVO, PageParam pageParam);
+    IPage<TakeOutVO> takeOutList(TakeOutQueryVO queryVO, PageParam pageParam);
 
     void takeOutAdd(TakeOutVO takeOutVO);
+
+    void takeOutUpdate(TakeOutVO takeOutVO);
+
+    TakeOutVO detail(Integer id);
+
+    void takenOut(Integer id);
 }

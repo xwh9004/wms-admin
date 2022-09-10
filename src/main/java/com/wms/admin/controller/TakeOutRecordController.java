@@ -14,11 +14,7 @@ import com.wms.admin.vo.TakeOutVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -29,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-08-22 15:02:28
  */
 @RestController
-@RequestMapping("/take-out-record-entity")
+@RequestMapping("/take-out")
 public class TakeOutRecordController {
     @Autowired
     private ITakeOutRecordService takeOutRecordService;
@@ -38,7 +34,7 @@ public class TakeOutRecordController {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/list")
     public Result list(@RequestBody TakeOutQueryVO queryVO, PageParam pageParam){
-        IPage<TakeInVO> page = takeOutRecordService.takeOutList(queryVO, pageParam);
+        IPage<TakeOutVO> page = takeOutRecordService.takeOutList(queryVO, pageParam);
         return Result.success().data(page);
     }
 
@@ -57,6 +53,31 @@ public class TakeOutRecordController {
     public Result submit(@RequestBody TakeOutVO takeOutVO){
         takeOutVO.setStatus(WMSConstants.TAKEN_OUT);
         takeOutRecordService.takeOutAdd(takeOutVO);
+        return Result.success();
+    }
+
+
+    @ApiOperation(value = "修改收货单")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/update")
+    public Result update(@RequestBody TakeOutVO takeOutVO){
+        takeOutRecordService.takeOutUpdate(takeOutVO);
+        return Result.success();
+    }
+
+    @ApiOperation(value = "出货单详情")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/detail/{id}")
+    public Result detail(@PathVariable("id") String id){
+        TakeOutVO result = takeOutRecordService.detail(Integer.valueOf(id));
+        return Result.success().data(result);
+    }
+
+    @ApiOperation(value = "出货单确认出库")
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
+    @PostMapping("/taken-out/{id}")
+    public Result takenIn(@PathVariable("id") String id){
+        takeOutRecordService.takenOut(Integer.valueOf(id));
         return Result.success();
     }
 }

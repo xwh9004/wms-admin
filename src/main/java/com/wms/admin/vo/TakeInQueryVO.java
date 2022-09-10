@@ -29,6 +29,8 @@ public class TakeInQueryVO implements Serializable {
 
     private String contact;
 
+    private String status;
+
     /**
      * 业务人员
      */

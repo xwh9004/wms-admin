@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.vo.Money;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -69,8 +70,8 @@ public class TakeInRecordEntity extends BaseEntity {
     /**
      * 收货总重量
      */
-    @TableField("prod_total_weight")
-    private Integer prodTotalWeight;
+    @TableField("total_weight")
+    private BigDecimal totalWeight;
 
     /**
      * 货品种类数
@@ -132,7 +133,7 @@ public class TakeInRecordEntity extends BaseEntity {
                 ", contractNo=" + contractNo +
                 ", contact=" + contact +
                 ", contractCompany=" + contractCompany +
-                ", prodTotalWeight=" + prodTotalWeight +
+                ", totalWeight=" + totalWeight +
                 ", prodTypes=" + prodTypes +
                 ", unloadFee=" + unloadFee +
                 ", pileFee=" + pileFee +

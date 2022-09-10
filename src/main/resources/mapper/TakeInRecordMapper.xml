@@ -24,6 +24,7 @@
             <result column="prod_no" property="prodNo"/>
             <result column="prod_name" property="prodName"/>
             <result column="unit_name" property="unitName"/>
+            <result column="quantity" property="quantity"/>
             <result column="prod_amount" property="prodAmount"/>
             <result column="unit_price" property="unitPrice" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"/>
             <result column="category_id" property="categoryId"/>
@@ -50,6 +51,7 @@
         r.status ,
         p.id prod_id,
         p.type,
+        p.quantity,
         rd.prod_no ,
         rd.prod_name ,
         rd.prod_unit ,

@@ -47,19 +47,21 @@ public class TakeOutRecordEntity extends BaseEntity {
      */
     @TableField("contract_no")
     private String contractNo;
+    /**
+     * 联系人
+     */
     @TableField("contact")
     private String contact;
+    /**
+     * 联系电话
+     */
+    @TableField("phone")
+    private String phone;
     /**
      * 合同单位
      */
     @TableField("contract_company")
     private String contractCompany;
-
-    /**
-     * 发货数量
-     */
-    @TableField("total_amount")
-    private Integer totalAmount;
 
     /**
      * 发货总重量
@@ -139,7 +141,6 @@ public class TakeOutRecordEntity extends BaseEntity {
             ", contractNo=" + contractNo +
             ", contact=" + contact +
             ", contractCompany=" + contractCompany +
-            ", totalAmount=" + totalAmount +
             ", totalWeight=" + totalWeight +
             ", prodTypes=" + prodTypes +
             ", packageNum=" + packageNum +

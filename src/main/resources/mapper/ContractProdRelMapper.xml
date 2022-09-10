@@ -4,7 +4,7 @@
 
 
     <select id="contractProductList" resultType="com.wms.admin.vo.ProductVO">
-        select P.id,P.prod_no,P.prod_name,P.type,C.id categoryId,C.name categoryName,CU.unit_name categoryUnitName,
+        select P.id,P.prod_no,P.prod_name,P.type,P.quantity,C.id categoryId,C.name categoryName,CU.unit_name categoryUnitName,
         R.lease_unit_price unit_price,PU.unit_name unitName
         from T_WMS_CONTRACT_PROD_REL R
         inner join T_WMS_PRODUCT P on R.prod_id = P.id AND R.DEL_FLAG ='1'

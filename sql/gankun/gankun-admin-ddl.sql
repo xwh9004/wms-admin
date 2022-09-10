@@ -201,10 +201,10 @@ drop table T_WMS_TAKE_IN_RECORD;
     business_user VARCHAR(40) NOT NULL comment '业务人员',
     contract_no VARCHAR(40) NOT NULL comment '合同编号',
     contact VARCHAR(40) NOT NULL comment '联系人',
-    phone VARCHAR(40) NOT NULL comment '联系人',
+    phone VARCHAR(40)  comment '联系人电话',
     contract_company VARCHAR(40) NOT NULL comment '合同单位',
+    total_weight decimal(10,3)  comment '收货总重量',
     prod_types int(20) NOT NULL comment '收货类型数量',
-	prod_total_weight int(20)  comment '收货总重量',
 	package_num   int(20)  comment '包裹数',
 	ship_fee   int(20)  comment '运费',
     load_fee   int(20)  comment '上车费',
@@ -246,8 +246,9 @@ drop table T_WMS_TAKE_IN_RECORD;
     business_user VARCHAR(40) NOT NULL comment '业务人员',
     contract_no VARCHAR(40) NOT NULL comment '合同编号',
     contact VARCHAR(40) NOT NULL comment '联系人',
+    phone VARCHAR(40)  comment '联系人电话',
     contract_company VARCHAR(40) NOT NULL comment '合同单位',
-	total_weight int(20)  comment '发货总重量',
+	total_weight decimal(10,3)  comment '发货总重量',
 	prod_types   int(20)  comment '货品种类数',
 	package_num   int(20)  comment '包裹数',
 	ship_fee   int(20)  comment '运费',
@@ -285,14 +286,8 @@ drop table T_WMS_TAKE_IN_RECORD;
 
 
    -----需要根棍的表结构---
-alter table T_WMS_TAKE_IN_RECORD add column phone VARCHAR(40) NOT NULL comment '联系电话' after  contact;
-alter table T_WMS_LEASE_CONTRACT add column stop_charge_fee_ratio decimal(10,3) comment '报停收费比例' after  bill_method;
-alter table T_WMS_LEASE_CONTRACT add column penalty_fee_ratio decimal(10,3)  comment '违约金收费比例' after  stop_charge_fee_ratio;
-alter table T_WMS_LEASE_CONTRACT add column package_fee int(20)  comment '袋费' after  penalty_fee_ratio;
-alter table T_WMS_LEASE_CONTRACT add column nums_per_package int(20)  comment '每袋扣件个数' after  package_fee;
-alter table T_WMS_LEASE_CONTRACT add column start_rent_weight decimal(10,3)  comment '起租吨数' after  nums_per_package;
-alter table T_WMS_LEASE_CONTRACT add column arrears_warring   decimal(10,3)  comment '预警欠款标准' after  start_rent_weight;
 
+alter table T_WMS_TAKE_IN_RECORD add column total_weight decimal(10,3)  comment '发货总重量' after  contract_company;
 
 
 
