@@ -48,7 +48,7 @@ public class LesseeAddressEntity extends BaseEntity {
      * 默认地址
      */
     @TableField("is_default")
-    private String isDefault;
+    private boolean isDefault;
 
     public Integer getId() {
         return id;
@@ -85,12 +85,13 @@ public class LesseeAddressEntity extends BaseEntity {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    public String getIsDefault() {
+
+    public boolean isDefault() {
         return isDefault;
     }
 
-    public void setIsDefault(String isDefault) {
-        this.isDefault = isDefault;
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 
     @Override

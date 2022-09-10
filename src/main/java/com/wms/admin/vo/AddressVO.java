@@ -32,11 +32,7 @@ public class AddressVO {
     /**
      * 是否默认地址
      */
-    private String isDefault;
-
-    public boolean isDefault(){
-        return StringUtils.equals(isDefault,"1");
-    }
+    private boolean isDefault;
 
 
 }

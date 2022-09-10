@@ -37,7 +37,8 @@ public class JsonFormatConfig {
         }
     }
 
-    public static class LocalDateFormatDeserialize extends JsonDeserializer<LocalDateTime> {
+    public static class
+    LocalDateFormatDeserialize extends JsonDeserializer<LocalDateTime> {
 
         @Override
         public LocalDateTime deserialize(JsonParser jsonParser,

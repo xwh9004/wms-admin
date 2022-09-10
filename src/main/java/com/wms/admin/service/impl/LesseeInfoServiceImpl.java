@@ -46,9 +46,6 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
     @Autowired
     private ILesseeAddressService lesseeAddressService;
 
-    private static final String IS_DEFAULT = "1";
-    private static final String IS_NO_DEFAULT = "0";
-
     @Override
     public List<LesseeInfoVO> allLessees() {
         return null;
@@ -124,11 +121,7 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
             entity.setCompanyAddress(vo.getAddress());
             entity.setLesseeId(lesseeId);
             entity.setDelFlag(WMSConstants.DEL_FLG_N);
-            if (vo.isDefault()) {
-                entity.setIsDefault(IS_DEFAULT);
-            } else {
-                entity.setIsDefault(IS_NO_DEFAULT);
-            }
+
             return entity;
         }).collect(Collectors.toList());
         lesseeAddressService.saveOrUpdateBatch(addressEntities);
@@ -140,10 +133,10 @@ public class LesseeInfoServiceImpl extends ServiceImpl<LesseeInfoMapper, LesseeI
             defaultAddress = addrList.get(0);
         } else {
             Optional<AddressVO> defaultOption = addrList.stream()
-                    .filter(vo -> StringUtils.equals(vo.getIsDefault(), "1")).findFirst();
+                    .filter(vo -> vo.isDefault()).findFirst();
             defaultAddress = defaultOption.orElse(addrList.get(0));
         }
-        defaultAddress.setIsDefault(IS_DEFAULT);
+        defaultAddress.setDefault(true);
         return defaultAddress;
     }
 

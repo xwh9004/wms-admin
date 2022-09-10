@@ -95,7 +95,7 @@ public class ContractVO implements Serializable {
     /**
      * 违约金收费比例
      */
-    private String penaltyFeeRatio;
+    private BigDecimal penaltyFeeRatio;
     /**
      * 袋费
      */
@@ -111,7 +111,7 @@ public class ContractVO implements Serializable {
     /**
      * 预警欠款标准
      */
-    private Money arrearsWarring;
+    private BigDecimal arrearsWarring;
 
     private String status;
 

@@ -107,7 +107,7 @@ public class LeaseContractEntity extends BaseEntity {
      * 违约金收费比例
      */
     @TableField("penalty_fee_ratio")
-    private String penaltyFeeRatio;
+    private BigDecimal penaltyFeeRatio;
     /**
      * 袋费
      */
@@ -127,7 +127,7 @@ public class LeaseContractEntity extends BaseEntity {
      * 预警欠款标准
      */
     @TableField("arrears_warring")
-    private Money arrearsWarring;
+    private BigDecimal arrearsWarring;
 
 
     /**

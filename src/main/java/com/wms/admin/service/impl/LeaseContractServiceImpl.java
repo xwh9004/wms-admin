@@ -33,6 +33,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -123,6 +124,8 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     @Transactional
     @Override
     public void addContract(ContractVO contractVO) {
+        trimProperties(contractVO);
+
         if (StringUtils.isBlank(contractVO.getContractNo())) {
             contractVO.setContractNo(SequenceUtil.generateNoByDate("HT"));
         }
@@ -222,6 +225,7 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
 
     @Override
     public void updateContract(ContractVO contractVO) {
+        trimProperties(contractVO);
         checkForUpdate(contractVO.getId());
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
@@ -272,6 +276,12 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
                 "合同已删除");
         Assert.isTrue(!StringUtils.equals(contractEntity.getStatus(), WMSConstants.CONTRACT_EFFECT),
                 "合同已生效，不能修改");
+    }
+
+    private void trimProperties(ContractVO contractVO){
+        if(Objects.nonNull(contractVO.getArrearsWarring())){
+            contractVO.setArrearsWarring(contractVO.getArrearsWarring().setScale(3, BigDecimal.ROUND_HALF_UP));
+        }
 
     }
 
