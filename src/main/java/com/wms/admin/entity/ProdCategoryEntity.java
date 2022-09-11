@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wms.admin.entity.BaseEntity;
+import com.wms.admin.vo.Money;
 
 /**
  * <p>
@@ -33,10 +34,28 @@ public class ProdCategoryEntity extends BaseEntity {
     @TableField("code")
     private String code;
     /**
-     * 单位ID
+     * 自然单位ID
      */
     @TableField("unit_id")
     private Integer unitId;
+
+    /**
+     * 计费单位ID
+     */
+    @TableField("charge_unit_id")
+    private Integer chargeUnitId;
+
+    /**
+     * 单位价值
+     */
+    @TableField("unit_value")
+    private Money unitValue;
+
+    /**
+     * 单位租金
+     */
+    @TableField("unit_rental")
+    private Money unitRental;
     /**
      * 描述
      */

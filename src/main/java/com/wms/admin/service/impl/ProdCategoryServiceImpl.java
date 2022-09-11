@@ -102,10 +102,18 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         Integer unitId = vo.getUnitId();
         MeasurementUnitEntity unit = measurementUnitMapper.selectById(unitId);
         if(Objects.isNull(unit)){
-            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "单位" + vo.getCode());
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "自然单位" + vo.getUnitId());
         }
         if(StringUtils.equals(unit.getDelFlag(),WMSConstants.DEL_FLG_Y)){
-            throw new BusinessException(ResultCode.COMMON_ERROR, "单位不可以");
+            throw new BusinessException(ResultCode.COMMON_ERROR, "自然单位不可用");
+        }
+        Integer chargeUnitId = vo.getChargeUnitId();
+        MeasurementUnitEntity chargeUnit = measurementUnitMapper.selectById(chargeUnitId);
+        if(Objects.isNull(chargeUnit)){
+            throw new BusinessException(ResultCode.RESOURCE_EXISTS, "计费单位" +vo.getChargeUnitId());
+        }
+        if(StringUtils.equals(unit.getDelFlag(),WMSConstants.DEL_FLG_Y)){
+            throw new BusinessException(ResultCode.COMMON_ERROR, "计费单位不可用");
         }
     }
 
@@ -120,15 +128,18 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         checkForUpdate(categoryVO);
         ProdCategoryEntity entity = prodCategoryMapper.selectById(categoryVO.getId());
         if (entity == null || WMSConstants.DEL_FLG_Y.equals(entity.getDelFlag())) {
-            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, categoryVO.getId());
+            throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, String.format("大类%s",categoryVO.getId()));
         }
         BeanUtils.copyProperties(categoryVO, entity);
         return updateById(entity);
     }
 
     private void checkForUpdate(ProdCategoryVO categoryVO) {
-        if (StringUtils.isBlank(categoryVO.getId())) {
+        if (Objects.nonNull(categoryVO.getId())) {
             throw new BusinessException(ResultCode.PARAM_NOT_NULL, "ID");
+        }
+        if (categoryVO.getId().intValue()<1) {
+            throw new BusinessException(ResultCode.PARAM_ERROR, "ID不能小于1");
         }
         List<ProdCategoryEntity> existCategories = queryByCode(categoryVO.getCode());
         if (existCategories.isEmpty()) {
@@ -152,11 +163,10 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
     public boolean deleteCategory(String id) {
         Assert.notNull(id, "ID不能为空");
         ProdCategoryEntity entity = prodCategoryMapper.selectById(id);
-
         if (entity == null || WMSConstants.DEL_FLG_Y.equals(entity.getDelFlag())) {
             throw new BusinessException(ResultCode.RESOURCE_NOT_EXISTS, "大类");
         }
-//        entity.setDelFlag(WMSConstants.DEL_FLG_0);
-        return removeById(id);
+        entity.setDelFlag(WMSConstants.DEL_FLG_Y);
+        return updateById(entity);
     }
 }

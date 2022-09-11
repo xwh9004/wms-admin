@@ -72,18 +72,22 @@ create table  if not exists T_WMS_MENU(
 
 
 create table  if not exists T_WMS_PROD_CATEGORY(
-   id VARCHAR(40) NOT NULL comment 'ID',
+   id int(20) primary key not null auto_increment,
    name VARCHAR(100) NOT NULL comment '大类名称',
    code VARCHAR(40) NOT NULL comment '大类编码',
-   unit_id VARCHAR(40) Not null comment '单位ID',
+   unit_id int(20) Not null comment '自然单位ID',
+   charge_unit_id int(20) Not null comment '计费单位ID',
+   unit_value int(20)  comment '单位价值',
+   unit_rental int(20)  comment '单位租金',
    description VARCHAR(200) NOT NULL comment '描述',
    del_flag VARCHAR(1) default '1' comment '是否删除',
    create_by VARCHAR(200) comment '创建人',
    create_time TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP comment '创建时间',
    update_by VARCHAR(200)   comment '最后更新人',
-   update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
-   PRIMARY KEY ( id )
+   update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
 )comment='货物大类表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 create table  if not exists T_WMS_PRODUCT(
   id VARCHAR(40) NOT NULL comment '产品ID',

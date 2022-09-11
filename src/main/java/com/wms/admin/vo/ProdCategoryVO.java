@@ -1,19 +1,15 @@
 package com.wms.admin.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Validated
 @Data
 public class ProdCategoryVO extends BaseVO{
 
-    private String id;
+    private Integer id;
 
     /**
      * 大类名称
@@ -25,9 +21,32 @@ public class ProdCategoryVO extends BaseVO{
     private String code;
 
     /**
-     * 计量单位ID
+     * 自然单位ID
      */
     private Integer unitId;
+
+    /**
+     * 自然单位
+     */
+    private Integer unitName;
+    /**
+     * 计费单位ID
+     */
+    private Integer chargeUnitId;
+
+
+    /**
+     * 计费单位
+     */
+    private Integer chargeUnitName;
+    /**
+     * 单位价值
+     */
+    private Money unitValue;
+    /**
+     * 单位租金
+     */
+    private Money unitRental;
     /**
      * 描述
      */

@@ -58,7 +58,7 @@ public class ProdCategoryServiceTest extends BaseTest {
     @Test(expected = BusinessException.class)
     public void update_not_exist_code_test() {
         ProdCategoryVO vo = new ProdCategoryVO();
-        vo.setId(UUIDUtil.uuid());
+        vo.setId(1);
         vo.setCode("test");
         Mockito.when(prodCategoryMapper.selectList(Mockito.any(Wrapper.class))).thenReturn(existList());
         categoryService.updateCategory(vo);
@@ -67,7 +67,7 @@ public class ProdCategoryServiceTest extends BaseTest {
     @Test(expected = BusinessException.class)
     public void delete_test() {
         ProdCategoryVO vo = new ProdCategoryVO();
-        vo.setId(UUIDUtil.uuid());
+        vo.setId(1);
         vo.setCode("test");
         Mockito.when(prodCategoryMapper.selectById(Mockito.any())).thenReturn(null);
         categoryService.deleteCategory(UUIDUtil.uuid());
