@@ -57,16 +57,19 @@ public class ProductEntity extends BaseEntity {
     /**
      * 产品单价
      */
-    @TableField(value = "unit_price",typeHandler = MoneyTypeHandler.class)
+    @TableField(value = "unit_price", typeHandler = MoneyTypeHandler.class)
     private Money unitPrice;
+
     @TableField(value = "quantity")
     private BigDecimal quantity;
 
+    @TableField(value = "quantity_unit_id")
+    private Integer quantityUnitId;
     /**
      * 产品类目
      */
     @TableField("category_id")
-    private String categoryId;
+    private Integer categoryId;
 
     /**
      * 描述

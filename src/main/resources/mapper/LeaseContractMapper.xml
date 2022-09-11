@@ -28,7 +28,7 @@
             <result column="prod_name" property="prodName"></result>
             <result column="unit_price" property="unitPrice" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"></result>
             <result column="type" property="type"></result>
-            <result column="unit_name" property="unitName"></result>
+            <result column="quantity_unit_name" property="quantityUnitName"></result>
         </collection>
     </resultMap>
 
@@ -59,11 +59,11 @@
         p.prod_name,
         p.type,
         r.lease_unit_price unit_price,
-        u.unit_name
+        u.unit_name quantity_unit_name
         from t_wms_lease_contract c
         inner join t_wms_contract_prod_rel r on c.id = r.contract_id and r.del_flag='1'
         inner join t_wms_product p on p.id = r.prod_id and p.del_flag ='1'
-        inner join t_wms_measurement_unit u on u.id = p.unit_id and u.del_flag ='1'
+        inner join t_wms_measurement_unit u on u.id = p.quantity_unit_id and u.del_flag ='1'
         where c.id =#{id}
 
     </select>

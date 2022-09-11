@@ -31,6 +31,8 @@ public class ContractProdVO {
      * 计价单位
      */
     private String unitName;
+
+    private String quantityUnitName;
     /**
      * 产品型号
      */

@@ -91,7 +91,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductEntity
                 .eq(ProductEntity::getDelFlag,WMSConstants.DEL_FLG_N);
         return productMapper.exists(queryWrapper);
     }
-    private boolean checkCategoryExist(final String categoryId) {
+    private boolean checkCategoryExist(final Integer categoryId) {
         LambdaQueryWrapper<ProdCategoryEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProdCategoryEntity::getId,categoryId)
                 .eq(ProdCategoryEntity::getDelFlag,WMSConstants.DEL_FLG_N);

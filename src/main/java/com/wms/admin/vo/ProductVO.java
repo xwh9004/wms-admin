@@ -1,5 +1,6 @@
 package com.wms.admin.vo;
 
+import io.swagger.models.auth.In;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
@@ -42,14 +43,22 @@ public class ProductVO {
     /**
      * 产品类目
      */
-    @NotBlank(message = "货物大类不能为空")
-    private String categoryId;
+    @NotNull(message = "货物大类不能为空")
+    private Integer categoryId;
     private String categoryName;
     /**
-     * 大类单位
+     * 大类自然单位
      */
-    private String categoryUnitId;
+    private Integer categoryUnitId;
     private String categoryUnitName;
+    /**
+     * 大类计费单位ID
+     */
+    private Integer categoryChargeUnitId;
+    /**
+     * 大类计费单位
+     */
+    private String categoryChargeUnitName;
     /**
      * 货物单位ID
      */
@@ -64,6 +73,15 @@ public class ProductVO {
      * 标量
      */
     private BigDecimal quantity;
+    /**
+     * 换算单位ID
+     */
+    @NotNull(message = "换算单位ID不能为空")
+    private Integer quantityUnitId;
+    /**
+     * 换算单位
+     */
+    private String quantityUnitName;
     /**
      * 描述
      */

@@ -4,6 +4,7 @@ package com.wms.admin.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.Result;
+import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.service.ILeaseContractService;
 import com.wms.admin.vo.ContractProductQueryVO;
 import com.wms.admin.vo.ContractQueryVO;
@@ -59,19 +60,22 @@ public class LeaseContractController {
     }
     @ApiOperation(value = "新增合同")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/add")
+    @PostMapping("/save")
     public Result add(@RequestBody @Validated ContractVO contractVO) {
+        contractVO.setStatus(WMSConstants.CONTRACT_EDITABLE);
         contractService.addContract(contractVO);
         return Result.success();
     }
 
-    @ApiOperation(value = "修改合同")
+    @ApiOperation(value = "新增合同")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
-    @PostMapping("/update")
-    public Result update(@RequestBody @Validated ContractVO contractVO) {
-        contractService.updateContract(contractVO);
+    @PostMapping("/submit")
+    public Result submit(@RequestBody @Validated ContractVO contractVO) {
+        contractVO.setStatus(WMSConstants.CONTRACT_EFFECT);
+        contractService.addContract(contractVO);
         return Result.success();
     }
+
     @ApiOperation(value = "合同失效")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/detail/{id}")

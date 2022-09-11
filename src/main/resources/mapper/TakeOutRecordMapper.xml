@@ -31,7 +31,7 @@
             <result column="unit_price" property="unitPrice" typeHandler="com.wms.admin.convertor.MoneyTypeHandler"/>
             <result column="category_id" property="categoryId"/>
             <result column="category_name" property="categoryName"/>
-            <result column="category_unit_name" property="categoryUnitName"/>
+            <result column="category_charge_unit_name" property="categoryChargeUnitName"/>
         </collection>
     </resultMap>
 
@@ -63,12 +63,12 @@
         rd.unit_price ,
         c.id category_id ,
         c.name category_name,
-        cu.unit_name category_unit_name
+        cu.unit_name category_charge_unit_name
         from t_wms_take_out_record r
         inner join t_wms_take_out_detail rd on r.take_out_no = rd.take_out_no and rd.del_flag ='1'
         inner join t_wms_product p on p.prod_no = rd.prod_no and p.del_flag ='1'
         inner join t_wms_prod_category c on p.category_id = c.id and c.del_flag ='1'
-        inner join t_wms_measurement_unit cu on cu.id = c.unit_id and cu.del_flag ='1'
+        inner join t_wms_measurement_unit cu on cu.id = c.charge_unit_id and cu.del_flag ='1'
         inner join t_wms_measurement_unit pu on pu.id = p.unit_id and pu.del_flag ='1'
         where r.del_flag ='1'
         and r.id =#{id}

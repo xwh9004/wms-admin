@@ -97,7 +97,8 @@ create table  if not exists T_WMS_PRODUCT(
   type  varChar(100)   comment '产品型号',
   unit_id int(20)  comment '单位ID',
   unit_price int(20)  comment '价格',
-  quantity decimal(10,3)  comment '标量',
+  quantity decimal(10,3)  comment '换算数量',
+  quantity_unit_id int(20)  comment '换算单位ID',
   category_id  varChar(40)  NOT NULL comment '产品类目',
   description VARCHAR(200)  comment '描述',
   del_flag VARCHAR(1) default '1' comment '是否删除',
@@ -107,6 +108,8 @@ create table  if not exists T_WMS_PRODUCT(
   update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间',
   PRIMARY KEY ( id )
 )comment='货物表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 create table  if not exists T_WMS_MEASUREMENT_UNIT (
   id int(20) primary key not null auto_increment,
@@ -292,6 +295,8 @@ drop table T_WMS_TAKE_IN_RECORD;
    -----需要根棍的表结构---
 
 alter table T_WMS_TAKE_IN_RECORD add column total_weight decimal(10,3)  comment '发货总重量' after  contract_company;
+alter table T_WMS_PRODUCT add column quantity_unit_id int(20)  comment '换算单位ID' after  quantity;
+
 
 
 

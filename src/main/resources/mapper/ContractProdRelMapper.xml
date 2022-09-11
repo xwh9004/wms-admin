@@ -4,12 +4,12 @@
 
 
     <select id="contractProductList" resultType="com.wms.admin.vo.ProductVO">
-        select P.id,P.prod_no,P.prod_name,P.type,P.quantity,C.id categoryId,C.name categoryName,CU.unit_name categoryUnitName,
+        select P.id,P.prod_no,P.prod_name,P.type,P.quantity,C.id categoryId,C.name categoryName,CU.unit_name categoryChargeUnitName,
         R.lease_unit_price unit_price,PU.unit_name unitName
         from T_WMS_CONTRACT_PROD_REL R
         inner join T_WMS_PRODUCT P on R.prod_id = P.id AND R.DEL_FLAG ='1'
         left join T_WMS_PROD_CATEGORY C ON C.id = P.category_id AND C.DEL_FLAG ='1'
-        left join T_WMS_MEASUREMENT_UNIT CU on C.unit_id = CU.id AND CU.DEL_FLAG ='1'
+        left join T_WMS_MEASUREMENT_UNIT CU on C.charge_unit_id = CU.id AND CU.DEL_FLAG ='1'
         left join T_WMS_MEASUREMENT_UNIT PU on P.unit_id = PU.id AND CU.DEL_FLAG ='1'
         where R.contract_id =#{ps.contractId}
         <if test="ps.prodNo!=null and ps.prodNo!=''">

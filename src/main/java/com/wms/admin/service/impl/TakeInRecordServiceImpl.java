@@ -84,6 +84,7 @@ public class TakeInRecordServiceImpl extends ServiceImpl<TakeInRecordMapper, Tak
         if (Objects.nonNull(queryVO.getStatus())) {
             queryWrapper.eq(TakeInRecordEntity::getStatus, queryVO.getStatus());
         }
+        queryWrapper.orderByDesc(TakeInRecordEntity::getUpdateTime);
         page = page(page, queryWrapper);
         IPage result = page.convert(e -> {
             TakeInVO record = new TakeInVO();

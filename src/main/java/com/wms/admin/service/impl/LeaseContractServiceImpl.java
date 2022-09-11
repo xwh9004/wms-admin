@@ -125,22 +125,26 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     @Override
     public void addContract(ContractVO contractVO) {
         trimProperties(contractVO);
+        if (Objects.isNull(contractVO.getId())) {
+            doSaveContract(contractVO);
+        } else {
+            updateContract(contractVO);
+        }
+    }
 
+    private void doSaveContract(ContractVO contractVO) {
         if (StringUtils.isBlank(contractVO.getContractNo())) {
             contractVO.setContractNo(SequenceUtil.generateNoByDate("HT"));
         }
         checkForAdd(contractVO);
-        contractVO.setIsEffective(WMSConstants.CONTRACT_EDITABLE);
         contractVO.setBusinessUser(UserInfoContext.getUsername());
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
             BeanUtils.copyProperties(vo, entity);
-            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             return entity;
         });
 
         save(contractEntity);
-
         saveContractProdInfo(contractEntity.getId(), contractVO.getList());
     }
 
@@ -156,7 +160,6 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     }
 
     private void checkDuplicateProd(List<ContractProdVO> list) {
-
         //判断是否有相同的货物
         List<String> duplicateProds = list.stream()
                 .collect(
@@ -226,18 +229,16 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
     @Override
     public void updateContract(ContractVO contractVO) {
         trimProperties(contractVO);
-        checkForUpdate(contractVO.getId());
+        checkForUpdate(contractVO);
         LeaseContractEntity contractEntity = VOUtil.toEntity(contractVO, vo -> {
             LeaseContractEntity entity = new LeaseContractEntity();
             BeanUtils.copyProperties(vo, entity);
-            entity.setStatus(WMSConstants.CONTRACT_EDITABLE);
             return entity;
         });
 
         updateById(contractEntity);
 
         deleteContractProdInfo(contractEntity.getId());
-
         saveContractProdInfo(contractEntity.getId(), contractVO.getList());
     }
 
@@ -266,23 +267,31 @@ public class LeaseContractServiceImpl extends ServiceImpl<LeaseContractMapper, L
         contractProdRelService.remove(queryWrapper);
     }
 
-    private void checkForUpdate(Integer id) {
-        Assert.notNull(id, "合同ID不能为空");
-
-        final LeaseContractEntity contractEntity = getById(id);
+    private void checkForUpdate(ContractVO contractVO) {
+        Assert.notNull(contractVO.getId(), "合同ID不能为空");
+        Assert.isTrue(existLesseeNo(contractVO.getLesseeNo()), "承租单位编号不存在");
+        LocalDate signDate = contractVO.getSignDate();
+        LocalDate effectiveDate = contractVO.getEffectiveDate();
+        LocalDate expireDate = contractVO.getExpireDate();
+        if (Objects.nonNull(expireDate)) {
+            Assert.isTrue(!effectiveDate.isAfter(expireDate), "生效日期不能晚于过期日期");
+        }
+        Assert.isTrue(!signDate.isAfter(effectiveDate), "签约日期不能晚于生效时日期");
+        checkDuplicateProd(contractVO.getList());
+        final LeaseContractEntity contractEntity = getById(contractVO.getId());
 
         Assert.notNull(contractEntity, "合同不存在");
         Assert.isTrue(StringUtils.equals(contractEntity.getDelFlag(), WMSConstants.DEL_FLG_N),
                 "合同已删除");
         Assert.isTrue(!StringUtils.equals(contractEntity.getStatus(), WMSConstants.CONTRACT_EFFECT),
                 "合同已生效，不能修改");
+
     }
 
-    private void trimProperties(ContractVO contractVO){
-        if(Objects.nonNull(contractVO.getArrearsWarring())){
+    private void trimProperties(ContractVO contractVO) {
+        if (Objects.nonNull(contractVO.getArrearsWarring())) {
             contractVO.setArrearsWarring(contractVO.getArrearsWarring().setScale(3, BigDecimal.ROUND_HALF_UP));
         }
-
     }
 
 }

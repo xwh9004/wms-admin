@@ -80,6 +80,8 @@ public class TakeOutRecordServiceImpl extends ServiceImpl<TakeOutRecordMapper, T
         if (Objects.nonNull(queryVO.getStatus())) {
             queryWrapper.eq(TakeOutRecordEntity::getStatus, queryVO.getStatus());
         }
+        queryWrapper.orderByDesc(TakeOutRecordEntity::getUpdateTime);
+
         page = page(page, queryWrapper);
         IPage result = page.convert(e -> {
             TakeOutVO record = new TakeOutVO();

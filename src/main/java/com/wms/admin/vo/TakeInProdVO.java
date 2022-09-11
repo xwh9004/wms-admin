@@ -42,6 +42,8 @@ public class TakeInProdVO implements Serializable {
 
     private BigDecimal quantity;
 
+    private String quantityUnitName;
+
     /**
      * 货物数量
      */
@@ -59,7 +61,8 @@ public class TakeInProdVO implements Serializable {
     /**
      * 大类单位
      */
-    private String categoryUnitId;
-    private String categoryUnitName;
+    private String categoryChargeUnitId;
+
+    private String categoryChargeUnitName;
 
 }

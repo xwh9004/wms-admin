@@ -81,7 +81,7 @@ public class ProdCategoryServiceTest extends BaseTest {
     private List<ProdCategoryEntity> existList() {
         List<ProdCategoryEntity> list = new ArrayList<>();
         ProdCategoryEntity entity = new ProdCategoryEntity();
-        entity.setId(UUIDUtil.uuid());
+        entity.setId(1);
         entity.setCode("test");
         list.add(entity);
         return list;

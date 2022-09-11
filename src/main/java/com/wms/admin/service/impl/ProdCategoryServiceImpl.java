@@ -86,7 +86,6 @@ public class ProdCategoryServiceImpl extends ServiceImpl<ProdCategoryMapper, Pro
         checkForAdd(vo);
         ProdCategoryEntity entity = new ProdCategoryEntity();
         BeanUtils.copyProperties(vo, entity);
-        entity.setId(UUIDUtil.uuid());
         return save(entity);
     }
 
