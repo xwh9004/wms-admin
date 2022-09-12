@@ -37,8 +37,10 @@ public class LoginController {
     public Result login(HttpServletResponse response, @RequestBody UserInfo req) {
         UserInfo userInfo = authenticService.getUserInfo(req.getUsername(), req.getPassword());
         // 创建token
-        String token = JwtTokenUtil.createJWT(userInfo.getUserId(), req.getUsername(),
-                userInfo.getRoles(), userInfo.getResources(), audience);
+//        String token = JwtTokenUtil.createJWT(userInfo.getUserId(), req.getUsername(),
+//                userInfo.getRoles(), userInfo.getResources(), audience);
+        String token = JwtTokenUtil.createJWT0(userInfo.getUserId(), req.getUsername(),
+                userInfo.getRoles(), audience);
         log.info("### 登录成功, token={} ###", token);
         // 将token放在响应头
         response.setContentType("application/json");
@@ -58,7 +60,6 @@ public class LoginController {
             roleNames.add(item.getRoleName());
         });
         userInfo.put("roles", roleNames);
-//        userInfo.put("resources", new String[]{"BTN0001", "BTN0002"});
         userInfo.put("resources", UserInfoContext.getUserInfo().getResources());
 
         userInfo.put("introduction", "I am a super administrator");

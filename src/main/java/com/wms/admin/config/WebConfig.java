@@ -2,7 +2,9 @@ package com.wms.admin.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wms.admin.interceptor.PermissionInterceptor;
 import com.wms.admin.interceptor.UserInfoInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    @Autowired
+    private UserInfoInterceptor userInfoInterceptor;
     /**
      * 注册用户登入拦截器
      *
@@ -23,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new UserInfoInterceptor())
+        registry.addInterceptor(userInfoInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/login",
@@ -31,6 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/v2/**",
                         "/swagger-resources/**",
                         "/webjars/**");
+        registry.addInterceptor(new PermissionInterceptor());
     }
 
     @Override

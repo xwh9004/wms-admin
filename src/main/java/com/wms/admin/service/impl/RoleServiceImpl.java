@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wms.admin.auth.PermissionResource;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.commom.ResultCode;
 import com.wms.admin.entity.RoleEntity;
@@ -197,5 +198,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     @Override
     public List<String> roleResources(String roleId) {
         return roleMenuService.roleResources(roleId);
+    }
+
+    @Override
+    public List<PermissionResource> rolePermissions(String roleId) {
+        return roleMenuService.rolePermissions(roleId);
     }
 }

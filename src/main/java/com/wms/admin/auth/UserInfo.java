@@ -12,4 +12,6 @@ public class UserInfo {
     private List<UserRoleVO> roles;
     private String password;
     private List<String> resources;
+    private String avatar;
+    private List<PermissionResource> permissions;
 }

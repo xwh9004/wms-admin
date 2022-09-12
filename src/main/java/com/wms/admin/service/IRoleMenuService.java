@@ -1,6 +1,7 @@
 package com.wms.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.auth.PermissionResource;
 import com.wms.admin.entity.RoleMenuEntity;
 
 import java.util.List;
@@ -24,4 +25,5 @@ public interface IRoleMenuService extends IService<RoleMenuEntity> {
     List<String> roleResources(String roleId);
 
 
+    List<PermissionResource> rolePermissions(String roleId);
 }

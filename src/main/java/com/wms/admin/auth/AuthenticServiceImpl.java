@@ -52,8 +52,8 @@ public class AuthenticServiceImpl implements AuthenticService {
         userInfo.setUsername(username);
         List<UserRoleVO> roles = userRoleMapper.selectUserRoles(userEntity.getId());
         userInfo.setRoles(roles);
-        List<String> resources = roleService.roleResources(roles.get(0).getRoleId());
-        userInfo.setResources(resources);
+        List<PermissionResource> permissions = roleService.rolePermissions(roles.get(0).getRoleId());
+        userInfo.setPermissions(permissions);
         return userInfo;
     }
 

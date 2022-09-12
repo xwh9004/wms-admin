@@ -3,6 +3,7 @@ package com.wms.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wms.admin.auth.PermissionResource;
 import com.wms.admin.auth.UserInfoContext;
 import com.wms.admin.commom.WMSConstants;
 import com.wms.admin.entity.RoleMenuEntity;
@@ -103,6 +104,11 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenuEnt
     @Override
     public List<String> roleResources(String roleId) {
         return roleMenuMapper.roleResources(roleId);
+    }
+
+    @Override
+    public List<PermissionResource> rolePermissions(String roleId) {
+        return roleMenuMapper.rolePermissions(roleId);
     }
 
 }

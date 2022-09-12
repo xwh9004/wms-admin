@@ -2,6 +2,7 @@ package com.wms.admin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wms.admin.auth.PermissionResource;
 import com.wms.admin.commom.PageParam;
 import com.wms.admin.entity.RoleEntity;
 import com.wms.admin.vo.MenuVO;
@@ -35,4 +36,6 @@ public interface IRoleService extends IService<RoleEntity> {
     List<MenuVO> allPermission();
 
     List<String> roleResources(String roleId);
+
+    List<PermissionResource> rolePermissions(String roleId);
 }
