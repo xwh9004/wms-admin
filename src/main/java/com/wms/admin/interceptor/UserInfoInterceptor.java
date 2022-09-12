@@ -65,6 +65,8 @@ public class UserInfoInterceptor implements HandlerInterceptor {
             if(!CollectionUtils.isEmpty(permissions)){
                 userInfo.setPermissions(permissions);
                 final List<String> resources = permissions.stream().map(PermissionResource::getMenuCode).collect(Collectors.toList());
+                final List<String> urls = permissions.stream().map(PermissionResource::getUrl).collect(Collectors.toList());
+                userInfo.setAuthorityUrls(urls);
                 userInfo.setResources(resources);
             }
         }

@@ -14,4 +14,5 @@ public class UserInfo {
     private List<String> resources;
     private String avatar;
     private List<PermissionResource> permissions;
+    private List<String> authorityUrls;
 }

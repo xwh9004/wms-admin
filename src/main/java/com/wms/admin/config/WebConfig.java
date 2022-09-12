@@ -20,6 +20,9 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private UserInfoInterceptor userInfoInterceptor;
+
+//    @Autowired
+//    private PermissionInterceptor permissionInterceptor;
     /**
      * 注册用户登入拦截器
      *
@@ -34,8 +37,10 @@ public class WebConfig implements WebMvcConfigurer {
                         "/swagger-ui.html",
                         "/v2/**",
                         "/swagger-resources/**",
-                        "/webjars/**");
-        registry.addInterceptor(new PermissionInterceptor());
+                        "/webjars/**",
+                        "/error"
+                );
+//        registry.addInterceptor(permissionInterceptor);
     }
 
     @Override
