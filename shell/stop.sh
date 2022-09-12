@@ -1,7 +1,7 @@
 #!/bin/bash
 appName="wms-admin-1.0.jar"
 
-PID=$(ps -ef | grep "${appName} --wms-admin-profile=prod" | grep -v grep | awk '{ print  }')
+PID=$(ps -ef | grep "${appName} --wms-admin-profile=prod" | grep -v grep | awk '{ print $2 }')
 
 if [ ! $PID ]; then
     echo "$appName stopped!!!"
