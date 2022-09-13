@@ -292,10 +292,7 @@ drop table T_WMS_TAKE_IN_RECORD;
    )comment='发货记录详情表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-   -----需要根棍的表结构---
 
-alter table T_WMS_TAKE_IN_RECORD add column total_weight decimal(10,3)  comment '发货总重量' after  contract_company;
-alter table T_WMS_PRODUCT add column quantity_unit_id int(20)  comment '换算单位ID' after  quantity;
 
 
 
