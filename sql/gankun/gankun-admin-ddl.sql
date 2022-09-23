@@ -274,8 +274,6 @@ drop table T_WMS_TAKE_IN_RECORD;
     update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP comment '最后更新时间'
    )comment='发货记录表' ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
   create table  if not exists T_WMS_TAKE_OUT_DETAIL(
     id int(20) primary key not null auto_increment,
     take_out_no VARCHAR(40) NOT NULL comment '发货单号',
