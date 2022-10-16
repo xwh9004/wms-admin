@@ -17,5 +17,6 @@ import java.util.List;
 public interface MenuMapper extends BaseMapper<MenuEntity> {
 
     List<MenuEntity> roleMenus(@Param("roleId") String roleId);
+    List<MenuEntity> userMenus(@Param("roleId") String userId);
 
 }

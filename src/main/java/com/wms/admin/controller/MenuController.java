@@ -35,13 +35,18 @@ public class MenuController {
     @Autowired
     private IMenuService menuService;
 
-    @ApiOperation(value = "权限配置使用 所有路径")
-    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
-    @GetMapping("/routes")
-    public Result routes() {
-        List<RouteVO> menuVOList = menuService.queryRoutes();
-        return Result.success().data(menuVOList);
-    }
+//    /**
+//     * 没有使用
+//     * @return
+//     */
+//    @Deprecated
+//    @ApiOperation(value = "权限配置使用 所有路径")
+//    @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")
+//    @GetMapping("/routes")
+//    public Result routes() {
+//        List<RouteVO> menuVOList = menuService.queryRoutes();
+//        return Result.success().data(menuVOList);
+//    }
 
     @ApiOperation(value = "菜单列表")
     @ApiImplicitParam(paramType = "header",name = "Authorization",value = "Token")

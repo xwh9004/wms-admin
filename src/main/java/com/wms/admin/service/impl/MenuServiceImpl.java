@@ -14,6 +14,7 @@ import com.wms.admin.service.IRoleMenuService;
 import com.wms.admin.util.UUIDUtil;
 import com.wms.admin.vo.MenuVO;
 import com.wms.admin.vo.RouteVO;
+import com.wms.admin.vo.UserRoleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -52,9 +54,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
      */
     @Override
     public List<MenuVO> queryList() {
-        QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(MenuEntity::getDelFlag, WMSConstants.DEL_FLG_N);
-        List<MenuEntity> list = list(queryWrapper);
+        final List<UserRoleVO> roles = UserInfoContext.getUserInfo().getRoles();
+        List<String> roleIds = roles.stream().map(UserRoleVO::getRoleId).collect(Collectors.toList());
+        List<MenuEntity> list = baseMapper.userMenus(roleIds.get(0));
         return toMenuTree(list);
     }
 
