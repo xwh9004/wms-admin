@@ -1,6 +1,7 @@
 package com.wms.admin.convertor;
 
 import com.wms.admin.vo.Money;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -17,19 +18,28 @@ public class MoneyTypeHandler  extends BaseTypeHandler<Money> {
 
     @Override
     public Money getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
-        long value = resultSet.getLong(columnName);
-        return Money.longValueOf(value);
+        String value = resultSet.getString(columnName);
+        if(StringUtils.isBlank(value)){
+            return null;
+        }
+        return Money.longValueOf(Long.valueOf(value));
     }
 
     @Override
     public Money getNullableResult(ResultSet resultSet, int i) throws SQLException {
-        long value = resultSet.getLong(i);
-        return Money.longValueOf(value);
+        String value = resultSet.getString(i);
+        if(StringUtils.isBlank(value)){
+            return null;
+        }
+        return Money.longValueOf(Long.valueOf(value));
     }
 
     @Override
     public Money getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
-        long value = callableStatement.getLong(i);
-        return Money.longValueOf(value);
+        String value = callableStatement.getString(i);
+        if(StringUtils.isBlank(value)){
+            return null;
+        }
+        return Money.longValueOf(Long.valueOf(value));
     }
 }

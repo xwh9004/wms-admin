@@ -51,7 +51,7 @@ public class LeaseContractController {
         IPage<ContractVO> page = contractService.contractList(queryVO, pageParam);
         return Result.success().data(page);
     }
-    @ApiOperation(value = "合同列表查询")
+    @ApiOperation(value = "合同产品列表查询")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/prodList")
     public Result prodList(@RequestBody ContractProductQueryVO queryVO, PageParam pageParam) {
@@ -67,7 +67,7 @@ public class LeaseContractController {
         return Result.success();
     }
 
-    @ApiOperation(value = "新增合同")
+    @ApiOperation(value = "提交合同")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/submit")
     public Result submit(@RequestBody @Validated ContractVO contractVO) {
@@ -76,7 +76,7 @@ public class LeaseContractController {
         return Result.success();
     }
 
-    @ApiOperation(value = "合同失效")
+    @ApiOperation(value = "合同详情")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "Token")
     @PostMapping("/detail/{id}")
     public Result detail(@PathVariable("id") String id) {
